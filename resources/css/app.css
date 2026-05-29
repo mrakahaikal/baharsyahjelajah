@@ -1,0 +1,42 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* Functional Colors mapping to CSS Variables */
+    --color-primary: var(--brand-primary);
+    --color-secondary: var(--brand-secondary);
+    --color-soft-accent: var(--brand-soft-accent);
+    --color-deep-contrast: var(--brand-deep-contrast);
+    --color-bg-main: var(--brand-bg-main);
+    --color-text-main: var(--brand-text-main);
+    --color-border-main: var(--brand-border-main);
+}
+
+:root {
+    /* General Travel Theme (Vibrant & Modern) */
+    --brand-primary: #796FE1;
+    --brand-secondary: #89D4CF;
+    --brand-soft-accent: #B48FCC;
+    --brand-deep-contrast: #2C10E4;
+    --brand-bg-main: #F8FAFC;
+    --brand-text-main: #1E293B;
+    --brand-border-main: #E2E8F0;
+}
+
+.theme-umrah {
+    /* Umrah Theme (Spiritual & Premium) */
+    --brand-primary: #FFC000;
+    --brand-secondary: #FFD450;
+    --brand-soft-accent: #272727; /* Reusing for dark section backgrounds */
+    --brand-deep-contrast: #000000;
+    --brand-bg-main: #FFFDF5;
+    --brand-text-main: #000000;
+    --brand-border-main: #F4F4F4;
+}

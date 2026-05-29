@@ -1,0 +1,165 @@
+<?php
+
+return [
+    'nav' => [
+        'transport' => 'Transport',
+        'tour' => 'Tour',
+        'umroh' => 'Umroh',
+        'visa' => 'Visa',
+        'shop' => 'Shop',
+        'blog' => 'Blog',
+    ],
+    'hero' => [
+        'slides' => [
+            [
+                'title' => 'Jelajahi Dunia dengan Penuh Berkah',
+                'subtitle' => 'Solusi perjalanan terpercaya untuk Wisata Halal, Umroh, dan kebutuhan transportasi Anda.',
+            ],
+            [
+                'title' => 'Ibadah Umroh Nyaman & Khusyuk',
+                'subtitle' => 'Pembimbing berpengalaman untuk memastikan ibadah Anda berjalan lancar.',
+            ],
+            [
+                'title' => 'Wisata Halal Mancanegara',
+                'subtitle' => 'Destinasi impian dengan fasilitas yang terjaga kualitas kehalalannya.',
+            ],
+        ],
+    ],
+    'featured_tour' => [
+        'title' => 'Paket Wisata Unggulan',
+        'subtitle' => 'Temukan destinasi impian Anda dengan paket tour terbaik yang telah kami kurasi khusus untuk Anda.',
+        'view_all' => 'Lihat Semua Paket',
+        'labels' => [
+            'duration' => ':days Hari',
+            'start_from' => 'Mulai dari',
+        ],
+        'empty' => [
+            'title' => 'Belum ada paket unggulan',
+            'subtitle' => 'Saat ini kami sedang menyiapkan paket perjalanan terbaik untuk Anda. Silakan cek kembali nanti.',
+        ],
+    ],
+    'car_rental' => [
+        'title' => 'Pilihan Armada Terbaik',
+        'subtitle' => 'Sewa mobil lepas kunci atau dengan supir untuk perjalanan yang lebih fleksibel dan nyaman.',
+        'view_all' => 'Lihat Semua Armada',
+        'labels' => [
+            'pax' => ':count Orang',
+            'transmission' => 'Transmisi :type',
+            'daily' => 'Harian',
+            'all_in' => 'All-in (Per Trip)',
+            'per_day' => '/ Hari',
+            'per_trip' => '/ Trip',
+            'start_from' => 'Mulai dari',
+        ],
+        'empty' => [
+            'title' => 'Armada belum tersedia',
+            'subtitle' => 'Kami sedang menyiapkan pilihan armada terbaik untuk Anda. Silakan hubungi kami untuk informasi lebih lanjut.',
+        ],
+    ],
+    'umrah_package' => [
+        'title' => 'Perkhidmatan Umroh',
+        'subtitle' => 'Wujudkan impian ibadah ke Tanah Suci dengan layanan profesional, bimbingan yang khusyuk, dan fasilitas terbaik.',
+        'view_all' => 'Lihat Semua Paket Umroh',
+        'labels' => [
+            'duration' => ':days Hari',
+            'airline' => 'Maskapai',
+            'hotel' => 'Hotel',
+            'start_from' => 'Mulai dari',
+        ],
+        'empty' => [
+            'title' => 'Jadwal Umroh belum tersedia',
+            'subtitle' => 'Kami sedang merancang jadwal keberangkatan terbaik untuk Anda. Silakan hubungi kami untuk pendaftaran antrian atau informasi lebih lanjut.',
+        ],
+    ],
+    'testimonials' => [
+        'title' => 'Kesan Perjalanan Mereka',
+        'subtitle' => 'Cerita nyata dari para pelanggan yang telah mempercayakan perjalanan mereka bersama Baharsyah Jelajah.',
+        'view_all' => 'Lihat Semua Testimoni',
+        'empty' => [
+            'title' => 'Belum ada testimoni',
+            'subtitle' => 'Kami senantiasa berusaha memberikan layanan terbaik. Testimoni dari pelanggan kami akan segera ditampilkan di sini.',
+        ],
+    ],
+    'blog' => [
+        'title' => 'Artikel & Berita Terbaru',
+        'subtitle' => 'Dapatkan wawasan seputar perjalanan, tips umroh, dan berita terbaru dari dunia pariwisata.',
+        'view_all' => 'Lihat Semua Artikel',
+        'read_more' => 'Baca Selengkapnya',
+        'empty' => [
+            'title' => 'Belum ada artikel',
+            'subtitle' => 'Kami sedang menyusun konten-konten menarik untuk Anda. Silakan cek kembali dalam waktu dekat.',
+        ],
+    ],
+    'search' => [
+        'tabs' => [
+            'tour' => 'Wisata Halal',
+            'transport' => 'Rental Mobil',
+            'umroh' => 'Umroh',
+        ],
+        'fields' => [
+            'destination' => 'Destinasi',
+            'destination_placeholder' => 'Ke mana Anda ingin pergi?',
+            'region' => 'Wilayah',
+            'all_regions' => 'Semua Wilayah',
+            'capacity' => 'Kapasitas Penumpang',
+            'pax_placeholder' => 'Jumlah Pax',
+            'vehicle_type' => 'Tipe Armada',
+            'all_vehicles' => 'Semua Tipe',
+            'departure_month' => 'Bulan Keberangkatan',
+            'select_month' => 'Pilih Bulan',
+            'package_type' => 'Jenis Paket',
+            'all_packages' => 'Semua Paket',
+        ],
+        'buttons' => [
+            'search_tour' => 'Cari Paket',
+            'search_transport' => 'Cari Armada',
+            'search_umroh' => 'Cari Jadwal',
+        ],
+    ],
+    'why_us' => [
+        'title' => 'Mengapa Memilih :brand?',
+        'subtitle' => 'Kami berkomitmen menghadirkan pengalaman perjalanan yang tidak hanya nyaman, tapi juga memberikan ketenangan spiritual bagi setiap pelanggan.',
+        'cta' => 'Apa Kata Mereka',
+        'stats' => [
+            'pilgrims' => 'Jamaah Terlayani',
+            'destinations' => 'Destinasi Dunia',
+            'satisfaction' => 'Tingkat Kepuasan',
+            'experience' => 'Tahun Pengalaman',
+        ],
+    ],
+    'how_it_works' => [
+        'title' => 'Cara Mudah Merencanakan Perjalanan',
+        'subtitle' => 'Proses pemesanan yang transparan dan tanpa ribet. Cukup 3 langkah mudah untuk mewujudkan perjalanan impian Anda.',
+        'steps' => [
+            '1' => [
+                'title' => 'Pilih & Sesuaikan',
+                'description' => 'Eksplorasi katalog kami dan gunakan filter interaktif untuk menemukan paket, armada, atau layanan yang sesuai dengan kebutuhan Anda.',
+            ],
+            '2' => [
+                'title' => 'Konsultasi via WhatsApp',
+                'description' => 'Klik tombol pesan, dan sistem kami akan membuatkan draf pesan detail secara otomatis. Tim kami akan segera merespons pertanyaan Anda.',
+            ],
+            '3' => [
+                'title' => 'Berangkat dengan Tenang',
+                'description' => 'Selesaikan administrasi dengan panduan tim kami, lalu bersiaplah untuk pengalaman perjalanan yang aman, nyaman, dan berkesan.',
+            ],
+        ],
+    ],
+    'cta' => [
+        'title' => 'Siap Merencanakan Perjalanan Anda?',
+        'subtitle' => 'Konsultasikan kebutuhan Wisata Halal, Umroh, atau Rental Mobil Anda bersama tim ahli kami sekarang juga.',
+        'button_whatsapp' => 'Hubungi via WhatsApp',
+        'button_consult' => 'Konsultasi Gratis',
+    ],
+    'faq' => [
+        'title'    => 'Pertanyaan yang Sering Diajukan',
+        'subtitle' => 'Temukan jawaban atas pertanyaan umum seputar layanan kami.',
+    ],
+    'footer' => [
+        'description' => 'Platform travel berbasis Lead Generation yang menyajikan katalog interaktif untuk layanan Wisata Halal, Umroh, Visa, Transportasi, dan Perlengkapan Travel.',
+        'services' => 'Layanan',
+        'support' => 'Bantuan',
+        'contact' => 'Hubungi Kami',
+        'rights' => 'All rights reserved.',
+    ],
+];

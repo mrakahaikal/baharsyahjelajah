@@ -1,0 +1,77 @@
+<?php
+
+use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', function () {
+    return redirect('/id');
+});
+
+// Route for Currency Switcher
+Route::get('/set-currency/{currency}', function (string $currency) {
+    if (in_array($currency, ['IDR', 'MYR', 'SGD'])) {
+        session(['app_currency' => $currency]);
+    }
+
+    return back();
+})->name('set.currency');
+
+Route::group([
+    'prefix' => '{locale}',
+    'where' => ['locale' => 'id|ms|en'],
+    'middleware' => 'set.locale',
+], function () {
+    Route::get('/', HomeController::class)->name('home');
+
+    Route::prefix('transport')->group(function () {
+        Route::get('/', function () {
+            return view('pages.transport.index');
+        })->name('transport.index');
+        Route::get('/{vehicle}', function () {
+            return view('pages.transport.show');
+        })->name('transport.show');
+    });
+
+    Route::prefix('tour')->group(function () {
+        Route::get('/', function () {
+            return view('pages.tour.index');
+        })->name('tour.index');
+        Route::get('/{tour}', function () {
+            return view('pages.tour.show');
+        })->name('tour.show');
+    });
+
+    Route::prefix('umroh')->group(function () {
+        Route::get('/', function () {
+            return view('pages.umroh.index');
+        })->name('umroh.index');
+        Route::get('/{umrah}', function () {
+            return view('pages.umroh.show');
+        })->name('umroh.show');
+    });
+
+    Route::prefix('blog')->group(function () {
+        Route::get('/', function () {
+            return view('pages.blog.index');
+        })->name('blog.index');
+        Route::get('/{post}', function () {
+            return view('pages.blog.show');
+        })->name('blog.show');
+    });
+
+    Route::get('/visa', function () {
+        return view('pages.visa.index');
+    })->name('visa.index');
+    Route::get('/shop', function () {
+        return view('pages.shop.index');
+    })->name('shop.index');
+    Route::get('/shop/{product}', function () {
+        return view('pages.shop.show');
+    })->name('shop.show');
+    Route::get('/gallery', function () {
+        return view('pages.gallery.index');
+    })->name('gallery.index');
+    Route::get('/testimonials', function () {
+        return view('pages.testimonials.index');
+    })->name('testimonials.index');
+});

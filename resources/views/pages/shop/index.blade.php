@@ -1,0 +1,1 @@
+<div>Shop Index - Locale: {{ app()->getLocale() }}</div>

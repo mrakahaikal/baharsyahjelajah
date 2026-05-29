@@ -1,0 +1,1 @@
+<div>Blog Show - Locale: {{ app()->getLocale() }}</div>

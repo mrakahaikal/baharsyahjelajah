@@ -1,0 +1,1 @@
+<div>Umroh Index - Locale: {{ app()->getLocale() }}</div>

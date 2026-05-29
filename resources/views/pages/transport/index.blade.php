@@ -1,0 +1,1 @@
+<div>Transport Index - Locale: {{ app()->getLocale() }}</div>

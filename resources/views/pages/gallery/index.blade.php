@@ -1,0 +1,1 @@
+<div>Gallery Page - Locale: {{ app()->getLocale() }}</div>

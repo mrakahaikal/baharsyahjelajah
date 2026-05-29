@@ -1,0 +1,1 @@
+<div>Visa Page - Locale: {{ app()->getLocale() }}</div>

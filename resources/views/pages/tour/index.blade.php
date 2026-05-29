@@ -1,0 +1,1 @@
+<div>Tour Index - Locale: {{ app()->getLocale() }}</div>

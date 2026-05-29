@@ -1,0 +1,1 @@
+<div>Testimonials Page - Locale: {{ app()->getLocale() }}</div>

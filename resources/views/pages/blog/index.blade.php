@@ -1,0 +1,1 @@
+<div>Blog Index - Locale: {{ app()->getLocale() }}</div>

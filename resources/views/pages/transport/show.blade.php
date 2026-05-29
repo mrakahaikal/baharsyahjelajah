@@ -1,0 +1,1 @@
+<div>Transport Show - Locale: {{ app()->getLocale() }}</div>

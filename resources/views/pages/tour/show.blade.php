@@ -1,0 +1,1 @@
+<div>Tour Show - Locale: {{ app()->getLocale() }}</div>

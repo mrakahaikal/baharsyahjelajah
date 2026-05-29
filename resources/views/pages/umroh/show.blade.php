@@ -1,0 +1,1 @@
+<div>Umroh Show - Locale: {{ app()->getLocale() }}</div>
