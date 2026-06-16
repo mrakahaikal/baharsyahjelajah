@@ -1,10 +1,18 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return redirect('/id');
+Route::get('/', function (Request $request) {
+    $supported = ['id', 'ms', 'en'];
+
+    $detected = collect($request->getLanguages())
+        ->map(fn (string $lang) => strtolower(substr($lang, 0, 2)))
+        ->first(fn (string $primary) => in_array($primary, $supported))
+        ?? 'id';
+
+    return redirect('/'.$detected);
 });
 
 // Route for Currency Switcher

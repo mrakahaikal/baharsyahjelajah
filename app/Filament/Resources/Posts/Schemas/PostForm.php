@@ -52,7 +52,7 @@ class PostForm
                                         ->placeholder('Masukkan judul artikel...')
                                         ->required($locale === 'id')
                                         ->live(onBlur: true)
-                                        ->afterStateUpdated(fn ($state, Set $set) => $set('slug', Str::slug($state)))
+                                        ->afterStateUpdated(fn ($state, Set $set) => $set("slug.{$locale}", Str::slug($state)))
                                         ->maxLength(255),
                                     TextInput::make('slug')
                                         ->label('Slug')
