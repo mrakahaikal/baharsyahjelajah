@@ -1,9 +1,10 @@
 <!-- Blog Section -->
 <section class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-end justify-between mb-8">
+        <div class="flex items-end justify-between mb-8 reveal-fade">
             <div>
-                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-1.5">
+                <div class="w-10 h-0.5 bg-[#89D4CF] mb-3"></div>
+                <h2 class="font-display text-3xl sm:text-4xl font-bold text-gray-900 mb-1.5">
                     {{ __('frontend.blog.title') }}
                 </h2>
                 <p class="text-sm text-gray-500">{{ __('frontend.blog.subtitle') }}</p>
@@ -20,7 +21,8 @@
         @if($latestPosts->isNotEmpty())
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 @foreach($latestPosts as $post)
-                    <article class="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition-shadow duration-300 flex flex-col">
+                    <article data-delay="{{ ($loop->index % 3) + 1 }}"
+                             class="reveal-on-scroll group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col">
                         <!-- Image -->
                         <div class="relative h-48 overflow-hidden bg-gray-100">
                             <img src="{{ $post->cover_image_url }}"
@@ -50,7 +52,7 @@
                             </p>
 
                             <a href="{{ route('blog.show', ['locale' => app()->getLocale(), 'post' => $post->slug]) }}"
-                               class="mt-auto inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline">
+                               class="mt-auto self-start inline-flex items-center gap-1.5 text-xs font-semibold text-primary bg-primary/8 hover:bg-primary hover:text-white px-3 py-1.5 rounded-full transition-colors">
                                 {{ __('frontend.blog.read_more') }}
                                 <x-lucide-arrow-right class="w-3.5 h-3.5" />
                             </a>

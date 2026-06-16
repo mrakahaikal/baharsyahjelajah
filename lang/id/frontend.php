@@ -75,6 +75,8 @@ return [
         'title' => 'Kesan Perjalanan Mereka',
         'subtitle' => 'Cerita nyata dari para pelanggan yang telah mempercayakan perjalanan mereka bersama Baharsyah Jelajah.',
         'view_all' => 'Lihat Semua Testimoni',
+        'video_title' => 'Momen Perjalanan Jamaah',
+        'video_subtitle' => 'Cuplikan pengalaman nyata jamaah & traveler kami di Instagram dan TikTok.',
         'empty' => [
             'title' => 'Belum ada testimoni',
             'subtitle' => 'Kami senantiasa berusaha memberikan layanan terbaik. Testimoni dari pelanggan kami akan segera ditampilkan di sini.',
@@ -152,7 +154,7 @@ return [
         'button_consult' => 'Konsultasi Gratis',
     ],
     'faq' => [
-        'title'    => 'Pertanyaan yang Sering Diajukan',
+        'title' => 'Pertanyaan yang Sering Diajukan',
         'subtitle' => 'Temukan jawaban atas pertanyaan umum seputar layanan kami.',
     ],
     'footer' => [

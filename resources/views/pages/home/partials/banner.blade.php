@@ -10,9 +10,9 @@
             }, 5000);
         }
     }
-}" class="py-10 bg-white">
+}" class="py-12 bg-[#F5F3EF]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="relative overflow-hidden rounded-2xl h-52 sm:h-64 lg:h-72 bg-gray-200">
+        <div class="reveal-fade relative overflow-hidden rounded-3xl h-52 sm:h-64 lg:h-72 bg-gray-200">
 
             <!-- Slides -->
             @foreach($banners as $index => $banner)
@@ -62,7 +62,7 @@
                 </button>
 
                 <!-- Dot indicators -->
-                <div class="absolute bottom-3 right-4 z-10 flex gap-1.5">
+                <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex gap-1.5">
                     @foreach($banners as $index => $banner)
                         <button @click="active = {{ $index }}"
                                 :class="active === {{ $index }} ? 'w-5 bg-white' : 'w-1.5 bg-white/45 hover:bg-white/70'"

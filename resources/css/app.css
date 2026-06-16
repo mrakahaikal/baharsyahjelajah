@@ -6,8 +6,9 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
 
     /* Functional Colors mapping to CSS Variables */
     --color-primary: var(--brand-primary);
@@ -25,9 +26,79 @@
     --brand-secondary: #89D4CF;
     --brand-soft-accent: #B48FCC;
     --brand-deep-contrast: #2C10E4;
-    --brand-bg-main: #F8FAFC;
+    --brand-bg-main: #FAF9F7; /* warm cream (was cold #F8FAFC) */
     --brand-text-main: #1E293B;
     --brand-border-main: #E2E8F0;
+}
+
+/* === Scroll Reveal Animation System === */
+@keyframes revealUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes revealFade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes heroZoom {
+    from {
+        transform: scale(1.04);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+.reveal-on-scroll {
+    opacity: 0;
+}
+
+.reveal-on-scroll.is-visible {
+    animation: revealUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.reveal-on-scroll.is-visible[data-delay='1'] {
+    animation-delay: 0.1s;
+}
+
+.reveal-on-scroll.is-visible[data-delay='2'] {
+    animation-delay: 0.2s;
+}
+
+.reveal-on-scroll.is-visible[data-delay='3'] {
+    animation-delay: 0.3s;
+}
+
+.reveal-on-scroll.is-visible[data-delay='4'] {
+    animation-delay: 0.4s;
+}
+
+.reveal-fade {
+    opacity: 0;
+}
+
+.reveal-fade.is-visible {
+    animation: revealFade 0.5s ease forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal-on-scroll,
+    .reveal-fade {
+        opacity: 1;
+        animation: none !important;
+    }
 }
 
 .theme-umrah {

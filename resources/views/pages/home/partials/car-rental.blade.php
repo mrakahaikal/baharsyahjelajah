@@ -1,9 +1,10 @@
 <!-- Car Rental Section -->
-<section class="py-14 bg-gray-50/60">
+<section class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-end justify-between mb-8">
+        <div class="flex items-end justify-between mb-8 reveal-fade">
             <div>
-                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-1.5">
+                <div class="w-10 h-0.5 bg-[#89D4CF] mb-3"></div>
+                <h2 class="font-display text-3xl sm:text-4xl font-bold text-gray-900 mb-1.5">
                     {{ __('frontend.car_rental.title') }}
                 </h2>
                 <p class="text-sm text-gray-500">{{ __('frontend.car_rental.subtitle') }}</p>
@@ -20,7 +21,8 @@
         @if($featuredVehicles->isNotEmpty())
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 @foreach($featuredVehicles as $vehicle)
-                    <div class="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition-shadow duration-300 flex flex-col">
+                    <div data-delay="{{ ($loop->index % 4) + 1 }}"
+                         class="reveal-on-scroll group bg-white rounded-xl overflow-hidden border border-[#E8E5FF] hover:border-[#796FE1]/30 hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col">
                         <!-- Image -->
                         <div class="relative h-44 bg-gray-50 overflow-hidden flex items-center justify-center">
                             <img src="{{ $vehicle->thumbnail_url }}"
@@ -36,11 +38,11 @@
                             </h3>
 
                             <div class="flex flex-wrap gap-2 mb-4">
-                                <span class="flex items-center gap-1 text-gray-500 text-xs bg-gray-50 px-2.5 py-1 rounded-full">
+                                <span class="flex items-center gap-1 text-gray-500 text-xs bg-[#F5F3EF] px-2.5 py-1 rounded-full">
                                     <x-lucide-users class="w-3 h-3" />
                                     {{ __('frontend.car_rental.labels.pax', ['count' => $vehicle->capacity_pax]) }}
                                 </span>
-                                <span class="flex items-center gap-1 text-gray-500 text-xs bg-gray-50 px-2.5 py-1 rounded-full">
+                                <span class="flex items-center gap-1 text-gray-500 text-xs bg-[#F5F3EF] px-2.5 py-1 rounded-full">
                                     <x-lucide-gauge class="w-3 h-3" />
                                     {{ $vehicle->transmission }}
                                 </span>
@@ -65,7 +67,7 @@
                                 @endif
 
                                 <a href="{{ route('transport.show', ['locale' => app()->getLocale(), 'vehicle' => $vehicle->id]) }}"
-                                   class="mt-3 w-full h-9 rounded-lg bg-gray-50 text-gray-600 group-hover:bg-primary group-hover:text-white flex items-center justify-center gap-1.5 text-xs font-semibold transition-colors duration-300">
+                                   class="mt-3 w-full h-9 rounded-lg bg-[#796FE1]/10 text-[#796FE1] group-hover:bg-[#796FE1] group-hover:text-white flex items-center justify-center gap-1.5 text-xs font-semibold transition-colors duration-300">
                                     {{ __('frontend.car_rental.labels.daily') !== 'Daily' ? 'Lihat Detail' : 'View Detail' }}
                                     <x-lucide-chevron-right class="w-3.5 h-3.5" />
                                 </a>

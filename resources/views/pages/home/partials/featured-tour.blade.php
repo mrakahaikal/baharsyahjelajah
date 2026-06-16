@@ -1,9 +1,10 @@
 <!-- Featured Tour Section -->
 <section class="py-14 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-end justify-between mb-8">
+        <div class="flex items-end justify-between mb-8 reveal-fade">
             <div>
-                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-1.5">
+                <div class="w-10 h-0.5 bg-[#89D4CF] mb-3"></div>
+                <h2 class="font-display text-3xl sm:text-4xl font-bold text-gray-900 mb-1.5">
                     {{ __('frontend.featured_tour.title') }}
                 </h2>
                 <p class="text-sm text-gray-500">{{ __('frontend.featured_tour.subtitle') }}</p>
@@ -21,7 +22,8 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 @foreach($featuredTours as $tour)
                     <a href="{{ route('tour.show', ['locale' => app()->getLocale(), 'tour' => $tour->slug]) }}"
-                       class="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition-shadow duration-300 flex flex-col">
+                       data-delay="{{ ($loop->index % 3) + 1 }}"
+                       class="reveal-on-scroll group bg-white rounded-xl overflow-hidden border border-[#E8E5FF] hover:border-[#796FE1]/30 hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col">
                         <!-- Image -->
                         <div class="relative h-52 overflow-hidden bg-gray-100">
                             <img src="{{ $tour->thumbnail_url }}"
@@ -29,7 +31,7 @@
                                  loading="lazy"
                                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             @if($tour->category)
-                                <span class="absolute top-3 left-3 bg-white/95 text-gray-700 text-[11px] font-semibold px-2.5 py-1 rounded-full shadow-sm">
+                                <span class="absolute top-3 left-3 bg-[#796FE1] text-white text-[11px] font-semibold px-2.5 py-1 rounded-full shadow-sm">
                                     {{ $tour->category->name }}
                                 </span>
                             @endif

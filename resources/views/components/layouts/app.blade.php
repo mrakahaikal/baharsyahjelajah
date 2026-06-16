@@ -7,16 +7,19 @@
 
     <title>{{ $title ?? config('app.name', 'Baharsyah Jelajah') }}</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
-
     <!-- Scripts & Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="bg-bg-main text-text-main font-sans antialiased {{ $themeClass ?? '' }}">
+<body class="bg-bg-main text-text-main font-sans antialiased {{ $themeClass ?? '' }}"
+      x-data
+      x-init="
+        const obs = new IntersectionObserver(
+          (entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); } }),
+          { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+        );
+        document.querySelectorAll('.reveal-on-scroll, .reveal-fade').forEach(el => obs.observe(el));
+      ">
     <div class="min-h-screen flex flex-col">
         <x-shared.header />
 
@@ -41,5 +44,6 @@
     @endif
 
     @livewireScripts
+    @stack('scripts')
 </body>
 </html>
