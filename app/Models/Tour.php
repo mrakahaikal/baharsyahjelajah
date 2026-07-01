@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\LocaleHelper;
 use App\Services\CurrencyService;
 use App\Settings\GeneralSettings;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -9,12 +10,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Translatable\HasTranslations;
 
 #[Fillable([
-    'tour_category_id', 'name', 'slug', 'description', 'highlights',
-    'tour_type', 'duration_days', 'duration_nights', 'price_idr',
-    'difficulty', 'max_pax', 'is_active', 'is_featured', 'thumbnail'
+    'category_id', 'name', 'slug', 'description', 'highlights',
+    'tour_type', 'duration_days', 'duration_nights', 'price', 'currency',
+    'difficulty', 'max_pax', 'is_active', 'is_featured', 'thumbnail',
 ])]
 class Tour extends Model
 {
@@ -23,12 +25,12 @@ class Tour extends Model
     protected function casts(): array
     {
         return [
-            'price_idr'    => 'integer',
-            'duration_days'    => 'integer',
-            'duration_nights'  => 'integer',
-            'max_pax'          => 'integer',
-            'is_active'        => 'boolean',
-            'is_featured'      => 'boolean',
+            'price' => 'integer',
+            'duration_days' => 'integer',
+            'duration_nights' => 'integer',
+            'max_pax' => 'integer',
+            'is_active' => 'boolean',
+            'is_featured' => 'boolean',
         ];
     }
 
@@ -78,7 +80,7 @@ class Tour extends Model
 
     public function scopePriceBetween($query, int $min, int $max)
     {
-        return $query->whereBetween('price_idr', [$min, $max]);
+        return $query->whereBetween('price', [$min, $max]);
     }
 
     public function getThumbnailUrlAttribute(): string
@@ -87,8 +89,8 @@ class Tour extends Model
             return $this->thumbnail;
         }
 
-        return $this->thumbnail 
-            ? \Illuminate\Support\Facades\Storage::url($this->thumbnail) 
+        return $this->thumbnail
+            ? Storage::url($this->thumbnail)
             : 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&q=80&w=800';
     }
 
@@ -101,16 +103,16 @@ class Tour extends Model
         $locale = app()->getLocale();
 
         $days = match ($locale) {
-            'ms' => $this->duration_days . ' Hari',
-            'en' => $this->duration_days . ' Day' . ($this->duration_days > 1 ? 's' : ''),
-            default => $this->duration_days . ' Hari',
+            'ms' => $this->duration_days.' Hari',
+            'en' => $this->duration_days.' Day'.($this->duration_days > 1 ? 's' : ''),
+            default => $this->duration_days.' Hari',
         };
 
         if ($this->duration_nights > 0) {
             $nights = match ($locale) {
-                'ms' => $this->duration_nights . ' Malam',
-                'en' => $this->duration_nights . ' Night' . ($this->duration_nights > 1 ? 's' : ''),
-                default => $this->duration_nights . ' Malam',
+                'ms' => $this->duration_nights.' Malam',
+                'en' => $this->duration_nights.' Night'.($this->duration_nights > 1 ? 's' : ''),
+                default => $this->duration_nights.' Malam',
             };
 
             return "$days $nights";
@@ -125,9 +127,9 @@ class Tour extends Model
      */
     public function getFormattedPriceAttribute(): string
     {
-        $currency = session('currency', 'IDR');
+        $currency = LocaleHelper::currency();
 
-        return app(CurrencyService::class)->convert($this->price_idr, $currency);
+        return app(CurrencyService::class)->convert($this->price, $currency, $this->currency);
     }
 
     /**
@@ -143,9 +145,9 @@ class Tour extends Model
      */
     public function whatsappUrl(int $pax = 2): string
     {
-        $locale   = app()->getLocale();
-        $currency = session('currency', 'IDR');
-        $phone    = app(GeneralSettings::class)->whatsapp_number;
+        $locale = app()->getLocale();
+        $currency = LocaleHelper::currency();
+        $phone = app(GeneralSettings::class)->whatsapp_number;
 
         $template = WhatsappTemplate::query()
             ->where('product_type', 'tour')
@@ -160,12 +162,12 @@ class Tour extends Model
 
         $message = strtr($template ?? '', [
             '{product_name}' => $this->getTranslation('name', $locale),
-            '{duration}'     => $this->duration_label,
-            '{price}'        => app(CurrencyService::class)->convert($this->price_idr, $currency),
-            '{pax}'          => $pax,
+            '{duration}' => $this->duration_label,
+            '{price}' => app(CurrencyService::class)->convert($this->price, $currency, $this->currency),
+            '{pax}' => $pax,
         ]);
 
-        return 'https://wa.me/' . $phone . '?text=' . urlencode($message);
+        return 'https://wa.me/'.$phone.'?text='.urlencode($message);
     }
 
     /**

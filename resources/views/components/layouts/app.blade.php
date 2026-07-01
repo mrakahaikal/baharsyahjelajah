@@ -1,3 +1,7 @@
+@props([
+    'themeClass' => '',
+    'overlapHeader' => false,
+])
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 <head>
@@ -10,17 +14,17 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
 
     <!-- Scripts & Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="bg-bg-main text-text-main font-sans antialiased {{ $themeClass ?? '' }}">
+<body class="bg-white text-slate-700 font-sans antialiased {{ $themeClass }}">
     <div class="min-h-screen flex flex-col">
         <x-shared.header />
 
-        <main class="flex-grow">
+        <main class="flex-grow {{ $overlapHeader ? '' : 'pt-24 lg:pt-28' }}">
             {{ $slot }}
         </main>
 
@@ -31,10 +35,10 @@
     @php $waNumber = app(\App\Settings\GeneralSettings::class)->whatsapp_number; @endphp
     @if($waNumber)
         <a href="https://wa.me/{{ $waNumber }}" target="_blank" rel="noopener"
-           class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#25D366] hover:bg-[#1EBE5D] text-white rounded-full shadow-xl flex items-center justify-center transition-all duration-200 hover:scale-110 group">
+           class="group fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-xl shadow-emerald-900/20 transition-all duration-200 hover:scale-105 hover:bg-[#1EBE5D]">
             <x-lucide-message-circle class="w-6 h-6" />
             <span class="sr-only">Chat WhatsApp</span>
-            <span class="absolute right-full mr-3 bg-gray-900 text-white text-xs font-medium px-2.5 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg">
+            <span class="pointer-events-none absolute right-full mr-3 whitespace-nowrap rounded-full bg-slate-950 px-3 py-2 text-xs font-semibold text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
                 Hubungi via WhatsApp
             </span>
         </a>

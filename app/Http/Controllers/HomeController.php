@@ -41,7 +41,7 @@ class HomeController extends Controller
             ->get();
 
         $latestPosts = Post::query()
-            ->where('is_published', true)
+            ->where('status', 'published')
             ->with('category')
             ->latest()
             ->limit(3)

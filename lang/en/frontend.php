@@ -1,0 +1,204 @@
+<?php
+
+return [
+    'nav' => [
+        'transport' => 'Transport',
+        'tour' => 'Tours',
+        'umroh' => 'Umrah',
+        'visa' => 'Visa',
+        'shop' => 'Shop',
+        'blog' => 'Blog',
+    ],
+    'hero' => [
+        'slides' => [
+            [
+                'title' => 'Explore the World with Purpose',
+                'subtitle' => 'Trusted travel support for halal tours, umrah journeys, and comfortable transport needs.',
+            ],
+            [
+                'title' => 'A Calm and Focused Umrah Journey',
+                'subtitle' => 'Experienced guides help keep your worship journey smooth, clear, and meaningful.',
+            ],
+            [
+                'title' => 'Curated Halal Travel Abroad',
+                'subtitle' => 'Dream destinations with thoughtful facilities and reliable trip planning.',
+            ],
+        ],
+    ],
+    'home' => [
+        'kicker' => 'Halal journeys, nature, and worship',
+        'explore_packages' => 'Explore Packages',
+        'travel_note' => 'Travel Note',
+        'travel_note_title' => 'Designed personally, guided until departure.',
+        'services' => [
+            'tour' => 'Halal tour packages with curated destinations, clear itineraries, and guided support.',
+            'transport' => 'Comfortable vehicles for families, groups, intercity travel, and custom trip needs.',
+            'umroh' => 'Umrah packages with worship guidance, departure schedules, and curated facilities.',
+            'visa' => 'Visa and travel document assistance so your preparation feels easier.',
+        ],
+    ],
+    'featured_tour' => [
+        'title' => 'Featured Tour Packages',
+        'subtitle' => 'Discover curated travel experiences prepared for meaningful journeys.',
+        'view_all' => 'View All Packages',
+        'labels' => [
+            'duration' => ':days Days',
+            'start_from' => 'Start from',
+        ],
+        'empty' => [
+            'title' => 'No featured packages yet',
+            'subtitle' => 'We are preparing our best travel packages. Please check back soon.',
+        ],
+    ],
+    'car_rental' => [
+        'title' => 'Preferred Fleet Choices',
+        'subtitle' => 'Car rental with or without driver for flexible and comfortable travel.',
+        'view_all' => 'View All Vehicles',
+        'labels' => [
+            'pax' => ':count Pax',
+            'transmission' => ':type Transmission',
+            'daily' => 'Daily',
+            'all_in' => 'All-in Trip',
+            'per_day' => '/ Day',
+            'per_trip' => '/ Trip',
+            'start_from' => 'Start from',
+        ],
+        'empty' => [
+            'title' => 'No vehicles available yet',
+            'subtitle' => 'We are preparing our best fleet options. Contact us for more information.',
+        ],
+    ],
+    'umrah_package' => [
+        'title' => 'Umrah Services',
+        'subtitle' => 'Make your journey to the Holy Land possible with professional service, focused guidance, and thoughtful facilities.',
+        'view_all' => 'View All Umrah Packages',
+        'labels' => [
+            'duration' => ':days Days',
+            'airline' => 'Airline',
+            'hotel' => 'Hotel',
+            'start_from' => 'Start from',
+        ],
+        'empty' => [
+            'title' => 'Umrah schedules are not available yet',
+            'subtitle' => 'We are preparing the best departure schedules. Contact us for waiting list registration or more information.',
+        ],
+    ],
+    'testimonials' => [
+        'title' => 'Their Travel Impressions',
+        'subtitle' => 'Real stories from customers who trusted Baharsyah Jelajah with their journeys.',
+        'view_all' => 'View All Testimonials',
+        'video_title' => 'Customer Travel Moments',
+        'video_subtitle' => 'Real customer and traveler moments from Instagram and TikTok.',
+        'empty' => [
+            'title' => 'No testimonials yet',
+            'subtitle' => 'We keep working to deliver our best service. Customer testimonials will appear here soon.',
+        ],
+    ],
+    'blog' => [
+        'title' => 'Latest Articles & News',
+        'subtitle' => 'Read travel insights, umrah tips, and updates from the tourism world.',
+        'view_all' => 'View All Articles',
+        'read_more' => 'Read More',
+        'empty' => [
+            'title' => 'No articles yet',
+            'subtitle' => 'We are preparing useful content for you. Please check back soon.',
+        ],
+    ],
+    'search' => [
+        'tabs' => [
+            'tour' => 'Halal Tours',
+            'transport' => 'Car Rental',
+            'umroh' => 'Umrah',
+        ],
+        'fields' => [
+            'destination' => 'Destination',
+            'destination_placeholder' => 'Where would you like to go?',
+            'region' => 'Region',
+            'all_regions' => 'All Regions',
+            'capacity' => 'Passenger Capacity',
+            'pax_placeholder' => 'Number of Pax',
+            'vehicle_type' => 'Vehicle Type',
+            'all_vehicles' => 'All Types',
+            'departure_month' => 'Departure Month',
+            'select_month' => 'Select Month',
+            'package_type' => 'Package Type',
+            'all_packages' => 'All Packages',
+        ],
+        'buttons' => [
+            'search_tour' => 'Find Packages',
+            'search_transport' => 'Find Vehicles',
+            'search_umroh' => 'Find Schedule',
+        ],
+    ],
+    'why_us' => [
+        'title' => 'Why Choose :brand?',
+        'subtitle' => 'We deliver travel experiences that are comfortable, thoughtful, and spiritually reassuring.',
+        'cta' => 'What They Say',
+        'stats' => [
+            'pilgrims' => 'Customers Served',
+            'destinations' => 'Destinations',
+            'satisfaction' => 'Satisfaction Rate',
+            'experience' => 'Years Experience',
+        ],
+    ],
+    'how_it_works' => [
+        'title' => 'Plan Your Journey Easily',
+        'subtitle' => 'A transparent booking process in three simple steps for your ideal journey.',
+        'steps' => [
+            '1' => [
+                'title' => 'Choose & Customize',
+                'description' => 'Explore our catalog and choose packages, vehicles, or services that match your needs.',
+            ],
+            '2' => [
+                'title' => 'Consult via WhatsApp',
+                'description' => 'Send your request and our team will respond with clear recommendations.',
+            ],
+            '3' => [
+                'title' => 'Depart with Confidence',
+                'description' => 'Complete the administration with our guidance, then travel with comfort and clarity.',
+            ],
+        ],
+    ],
+    'cta' => [
+        'title' => 'Ready to Plan Your Journey?',
+        'subtitle' => 'Consult your halal tour, umrah, or car rental needs with our team today.',
+        'button_whatsapp' => 'Contact via WhatsApp',
+        'button_consult' => 'Free Consultation',
+    ],
+    'faq' => [
+        'title' => 'Frequently Asked Questions',
+        'subtitle' => 'Find answers to common questions about our services.',
+    ],
+    'footer' => [
+        'description' => 'An interactive travel catalog for halal tours, umrah, visa, transport, and travel essentials.',
+        'services' => 'Services',
+        'support' => 'Support',
+        'contact' => 'Contact Us',
+        'rights' => 'All rights reserved.',
+    ],
+    'tour' => [
+        'duration' => 'Duration',
+        'difficulty' => 'Difficulty',
+        'group_size' => 'Group Size',
+        'tour_type' => 'Tour Type',
+        'overview' => 'Trip Overview',
+        'highlights' => 'Highlights',
+        'whats_included' => 'What\'s Included',
+        'whats_excluded' => 'What\'s Excluded',
+        'itinerary' => 'Itinerary',
+        'day' => 'Day',
+        'meals' => 'Meals',
+        'accommodation' => 'Accommodation',
+        'day_trip' => 'Day Trip',
+        'featured' => 'Featured',
+        'related_title' => 'Recommended for you',
+        'see_all' => 'See all tours',
+        'view_itinerary' => 'View Itinerary',
+        'no_items' => 'No items specified',
+        'easy' => 'Easy',
+        'moderate' => 'Moderate',
+        'hard' => 'Hard',
+        'domestic' => 'Domestic',
+        'outbound' => 'Outbound',
+    ],
+];

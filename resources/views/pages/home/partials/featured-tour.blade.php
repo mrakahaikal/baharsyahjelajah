@@ -49,7 +49,7 @@
                                 <div>
                                     <p class="text-[11px] text-gray-400 mb-0.5">{{ __('frontend.featured_tour.labels.start_from') }}</p>
                                     <p class="text-base font-bold text-primary">
-                                        {{ \App\Helpers\LocaleHelper::formatPrice($tour->price_idr) }}
+                                        {{ $tour->formatted_price }}
                                     </p>
                                 </div>
                                 <span class="text-xs font-medium text-primary bg-primary/10 px-3 py-1.5 rounded-full group-hover:bg-primary group-hover:text-white transition-colors">

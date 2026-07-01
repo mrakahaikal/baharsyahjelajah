@@ -1,0 +1,204 @@
+<?php
+
+return [
+    'nav' => [
+        'transport' => 'Pengangkutan',
+        'tour' => 'Lawatan',
+        'umroh' => 'Umrah',
+        'visa' => 'Visa',
+        'shop' => 'Kedai',
+        'blog' => 'Blog',
+    ],
+    'hero' => [
+        'slides' => [
+            [
+                'title' => 'Jelajahi Dunia dengan Penuh Berkah',
+                'subtitle' => 'Sokongan perjalanan dipercayai untuk lawatan halal, umrah, dan pengangkutan yang selesa.',
+            ],
+            [
+                'title' => 'Umrah yang Selesa dan Khusyuk',
+                'subtitle' => 'Pembimbing berpengalaman membantu perjalanan ibadah anda berjalan lancar.',
+            ],
+            [
+                'title' => 'Lawatan Halal Mancanegara',
+                'subtitle' => 'Destinasi impian dengan kemudahan yang dirancang dengan teliti.',
+            ],
+        ],
+    ],
+    'home' => [
+        'kicker' => 'Perjalanan halal, alam, dan ibadah',
+        'explore_packages' => 'Jelajahi Pakej',
+        'travel_note' => 'Nota Perjalanan',
+        'travel_note_title' => 'Direka secara peribadi, dipandu hingga berangkat.',
+        'services' => [
+            'tour' => 'Pakej lawatan halal dengan destinasi terpilih, itinerari jelas, dan sokongan pemandu.',
+            'transport' => 'Armada selesa untuk keluarga, rombongan, perjalanan antara bandar, dan keperluan khas.',
+            'umroh' => 'Pakej umrah dengan bimbingan ibadah, jadual keberangkatan, dan kemudahan terpilih.',
+            'visa' => 'Bantuan visa dan dokumen perjalanan agar persediaan anda lebih tenang.',
+        ],
+    ],
+    'featured_tour' => [
+        'title' => 'Pakej Lawatan Pilihan',
+        'subtitle' => 'Temui pengalaman perjalanan terpilih untuk perjalanan yang bermakna.',
+        'view_all' => 'Lihat Semua Pakej',
+        'labels' => [
+            'duration' => ':days Hari',
+            'start_from' => 'Bermula dari',
+        ],
+        'empty' => [
+            'title' => 'Belum ada pakej pilihan',
+            'subtitle' => 'Kami sedang menyediakan pakej perjalanan terbaik. Sila semak semula nanti.',
+        ],
+    ],
+    'car_rental' => [
+        'title' => 'Pilihan Armada Terbaik',
+        'subtitle' => 'Sewa kereta dengan atau tanpa pemandu untuk perjalanan yang fleksibel dan selesa.',
+        'view_all' => 'Lihat Semua Armada',
+        'labels' => [
+            'pax' => ':count Orang',
+            'transmission' => 'Transmisi :type',
+            'daily' => 'Harian',
+            'all_in' => 'Semua Termasuk',
+            'per_day' => '/ Hari',
+            'per_trip' => '/ Trip',
+            'start_from' => 'Bermula dari',
+        ],
+        'empty' => [
+            'title' => 'Armada belum tersedia',
+            'subtitle' => 'Kami sedang menyediakan pilihan armada terbaik. Hubungi kami untuk maklumat lanjut.',
+        ],
+    ],
+    'umrah_package' => [
+        'title' => 'Perkhidmatan Umrah',
+        'subtitle' => 'Wujudkan impian ibadah ke Tanah Suci dengan layanan profesional, bimbingan khusyuk, dan kemudahan terbaik.',
+        'view_all' => 'Lihat Semua Pakej Umrah',
+        'labels' => [
+            'duration' => ':days Hari',
+            'airline' => 'Syarikat Penerbangan',
+            'hotel' => 'Hotel',
+            'start_from' => 'Bermula dari',
+        ],
+        'empty' => [
+            'title' => 'Jadual Umrah belum tersedia',
+            'subtitle' => 'Kami sedang merancang jadual keberangkatan terbaik. Hubungi kami untuk pendaftaran senarai menunggu atau maklumat lanjut.',
+        ],
+    ],
+    'testimonials' => [
+        'title' => 'Kesan Perjalanan Mereka',
+        'subtitle' => 'Cerita sebenar daripada pelanggan yang mempercayakan perjalanan mereka kepada Baharsyah Jelajah.',
+        'view_all' => 'Lihat Semua Testimoni',
+        'video_title' => 'Momen Perjalanan Pelanggan',
+        'video_subtitle' => 'Cuplikan pengalaman sebenar pelanggan dan pengembara kami di Instagram dan TikTok.',
+        'empty' => [
+            'title' => 'Belum ada testimoni',
+            'subtitle' => 'Kami sentiasa berusaha memberikan layanan terbaik. Testimoni pelanggan akan dipaparkan di sini nanti.',
+        ],
+    ],
+    'blog' => [
+        'title' => 'Artikel & Berita Terkini',
+        'subtitle' => 'Dapatkan wawasan perjalanan, tip umrah, dan berita terkini dunia pelancongan.',
+        'view_all' => 'Lihat Semua Artikel',
+        'read_more' => 'Baca Selanjutnya',
+        'empty' => [
+            'title' => 'Belum ada artikel',
+            'subtitle' => 'Kami sedang menyusun kandungan menarik untuk anda. Sila semak semula nanti.',
+        ],
+    ],
+    'search' => [
+        'tabs' => [
+            'tour' => 'Lawatan Halal',
+            'transport' => 'Sewa Kereta',
+            'umroh' => 'Umrah',
+        ],
+        'fields' => [
+            'destination' => 'Destinasi',
+            'destination_placeholder' => 'Ke mana anda ingin pergi?',
+            'region' => 'Wilayah',
+            'all_regions' => 'Semua Wilayah',
+            'capacity' => 'Kapasiti Penumpang',
+            'pax_placeholder' => 'Jumlah Pax',
+            'vehicle_type' => 'Jenis Armada',
+            'all_vehicles' => 'Semua Jenis',
+            'departure_month' => 'Bulan Keberangkatan',
+            'select_month' => 'Pilih Bulan',
+            'package_type' => 'Jenis Pakej',
+            'all_packages' => 'Semua Pakej',
+        ],
+        'buttons' => [
+            'search_tour' => 'Cari Pakej',
+            'search_transport' => 'Cari Armada',
+            'search_umroh' => 'Cari Jadual',
+        ],
+    ],
+    'why_us' => [
+        'title' => 'Mengapa Memilih :brand?',
+        'subtitle' => 'Kami menghadirkan pengalaman perjalanan yang selesa, tersusun, dan memberi ketenangan rohani.',
+        'cta' => 'Apa Kata Mereka',
+        'stats' => [
+            'pilgrims' => 'Pelanggan Dilayani',
+            'destinations' => 'Destinasi',
+            'satisfaction' => 'Tahap Kepuasan',
+            'experience' => 'Tahun Pengalaman',
+        ],
+    ],
+    'how_it_works' => [
+        'title' => 'Cara Mudah Merancang Perjalanan',
+        'subtitle' => 'Proses tempahan yang telus dalam tiga langkah mudah untuk perjalanan impian anda.',
+        'steps' => [
+            '1' => [
+                'title' => 'Pilih & Sesuaikan',
+                'description' => 'Jelajahi katalog kami dan pilih pakej, armada, atau layanan yang sesuai dengan keperluan anda.',
+            ],
+            '2' => [
+                'title' => 'Konsultasi via WhatsApp',
+                'description' => 'Hantar keperluan anda dan pasukan kami akan memberi cadangan yang jelas.',
+            ],
+            '3' => [
+                'title' => 'Berangkat dengan Tenang',
+                'description' => 'Selesaikan pentadbiran dengan panduan kami, lalu berangkat dengan selesa dan yakin.',
+            ],
+        ],
+    ],
+    'cta' => [
+        'title' => 'Sedia Merancang Perjalanan Anda?',
+        'subtitle' => 'Konsultasikan keperluan lawatan halal, umrah, atau sewa kereta bersama pasukan kami hari ini.',
+        'button_whatsapp' => 'Hubungi via WhatsApp',
+        'button_consult' => 'Konsultasi Percuma',
+    ],
+    'faq' => [
+        'title' => 'Soalan Lazim',
+        'subtitle' => 'Temui jawapan kepada soalan umum tentang perkhidmatan kami.',
+    ],
+    'footer' => [
+        'description' => 'Katalog perjalanan interaktif untuk lawatan halal, umrah, visa, pengangkutan, dan perlengkapan travel.',
+        'services' => 'Perkhidmatan',
+        'support' => 'Bantuan',
+        'contact' => 'Hubungi Kami',
+        'rights' => 'All rights reserved.',
+    ],
+    'tour' => [
+        'duration' => 'Tempoh',
+        'difficulty' => 'Tahap Kesukaran',
+        'group_size' => 'Saiz Kumpulan',
+        'tour_type' => 'Jenis Lawatan',
+        'overview' => 'Gambaran Keseluruhan',
+        'highlights' => 'Sorotan Lawatan',
+        'whats_included' => 'Apa Yang Termasuk',
+        'whats_excluded' => 'Tidak Termasuk',
+        'itinerary' => 'Itinerari',
+        'day' => 'Hari',
+        'meals' => 'Makanan',
+        'accommodation' => 'Penginapan',
+        'day_trip' => 'Lawatan Harian',
+        'featured' => 'Pilihan Utama',
+        'related_title' => 'Disyorkan untuk Anda',
+        'see_all' => 'Lihat Semua Lawatan',
+        'view_itinerary' => 'Lihat Itinerari',
+        'no_items' => 'Tiada item yang ditentukan',
+        'easy' => 'Mudah',
+        'moderate' => 'Sederhana',
+        'hard' => 'Sukar',
+        'domestic' => 'Domestik',
+        'outbound' => 'Mancanegara',
+    ],
+];

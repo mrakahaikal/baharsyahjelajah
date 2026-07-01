@@ -21,7 +21,7 @@ class TourCategory extends Model
 
     public function tours(): HasMany
     {
-        return $this->hasMany(Tour::class);
+        return $this->hasMany(Tour::class, 'category_id');
     }
 
     public function activeTours(): HasMany

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Tours\Tables;
 
+use App\Services\CurrencyService;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -43,9 +44,9 @@ class ToursTable
                         'private' => 'success',
                         default => 'gray',
                     }),
-                TextColumn::make('price_idr')
+                TextColumn::make('price')
                     ->label('Harga')
-                    ->money('IDR', locale: 'id')
+                    ->formatStateUsing(fn ($record): string => app(CurrencyService::class)->convert($record->price, $record->currency, $record->currency))
                     ->sortable(),
                 TextColumn::make('duration_days')
                     ->label('Durasi')

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 @import 'tailwindcss';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -6,37 +7,95 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 
+    --color-brand-primary: #0f172a;
+    --color-brand-secondary: #2563eb;
+    --color-brand-accent: #22c55e;
+    --color-brand-bg-light: #f8fafc;
+    --color-brand-bg-dark: #0b1324;
+    --color-text-main: #1e293b;
+    --color-text-muted: #64748b;
+
     /* Functional Colors mapping to CSS Variables */
-    --color-primary: var(--brand-primary);
-    --color-secondary: var(--brand-secondary);
-    --color-soft-accent: var(--brand-soft-accent);
-    --color-deep-contrast: var(--brand-deep-contrast);
-    --color-bg-main: var(--brand-bg-main);
-    --color-text-main: var(--brand-text-main);
-    --color-border-main: var(--brand-border-main);
+    /*--color-primary: var(--brand-primary);*/
+    /*--color-secondary: var(--brand-secondary);*/
+    /*--color-deep-contrast: var(--brand-deep-contrast);*/
+    /*--color-bg-main: var(--brand-bg-main);*/
+    /*--color-text-main: var(--brand-text-main);*/
+    /*--color-border-main: var(--brand-border-main);*/
+    /*--color-umrah-primary: var(--brand-umrah-primary);*/
+    /*--color-umrah-secondary: var(--brand-umrah-secondary);*/
+    /*--color-umrah-soft-accent: var(--brand-umrah-soft-accent);*/
+    /*--color-umrah-deep-contrast: var(--brand-umrah-deep-contrast);*/
+    /*--color-umrah-bg-main: var(--brand-umrah-bg-main);*/
+    /*--color-umrah-text-main: var(--brand-umrah-text-main);*/
+    /*--color-umrah-border-main: var(--brand-umrah-border-main);*/
 }
 
-:root {
-    /* General Travel Theme (Vibrant & Modern) */
-    --brand-primary: #796FE1;
-    --brand-secondary: #89D4CF;
-    --brand-soft-accent: #B48FCC;
-    --brand-deep-contrast: #2C10E4;
-    --brand-bg-main: #F8FAFC;
-    --brand-text-main: #1E293B;
-    --brand-border-main: #E2E8F0;
+/*:root {*/
+/*    !* Modern OTA: Ocean, Sky, & Sunset *!*/
+/*    --brand-primary: #2563EB;       !* Ocean Blue: Profesional, aman, standar industri travel *!*/
+/*    --brand-secondary: #89D4CF;     !* Teal aslimu: Sangat bagus untuk aksen pantai/alam *!*/
+/*    --brand-accent-cta: #F97316;    !* Sunset Orange: Warna kontras TINGGI untuk tombol Booking! *!*/
+/*    --brand-deep-contrast: #1E3A8A; !* Navy/Dark Blue: Pengganti #2C10E4 yang lebih kalem dan elegan *!*/
+
+/*    !* Base - Tetap dipertahankan *!*/
+/*    --brand-bg-main: #F8FAFC;*/
+/*    --brand-text-main: #1E293B;*/
+/*    --brand-border-main: #E2E8F0;*/
+
+/*    !* Nuansa Ka'bah: Emas Elegan & Charcoal *!*/
+/*    --brand-umrah-primary: #D4AF37;       !* Metallic Gold yang lebih kalem dan premium *!*/
+/*    --brand-umrah-secondary: #FFC000;     !* Warna aslimu digeser ke secondary untuk aksen/hover *!*/
+/*    --brand-umrah-soft-accent: #FEF3C7;   !* Kuning pastel tipis (amber-100) untuk background badge/ikon *!*/
+/*    --brand-umrah-deep-contrast: #171717; !* Charcoal (neutral-900) pengganti pure black *!*/
+
+/*    !* Base - Disesuaikan agar tone-nya seirama (Warm tone) *!*/
+/*    --brand-umrah-bg-main: #FAFAF9;       !* Warm white (stone-50) *!*/
+/*    --brand-umrah-text-main: #272727;     !* Warna soft-accent aslimu kita jadikan teks utama. Jauh lebih nyaman dibaca! *!*/
+/*    --brand-umrah-border-main: #E7E5E4;   !* Warm grey (stone-200) biar matching sama background *!*/
+/*}*/
+
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 .theme-umrah {
-    /* Umrah Theme (Spiritual & Premium) */
-    --brand-primary: #FFC000;
-    --brand-secondary: #FFD450;
-    --brand-soft-accent: #272727; /* Reusing for dark section backgrounds */
-    --brand-deep-contrast: #000000;
-    --brand-bg-main: #FFFDF5;
-    --brand-text-main: #000000;
-    --brand-border-main: #F4F4F4;
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+:focus-visible {
+    outline: 3px solid var(--brand-primary);
+    outline-offset: 2px;
+    border-radius: 8px;
+}
+
+.theme-umrah :focus-visible {
+    outline-color: var(--brand-umrah-primary);
+}
+
+.swiper-pagination-bullet {
+    background: currentColor;
+    opacity: 0.35;
+}
+
+.swiper-pagination-bullet-active {
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+    }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\Tours\Schemas;
 
+use App\Services\CurrencyService;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Schemas\Components\Flex;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -62,9 +62,9 @@ class TourInfolist
                                 Section::make('Informasi Trip')
                                     ->icon(Heroicon::OutlinedBriefcase)
                                     ->schema([
-                                        TextEntry::make('price_idr')
+                                        TextEntry::make('price')
                                             ->label('Harga Mulai')
-                                            ->money('IDR', locale: 'id')
+                                            ->formatStateUsing(fn ($record): string => app(CurrencyService::class)->convert($record->price, $record->currency, $record->currency))
                                             ->weight(FontWeight::Bold)
                                             ->size(TextSize::Large)
                                             ->color('success'),

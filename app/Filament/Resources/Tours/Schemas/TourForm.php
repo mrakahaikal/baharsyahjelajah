@@ -102,11 +102,20 @@ class TourForm
                                                 ->placeholder('0')
                                                 ->numeric()
                                                 ->required(),
-                                            TextInput::make('price_idr')
-                                                ->label('Harga (IDR)')
+                                            TextInput::make('price')
+                                                ->label('Harga')
                                                 ->placeholder('0')
-                                                ->prefix('Rp')
                                                 ->numeric()
+                                                ->required(),
+                                            Select::make('currency')
+                                                ->label('Mata Uang')
+                                                ->options([
+                                                    'IDR' => 'IDR (Rp)',
+                                                    'USD' => 'USD ($)',
+                                                    'MYR' => 'MYR (RM)',
+                                                    'SGD' => 'SGD (S$)',
+                                                ])
+                                                ->default('IDR')
                                                 ->required(),
                                             TextInput::make('max_pax')
                                                 ->label('Kapasitas Maksimal')
@@ -143,8 +152,8 @@ class TourForm
                                 ]),
                         ]),
                 ])
-                ->skippable()
-                ->columnSpanFull(),
+                    ->skippable()
+                    ->columnSpanFull(),
             ]);
     }
 }
