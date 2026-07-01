@@ -1,13 +1,65 @@
 <?php
 
 use App\Models\CurrencyRate;
+use App\Models\Post;
+use App\Models\PostCategory;
 use App\Models\Tour;
 use App\Models\TourCategory;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use function Pest\Laravel\get;
 
 uses(RefreshDatabase::class);
+
+it('renders the tour index as an editorial catalog and hides inactive tours', function () {
+    $category = TourCategory::create([
+        'name' => ['en' => 'Nature Tour', 'id' => 'Wisata Alam', 'ms' => 'Pelancongan Alam'],
+        'slug' => ['en' => 'nature-tour', 'id' => 'wisata-alam', 'ms' => 'pelancongan-alam'],
+        'icon' => 'heroicon-o-sparkles',
+        'sort_order' => 1,
+    ]);
+
+    $activeTour = new Tour([
+        'name' => ['en' => 'River Forest Escape', 'id' => 'Jelajah Sungai Hutan', 'ms' => 'Jelajah Sungai Hutan'],
+        'slug' => ['en' => 'river-forest-escape', 'id' => 'jelajah-sungai-hutan', 'ms' => 'jelajah-sungai-hutan'],
+        'description' => ['en' => 'A calm nature trip.', 'id' => 'Perjalanan alam yang tenang.', 'ms' => 'Perjalanan alam yang tenang.'],
+        'tour_type' => 'domestic',
+        'duration_days' => 2,
+        'duration_nights' => 1,
+        'price' => 1500000,
+        'currency' => 'IDR',
+        'difficulty' => 'easy',
+        'max_pax' => 8,
+        'is_active' => true,
+    ]);
+    $activeTour->category_id = $category->id;
+    $activeTour->save();
+
+    $inactiveTour = new Tour([
+        'name' => ['en' => 'Hidden Draft Tour', 'id' => 'Tour Draft Tersembunyi', 'ms' => 'Tour Draft Tersembunyi'],
+        'slug' => ['en' => 'hidden-draft-tour', 'id' => 'tour-draft-tersembunyi', 'ms' => 'tour-draft-tersembunyi'],
+        'tour_type' => 'domestic',
+        'duration_days' => 1,
+        'duration_nights' => 0,
+        'price' => 500000,
+        'currency' => 'IDR',
+        'difficulty' => 'easy',
+        'max_pax' => 4,
+        'is_active' => false,
+    ]);
+    $inactiveTour->category_id = $category->id;
+    $inactiveTour->save();
+
+    get('/id/tour')
+        ->assertSuccessful()
+        ->assertSee('Katalog Perjalanan')
+        ->assertSee('Paket aktif')
+        ->assertSee('Jelajah Sungai Hutan')
+        ->assertSee('Perjalanan alam yang tenang.')
+        ->assertSee('Buat Custom Trip')
+        ->assertDontSee('Tour Draft Tersembunyi');
+});
 
 it('renders the tour show page with correct database data and no emojis', function () {
     // 1. Create category and tour
@@ -57,9 +109,25 @@ it('renders the tour show page with correct database data and no emojis', functi
         'accommodation' => 'Camp A',
     ]);
 
+    $postCategory = PostCategory::create([
+        'name' => ['en' => 'Travel Guide', 'id' => 'Panduan Perjalanan', 'ms' => 'Panduan Perjalanan'],
+        'slug' => ['en' => 'travel-guide', 'id' => 'panduan-perjalanan', 'ms' => 'panduan-perjalanan'],
+    ]);
+
+    Post::create([
+        'post_category_id' => $postCategory->id,
+        'user_id' => User::factory()->create()->id,
+        'title' => ['en' => 'Jungle Travel Guide', 'id' => 'Panduan Wisata Hutan', 'ms' => 'Panduan Wisata Hutan'],
+        'slug' => ['en' => 'jungle-travel-guide', 'id' => 'panduan-wisata-hutan', 'ms' => 'panduan-wisata-hutan'],
+        'excerpt' => ['en' => 'Guide for jungle trips.', 'id' => 'Panduan untuk wisata hutan.', 'ms' => 'Panduan untuk wisata hutan.'],
+        'content' => ['en' => '<p>Prepare well.</p>', 'id' => '<p>Persiapkan perjalanan.</p>', 'ms' => '<p>Persiapkan perjalanan.</p>'],
+        'status' => 'published',
+        'published_at' => now(),
+    ]);
+
     // 4. Request the show page in Indonesian
     $response = get('/id/tour/pendakian-hutan-menakjubkan');
-    $response->assertStatus(200)
+    $response->assertSuccessful()
         ->assertSee('Pendakian Hutan Menakjubkan')
         ->assertSee('Jelajahi hutan belantara.')
         ->assertSee('Tur Petualangan')
@@ -71,6 +139,11 @@ it('renders the tour show page with correct database data and no emojis', functi
         ->assertSee('Masuk Hutan')
         ->assertSee('Sarapan') // meals_included 'breakfast' mapped to 'Sarapan' (no emoji)
         ->assertSee('Camp A')
+        ->assertSee('Konsultasi Tour Ini')
+        ->assertSee(route('contact.index', ['locale' => 'id', 'tour' => 'pendakian-hutan-menakjubkan']), false)
+        ->assertSee('Artikel panduan terkait')
+        ->assertSee('Panduan Wisata Hutan')
+        ->assertSee('application/ld+json')
         ->assertDontSee('🏨')
         ->assertDontSee('🌅')
         ->assertDontSee('☀️')
@@ -78,11 +151,12 @@ it('renders the tour show page with correct database data and no emojis', functi
 
     // 5. Request the show page in English
     get('/en/tour/amazing-jungle-hike')
-        ->assertStatus(200)
+        ->assertSuccessful()
         ->assertSee('Amazing Jungle Hike')
         ->assertSee('Explore the deep jungle.')
         ->assertSee('Adventure Tour')
         ->assertSee('Moderate')
+        ->assertSee('Consult This Tour')
         ->assertSee('https://wa.me/')
         ->assertDontSee('🏨');
 });

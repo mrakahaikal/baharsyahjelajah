@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use App\Models\Tour;
 use App\Models\TourCategory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,10 @@ class TourController extends Controller
             ->ordered()
             ->withCount('activeTours')
             ->get();
+
+        $activeToursCount = Tour::query()
+            ->active()
+            ->count();
 
         $tours = Tour::query()
             ->active()
@@ -33,7 +38,7 @@ class TourController extends Controller
             ->paginate(9)
             ->withQueryString();
 
-        return view('pages.tour.index', compact('categories', 'tours'));
+        return view('pages.tour.index', compact('activeToursCount', 'categories', 'tours'));
     }
 
     public function show(string $locale, string $tour): View
@@ -58,7 +63,14 @@ class TourController extends Controller
             ->limit(3)
             ->get();
 
-        return view('pages.tour.show', compact('tour', 'relatedTours'));
+        $relatedPosts = Post::query()
+            ->where('status', 'published')
+            ->with(['category', 'author'])
+            ->latest('published_at')
+            ->limit(3)
+            ->get();
+
+        return view('pages.tour.show', compact('relatedPosts', 'relatedTours', 'tour'));
     }
 
     /**

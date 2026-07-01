@@ -6,6 +6,7 @@
             ?? data_get($settings->address, 'id')
             ?? data_get($settings->address, 'en');
         $whatsappUrl = $settings->whatsapp_number ? 'https://wa.me/'.$settings->whatsapp_number : null;
+        $tourContext = request('tour');
     @endphp
 
     <section class="bg-slate-50 border-b border-slate-100">
@@ -30,6 +31,13 @@
                 <p class="mt-5 max-w-2xl text-sm leading-7 text-slate-500">
                     Konsultasikan kebutuhan tour, itinerary, atau layanan perjalanan Anda melalui kanal resmi kami.
                 </p>
+
+                @if($tourContext)
+                    <div class="mt-6 rounded-2xl border border-blue-100 bg-blue-50 p-4 text-sm leading-6 text-blue-900">
+                        <span class="font-semibold">Konteks konsultasi:</span>
+                        {{ str($tourContext)->replace('-', ' ')->title() }}
+                    </div>
+                @endif
             </div>
 
             <div class="grid gap-4 sm:grid-cols-2">

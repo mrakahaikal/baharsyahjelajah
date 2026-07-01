@@ -1,4 +1,7 @@
 @props([
+    'title' => null,
+    'metaDescription' => null,
+    'schemaJson' => null,
     'themeClass' => '',
     'overlapHeader' => false,
 ])
@@ -10,6 +13,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ $title ?? config('app.name', 'Baharsyah Jelajah') }}</title>
+    @if($metaDescription)
+        <meta name="description" content="{{ $metaDescription }}">
+    @endif
+    @if($schemaJson)
+        <script type="application/ld+json">{!! $schemaJson !!}</script>
+    @endif
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
