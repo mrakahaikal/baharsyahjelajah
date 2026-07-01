@@ -51,15 +51,13 @@
                 @endforeach
             </nav>
 
-            <div class="hidden md:flex items-center gap-4">
-                <div class="hidden lg:flex items-center gap-2">
+            <div class="hidden md:flex items-center gap-3">
+                <div class="hidden lg:flex items-center gap-1.5 rounded-full border border-slate-200/70 bg-slate-50/70 p-1 backdrop-blur-md">
                     <div x-data="{ open: false }" class="relative">
                         <button type="button" @click="open = !open" @keydown.escape="open = false"
-                                class="inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-slate-50/50 px-3.5 py-2 text-xs font-semibold text-slate-700 backdrop-blur-md transition-[background-color,border-color,color] duration-200 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                                aria-label="Pilih bahasa" aria-haspopup="menu" aria-controls="language-menu" x-bind:aria-expanded="open.toString()">
-                            <x-lucide-languages class="h-3.5 w-3.5 text-slate-500" aria-hidden="true" />
-                            <span class="uppercase tracking-wider">{{ $locale }}</span>
-                            <x-lucide-chevron-down class="h-3.5 w-3.5 text-slate-400 transition-transform duration-200" x-bind:class="{ 'rotate-180': open }" aria-hidden="true" />
+                                class="grid size-10 place-items-center rounded-full text-slate-600 transition-[background-color,color,box-shadow] duration-200 hover:bg-white hover:text-slate-950 hover:shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                                aria-label="Pilih bahasa, saat ini {{ strtoupper($locale) }}" aria-haspopup="menu" aria-controls="language-menu" x-bind:aria-expanded="open.toString()">
+                            <x-lucide-languages class="h-4.5 w-4.5" aria-hidden="true" />
                         </button>
                         <div id="language-menu" x-show="open" x-cloak @click.away="open = false"
                              x-transition:enter="transition ease-out duration-150"
@@ -84,11 +82,9 @@
 
                     <div x-data="{ open: false }" class="relative">
                         <button type="button" @click="open = !open" @keydown.escape="open = false"
-                                class="inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-slate-50/50 px-3.5 py-2 text-xs font-semibold text-slate-700 backdrop-blur-md transition-[background-color,border-color,color] duration-200 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                                aria-label="Pilih mata uang" aria-haspopup="menu" aria-controls="currency-menu" x-bind:aria-expanded="open.toString()">
-                            <x-lucide-circle-dollar-sign class="h-3.5 w-3.5 text-slate-500" aria-hidden="true" />
-                            <span class="tracking-wider">{{ \App\Helpers\LocaleHelper::currency() }}</span>
-                            <x-lucide-chevron-down class="h-3.5 w-3.5 text-slate-400 transition-transform duration-200" x-bind:class="{ 'rotate-180': open }" aria-hidden="true" />
+                                class="grid size-10 place-items-center rounded-full text-slate-600 transition-[background-color,color,box-shadow] duration-200 hover:bg-white hover:text-slate-950 hover:shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                                aria-label="Pilih mata uang, saat ini {{ \App\Helpers\LocaleHelper::currency() }}" aria-haspopup="menu" aria-controls="currency-menu" x-bind:aria-expanded="open.toString()">
+                            <x-lucide-circle-dollar-sign class="h-4.5 w-4.5" aria-hidden="true" />
                         </button>
                         <div id="currency-menu" x-show="open" x-cloak @click.away="open = false"
                              x-transition:enter="transition ease-out duration-150"

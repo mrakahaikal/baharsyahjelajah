@@ -44,10 +44,10 @@
     @php $waNumber = app(\App\Settings\GeneralSettings::class)->whatsapp_number; @endphp
     @if($waNumber)
         <a href="https://wa.me/{{ $waNumber }}" target="_blank" rel="noopener"
-           class="group fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-xl shadow-emerald-900/20 transition-[background-color,transform] duration-200 hover:scale-105 hover:bg-[#1EBE5D]">
-            <x-lucide-message-circle class="w-6 h-6" />
+           class="group fixed bottom-4 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-xl shadow-emerald-900/20 transition-[background-color,transform] duration-200 hover:scale-105 hover:bg-[#1EBE5D] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 sm:bottom-6 sm:right-6">
+            <x-lucide-message-circle class="h-6 w-6" aria-hidden="true" />
             <span class="sr-only">Chat WhatsApp</span>
-            <span class="pointer-events-none absolute right-full mr-3 whitespace-nowrap rounded-full bg-slate-950 px-3 py-2 text-xs font-semibold text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
+            <span class="pointer-events-none absolute right-full mr-3 hidden whitespace-nowrap rounded-full bg-slate-950 px-3 py-2 text-xs font-semibold text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 sm:block">
                 Hubungi via WhatsApp
             </span>
         </a>

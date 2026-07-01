@@ -18,12 +18,12 @@
                 : $fallback;
 @endphp
 
-<section class="relative overflow-hidden text-white" aria-labelledby="home-hero-heading">
-    <div class="absolute inset-0 -z-10">
-        <div class="swiper js-hero-swiper absolute inset-0">
-            <div class="swiper-wrapper">
+<section class="relative isolate min-h-[720px] overflow-hidden text-white lg:min-h-[780px]" aria-labelledby="home-hero-heading">
+    <div class="absolute inset-0 z-0 h-full">
+        <div class="swiper js-hero-swiper absolute inset-0 h-full">
+            <div class="swiper-wrapper h-full">
                 @foreach($bannerSlides as $slide)
-                    <div class="swiper-slide">
+                    <div class="swiper-slide h-full">
                         <img src="{{ $imageUrl($slide->image_path ?? null, 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=85') }}" alt="" width="1800" height="1100" @if($loop->first) fetchpriority="high" @else loading="lazy" @endif class="h-full w-full object-cover">
                     </div>
                 @endforeach
@@ -32,10 +32,10 @@
         </div>
     </div>
     
-    <div class="absolute inset-0 bg-linear-to-r from-brand-primary/95 via-brand-primary/80 to-brand-primary/20"></div>
-    <div class="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-white to-transparent"></div>
+    <div class="absolute inset-0 z-10 bg-linear-to-r from-brand-primary/95 via-brand-primary/80 to-brand-primary/20"></div>
+    <div class="absolute inset-x-0 bottom-0 z-10 h-32 bg-linear-to-t from-white to-transparent"></div>
 
-    <div class="relative mx-auto max-w-7xl px-4 pb-36 pt-32 sm:px-6 lg:px-8 lg:pb-44 lg:pt-36">
+    <div class="relative z-20 mx-auto max-w-7xl px-4 pb-36 pt-32 sm:px-6 lg:px-8 lg:pb-44 lg:pt-36">
         <div class="max-w-3xl" data-aos="fade-up">
             <p class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-blue-100 ring-1 ring-white/20 backdrop-blur-md">
                 <x-lucide-shield-check class="h-4 w-4 text-blue-400" />
