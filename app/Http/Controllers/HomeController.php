@@ -7,8 +7,6 @@ use App\Models\Faq;
 use App\Models\Post;
 use App\Models\Testimonial;
 use App\Models\Tour;
-use App\Models\UmrahPackage;
-use App\Models\Vehicle;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -19,18 +17,6 @@ class HomeController extends Controller
             ->where('is_featured', true)
             ->where('is_active', true)
             ->with('category')
-            ->latest()
-            ->limit(3)
-            ->get();
-
-        $featuredVehicles = Vehicle::query()
-            ->where('is_available', true)
-            ->latest()
-            ->limit(4)
-            ->get();
-
-        $umrahPackages = UmrahPackage::query()
-            ->where('is_active', true)
             ->latest()
             ->limit(3)
             ->get();
@@ -53,8 +39,6 @@ class HomeController extends Controller
 
         return view('pages.home', compact(
             'featuredTours',
-            'featuredVehicles',
-            'umrahPackages',
             'testimonials',
             'latestPosts',
             'banners',

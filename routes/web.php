@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TourController;
 use Illuminate\Http\Request;
@@ -15,6 +16,17 @@ Route::get('/', function (Request $request) {
 
     return redirect('/'.$detected);
 });
+
+Route::get('/kontak', function (Request $request) {
+    $supported = ['id', 'ms', 'en'];
+
+    $detected = collect($request->getLanguages())
+        ->map(fn (string $lang) => strtolower(substr($lang, 0, 2)))
+        ->first(fn (string $primary) => in_array($primary, $supported))
+        ?? 'id';
+
+    return redirect()->route('contact.index', ['locale' => $detected]);
+})->name('contact.redirect');
 
 // Route for Currency Switcher
 Route::get('/set-currency/{currency}', function (string $currency) {
@@ -56,12 +68,8 @@ Route::group([
     });
 
     Route::prefix('blog')->group(function () {
-        Route::get('/', function () {
-            return view('pages.blog.index');
-        })->name('blog.index');
-        Route::get('/{post}', function () {
-            return view('pages.blog.show');
-        })->name('blog.show');
+        Route::get('/', [BlogController::class, 'index'])->name('blog.index');
+        Route::get('/{post}', [BlogController::class, 'show'])->name('blog.show');
     });
 
     Route::get('/visa', function () {
@@ -79,6 +87,9 @@ Route::group([
     Route::get('/testimonials', function () {
         return view('pages.testimonials.index');
     })->name('testimonials.index');
+    Route::get('/kontak', function () {
+        return view('pages.contact.index');
+    })->name('contact.index');
 });
 
 Route::view('/design-system', 'pages.design-system')->name('design-system.index');

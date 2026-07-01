@@ -17,7 +17,7 @@
                     {{ $tour->category->name }}
                 </span>
             @endif
-            <img src="{{ $tour->thumbnail_url }}" alt="{{ $tour->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <img src="{{ $tour->thumbnail_url }}" alt="{{ $tour->name }}" width="640" height="448" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
         </div>
         <div class="p-5">
             <h3 class="font-bold text-lg text-slate-900 mb-1 line-clamp-1 group-hover:text-blue-600 transition-colors">

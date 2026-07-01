@@ -13,7 +13,9 @@ class BlogController extends Controller
     public function index(Request $request): View
     {
         $categories = PostCategory::query()
-            ->withCount('posts')
+            ->withCount([
+                'posts' => fn ($query) => $query->where('status', 'published'),
+            ])
             ->orderBy('name')
             ->get();
 
