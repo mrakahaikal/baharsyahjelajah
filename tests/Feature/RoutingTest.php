@@ -156,6 +156,26 @@ it('applies floating header spacing to the first section on standard pages only'
         ->assertDontSee('[&amp;&gt;*:first-child]:pt-28', false);
 });
 
+it('renders the contact page with whatsapp inquiry forms and map context', function () {
+    get('/id/kontak')
+        ->assertOk()
+        ->assertSee('Kontak Resmi')
+        ->assertSee('Hubungi Tim Baharsyah Jelajah')
+        ->assertSee('Buka di Google Maps')
+        ->assertSee('Inquiry Perjalanan')
+        ->assertSee('Permohonan B2B')
+        ->assertSee('Form ini tidak menyimpan data di website')
+        ->assertSee('action="https://wa.me/6281234567890"', false)
+        ->assertSee('name="text"', false)
+        ->assertSee('name="customer_phone"', false)
+        ->assertSee('name="destination_interest"', false)
+        ->assertSee('name="organization_name"', false)
+        ->assertSee('name="business_email"', false)
+        ->assertSee('title="Peta lokasi Baharsyah Jelajah"', false)
+        ->assertSee('Kanal Resmi')
+        ->assertSee('Respons Personal');
+});
+
 it('returns 404 for invalid locales', function () {
     get('/fr/transport')
         ->assertStatus(404);

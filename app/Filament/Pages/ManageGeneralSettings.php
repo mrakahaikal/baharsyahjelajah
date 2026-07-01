@@ -16,11 +16,15 @@ use SolutionForest\FilamentTranslateField\Forms\Component\Translate;
 
 class ManageGeneralSettings extends SettingsPage
 {
-    protected static string|null|BackedEnum $navigationIcon  = Heroicon::OutlinedCog6Tooth;
+    protected static string|null|BackedEnum $navigationIcon = Heroicon::OutlinedCog6Tooth;
+
     protected static string|null|\UnitEnum $navigationGroup = 'Pengaturan';
+
     protected static ?string $navigationLabel = 'Umum & Kontak';
+
     protected static ?string $title = 'Pengaturan Umum';
-    protected static ?int    $navigationSort  = 1;
+
+    protected static ?int $navigationSort = 1;
 
     protected static string $settings = GeneralSettings::class;
 
@@ -67,6 +71,12 @@ class ManageGeneralSettings extends SettingsPage
                                 ->placeholder('info@baharsyahjelajah.com')
                                 ->email()
                                 ->required(),
+                            TextInput::make('map_embed_url')
+                                ->label('Google Maps Embed URL')
+                                ->placeholder('https://www.google.com/maps/embed?...')
+                                ->url()
+                                ->helperText('Gunakan URL iframe embed dari Google Maps.')
+                                ->columnSpanFull(),
                         ]),
                         Translate::make()
                             ->locales(['id', 'en', 'ms'])
@@ -75,6 +85,10 @@ class ManageGeneralSettings extends SettingsPage
                                     ->label('Alamat Kantor')
                                     ->placeholder('Tuliskan alamat lengkap kantor pusat...')
                                     ->rows(3),
+                                Textarea::make('office_hours')
+                                    ->label('Jam Respons')
+                                    ->placeholder('Senin-Sabtu, 09.00-18.00 WIB')
+                                    ->rows(2),
                             ]),
                     ]),
 
