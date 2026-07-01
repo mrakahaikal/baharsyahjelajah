@@ -26,6 +26,8 @@ class VehicleResource extends Resource
 
     protected static string|null|\UnitEnum $navigationGroup = 'Layanan Transportasi';
 
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static ?string $navigationLabel = 'Armada Kendaraan';
 
     protected static ?string $modelLabel = 'Kendaraan';

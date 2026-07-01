@@ -14,33 +14,30 @@
         <!-- Services Section -->
         <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="services-heading">
             <div class="text-center" data-aos="fade-up">
-                <p class="text-sm font-semibold text-blue-600 uppercase tracking-wider">Layanan utama</p>
-                <h2 id="services-heading" class="mt-2 text-3xl font-extrabold text-slate-900 tracking-tight sm:text-4xl">Layanan Perjalanan Terbaik Kami</h2>
-                <p class="mt-4 max-w-2xl mx-auto text-sm leading-relaxed text-slate-500">Mulai dari perjalanan ibadah, wisata halal dunia, pengurusan dokumen perjalanan, hingga transportasi nyaman.</p>
+                <p class="text-sm font-semibold text-blue-600 uppercase tracking-wider">Rancang perjalanan</p>
+                <h2 id="services-heading" class="mt-2 text-3xl font-extrabold text-slate-900 tracking-tight sm:text-4xl">Pilih tour dengan detail yang mudah dipahami.</h2>
+                <p class="mt-4 max-w-2xl mx-auto text-sm leading-relaxed text-slate-500">Jelajahi itinerary, fasilitas, estimasi biaya, dan panduan destinasi sebelum berdiskusi dengan tim Baharsyah Jelajah.</p>
             </div>
 
-            <div class="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
                 @foreach([
-                    ['icon' => 'map', 'title' => 'Tour & Travel', 'desc' => 'Paket wisata domestik dan internasional dengan jaminan halal tour.', 'route' => 'tour.index'],
-                    ['icon' => 'moon', 'title' => 'Paket Umroh', 'desc' => 'Layanan ibadah umroh eksklusif pendampingan mutawwif berpengalaman.', 'route' => 'umroh.index'],
-                    ['icon' => 'car', 'title' => 'Sewa Kendaraan', 'desc' => 'Armada lengkap dengan driver ramah untuk menunjang kenyamanan mobilitas Anda.', 'route' => 'transport.index'],
-                    ['icon' => 'badge-check', 'title' => 'Layanan Visa', 'desc' => 'Bantuan pengurusan dokumen perjalanan dan visa resmi dengan proses cepat.', 'route' => 'visa.index'],
+                    ['icon' => 'map', 'title' => 'Jelajahi Paket Tour', 'desc' => 'Bandingkan rute, durasi, fasilitas, dan estimasi harga dari paket perjalanan yang tersedia.', 'route' => 'tour.index'],
+                    ['icon' => 'file', 'title' => 'Baca Panduan Destinasi', 'desc' => 'Temukan inspirasi rute, tips persiapan, dan catatan perjalanan sebelum menentukan pilihan.', 'route' => 'blog.index'],
+                    ['icon' => 'message', 'title' => 'Diskusikan Itinerary', 'desc' => 'Ceritakan tanggal, jumlah peserta, dan gaya perjalanan agar tim dapat membantu menyesuaikan rute.', 'route' => 'contact.index'],
                 ] as $srv)
                     <div class="group relative min-h-48 rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs transition-[box-shadow,transform,border-color] duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md" data-aos="fade-up" data-aos-delay="{{ $loop->index * 80 }}">
                         <div class="inline-flex rounded-xl bg-blue-50 text-blue-600 p-3 mb-5 transition-colors group-hover:bg-blue-600 group-hover:text-white">
                             @if($srv['icon'] === 'map')
                                 <x-lucide-map class="h-6 w-6" />
-                            @elseif($srv['icon'] === 'moon')
-                                <x-lucide-moon class="h-6 w-6" />
-                            @elseif($srv['icon'] === 'car')
-                                <x-lucide-car class="h-6 w-6" />
+                            @elseif($srv['icon'] === 'file')
+                                <x-lucide-file-text class="h-6 w-6" />
                             @else
-                                <x-lucide-badge-check class="h-6 w-6" />
+                                <x-lucide-message-circle class="h-6 w-6" />
                             @endif
                         </div>
                         <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{{ $srv['title'] }}</h3>
                         <p class="mt-3 text-xs leading-relaxed text-slate-500">{{ $srv['desc'] }}</p>
-                        <a href="{{ route($srv['route'], ['locale' => $locale]) }}" class="absolute inset-0" aria-label="{{ $srv['title'] }}"></a>
+                        <a href="{{ route($srv['route'], ['locale' => $locale]) }}" class="absolute inset-0 rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600" aria-label="{{ $srv['title'] }}"></a>
                     </div>
                 @endforeach
             </div>
@@ -55,9 +52,9 @@
                         <h2 id="featured-tours-heading" class="mt-2 text-3xl font-extrabold text-slate-900 tracking-tight sm:text-4xl">{{ __('frontend.featured_tour.title') }}</h2>
                     </div>
                     <a href="{{ route('tour.index', ['locale' => $locale]) }}"
-                       class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
+                       class="inline-flex w-full items-center justify-center gap-1.5 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 sm:w-fit">
                         {{ __('frontend.featured_tour.view_all') }}
-                        <x-lucide-arrow-right class="h-3.5 w-3.5"/>
+                        <x-lucide-arrow-right class="h-3.5 w-3.5" aria-hidden="true"/>
                     </a>
                 </div>
 
@@ -76,99 +73,6 @@
             </div>
         </section>
 
-        <!-- Transport Section -->
-{{--        <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="transport-heading">--}}
-{{--            <div class="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">--}}
-{{--                <div data-aos="fade-right">--}}
-{{--                    <p class="text-sm font-semibold text-blue-600 uppercase tracking-wider">Transport fleksibel</p>--}}
-{{--                    <h2 id="transport-heading" class="mt-2 text-3xl font-extrabold text-slate-900 tracking-tight">{{ __('frontend.car_rental.title') }}</h2>--}}
-{{--                    <p class="mt-4 text-sm leading-relaxed text-slate-500">{{ __('frontend.car_rental.subtitle') }}</p>--}}
-{{--                    <div class="mt-6 grid grid-cols-2 gap-3">--}}
-{{--                        @foreach(['AC nyaman', 'Driver opsional', 'Harga harian/trip', 'Rombongan siap'] as $item)--}}
-{{--                            <div class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-xs">{{ $item }}</div>--}}
-{{--                        @endforeach--}}
-{{--                    </div>--}}
-{{--                    <a href="{{ route('transport.index', ['locale' => $locale]) }}"--}}
-{{--                       class="mt-8 inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">--}}
-{{--                        {{ __('frontend.car_rental.view_all') }}--}}
-{{--                        <x-lucide-arrow-right class="h-4 w-4"/>--}}
-{{--                    </a>--}}
-{{--                </div>--}}
-
-{{--                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">--}}
-{{--                    @forelse($featuredVehicles->take(4) as $vehicle)--}}
-{{--                        <article class="group overflow-hidden rounded-2xl bg-white border border-slate-200/80 shadow-xs transition-[box-shadow,transform,border-color] duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md"--}}
-{{--                                 data-aos="fade-up" data-aos-delay="{{ $loop->index * 80 }}">--}}
-{{--                            <div class="h-44 overflow-hidden bg-slate-100">--}}
-{{--                                <img src="{{ $vehicle->thumbnail_url }}" alt="{{ $vehicle->name }}"--}}
-{{--                                     width="640" height="360" loading="lazy" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500">--}}
-{{--                            </div>--}}
-{{--                            <div class="p-5">--}}
-{{--                                <h3 class="font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{{ $vehicle->full_name ?: $vehicle->name }}</h3>--}}
-{{--                                <div class="mt-3 flex flex-wrap gap-2">--}}
-{{--                                    @foreach(array_slice($vehicle->feature_badges, 0, 3) as $badge)--}}
-{{--                                        <span class="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600">{{ $badge }}</span>--}}
-{{--                                    @endforeach--}}
-{{--                                </div>--}}
-{{--                                <p class="mt-4 text-base font-extrabold text-blue-600">{{ $vehicle->formatted_price_per_day ?? $vehicle->formatted_price_per_trip ?? 'Hubungi kami' }}</p>--}}
-{{--                            </div>--}}
-{{--                        </article>--}}
-{{--                    @empty--}}
-{{--                        <div class="sm:col-span-2 rounded-2xl bg-white p-10 text-center border border-slate-200/80">--}}
-{{--                            <h3 class="font-bold text-slate-900">{{ __('frontend.car_rental.empty.title') }}</h3>--}}
-{{--                            <p class="mt-2 text-sm text-slate-500">{{ __('frontend.car_rental.empty.subtitle') }}</p>--}}
-{{--                        </div>--}}
-{{--                    @endforelse--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </section>--}}
-
-        <!-- Umrah Section -->
-{{--        <section class="bg-slate-900 py-16 text-white" aria-labelledby="umrah-heading">--}}
-{{--            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">--}}
-{{--                <div class="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">--}}
-{{--                    <div data-aos="fade-right">--}}
-{{--                        <p class="inline-flex items-center gap-1.5 rounded-full bg-blue-500/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-blue-400 ring-1 ring-blue-500/20">--}}
-{{--                            <x-lucide-moon-star class="h-3.5 w-3.5 shrink-0"/>--}}
-{{--                            Nuansa Ka'bah premium--}}
-{{--                        </p>--}}
-{{--                        <h2 id="umrah-heading" class="mt-5 text-3xl font-extrabold leading-tight text-white tracking-tight sm:text-4xl">{{ __('frontend.umrah_package.title') }}</h2>--}}
-{{--                        <p class="mt-4 max-w-xl text-sm leading-relaxed text-slate-400">{{ __('frontend.umrah_package.subtitle') }}</p>--}}
-{{--                        <div class="mt-8 grid grid-cols-2 gap-3">--}}
-{{--                            @foreach([--}}
-{{--                                ['value' => 'Visa', 'label' => 'Pengurusan dibantu'],--}}
-{{--                                ['value' => 'Hotel', 'label' => 'Makkah & Madinah'],--}}
-{{--                                ['value' => 'Handling', 'label' => 'Keberangkatan rapi'],--}}
-{{--                                ['value' => 'Guide', 'label' => 'Pendamping ibadah'],--}}
-{{--                            ] as $item)--}}
-{{--                                <div class="rounded-2xl border border-slate-800 bg-slate-950/40 p-4">--}}
-{{--                                    <div class="font-extrabold text-blue-400 text-lg">{{ $item['value'] }}</div>--}}
-{{--                                    <p class="mt-1 text-xs text-slate-400">{{ $item['label'] }}</p>--}}
-{{--                                </div>--}}
-{{--                            @endforeach--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-
-{{--                    <div class="bg-slate-950/50 border border-slate-800 rounded-2xl p-6 sm:p-8 relative overflow-hidden" data-aos="fade-left">--}}
-{{--                        <div class="relative">--}}
-{{--                            <h3 class="text-xl font-bold mb-2">Konsultasi Umroh Kustom</h3>--}}
-{{--                            <p class="text-xs text-slate-400 leading-relaxed mb-6">Butuh akomodasi khusus, paket keluarga kecil, atau tanggal keberangkatan yang fleksibel? Diskusikan langsung via WhatsApp.</p>--}}
-
-{{--                            <div class="space-y-4">--}}
-{{--                                <a href="https://wa.me/{{ $waNumber }}" target="_blank" rel="noopener" class="flex items-center justify-between rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-4 text-sm transition-colors shadow-lg shadow-blue-500/10">--}}
-{{--                                    <span class="flex items-center gap-2">--}}
-{{--                                        <x-lucide-message-circle class="h-4.5 w-4.5" />--}}
-{{--                                        Hubungi Chat Admin--}}
-{{--                                    </span>--}}
-{{--                                    <x-lucide-arrow-right class="h-4 w-4" />--}}
-{{--                                </a>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </section>--}}
-
         <!-- Why Choose Us -->
         <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="why-heading">
             <div class="grid gap-10 lg:grid-cols-2 lg:items-center">
@@ -179,9 +83,9 @@
                     <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
                         @foreach([
                             ['title' => 'Kurasi itinerary', 'text' => 'Rute, fasilitas, dan durasi disusun supaya realistis.'],
-                            ['title' => 'Konsultasi cepat', 'text' => 'Setiap CTA membawa calon pelanggan langsung ke percakapan.'],
-                            ['title' => 'Harga terbaca', 'text' => 'Paket menampilkan durasi, fasilitas, dan harga mulai.'],
-                            ['title' => 'Lintas layanan', 'text' => 'Tour, umroh, transport, visa, dan shop saling terhubung.'],
+                            ['title' => 'Respons personal', 'text' => 'Tim membantu membaca kebutuhan perjalanan sebelum memberi saran rute.'],
+                            ['title' => 'Estimasi jelas', 'text' => 'Paket menampilkan durasi, fasilitas, dan harga awal yang mudah dipahami.'],
+                            ['title' => 'Panduan berguna', 'text' => 'Artikel membantu Anda mengenali destinasi sebelum mulai berdiskusi.'],
                         ] as $item)
                             <div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs">
                                 <h3 class="font-bold text-slate-900">{{ $item['title'] }}</h3>
@@ -195,7 +99,7 @@
                     <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1100&q=85"
                          alt="" width="1100" height="825" loading="lazy" class="absolute inset-0 h-full w-full object-cover opacity-25">
                     <div class="relative">
-                        <p class="text-sm font-semibold uppercase tracking-wider text-blue-400">3 langkah mudah</p>
+                        <p class="text-sm font-semibold uppercase tracking-wider text-blue-400">Cara merencanakan</p>
                         <div class="mt-8 space-y-6">
                             @foreach(__('frontend.how_it_works.steps') as $step)
                                 <div class="flex gap-4">
@@ -268,16 +172,16 @@
                     </div>
 
                     <a href="{{ route('blog.index', ['locale' => $locale]) }}"
-                       class="inline-flex w-fit items-center gap-1.5 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                       class="inline-flex w-full items-center justify-center gap-1.5 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 sm:w-fit">
                         {{ __('frontend.blog.view_all') }}
                         <x-lucide-arrow-right class="h-3.5 w-3.5" aria-hidden="true" />
                     </a>
                 </div>
 
                 @if($latestPosts->isNotEmpty())
-                    <div class="mt-10 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-                        <div data-aos="fade-up">
-                            <x-ui.post-card :post="$latestPosts->first()" :$locale image-height="h-72 sm:h-96" featured />
+                    <div class="mt-10 grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+                        <div class="lg:self-start" data-aos="fade-up">
+                            <x-ui.post-card :post="$latestPosts->first()" :$locale image-height="h-72 sm:h-96" featured :stretch="false" />
                         </div>
 
                         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-1">
@@ -328,20 +232,20 @@
                  data-aos="fade-up">
                 <div class="grid gap-8 lg:grid-cols-12 lg:items-center">
                     <div class="lg:col-span-8">
-                        <p class="text-sm font-semibold uppercase tracking-wider text-blue-100">Konsultasi gratis</p>
+                        <p class="text-sm font-semibold uppercase tracking-wider text-blue-100">Mulai diskusi</p>
                         <h2 id="final-cta-heading" class="mt-3 text-3xl font-extrabold tracking-tight">{{ __('frontend.cta.title') }}</h2>
                         <p class="mt-3 max-w-2xl text-sm leading-relaxed text-blue-100/90">{{ __('frontend.cta.subtitle') }}</p>
                     </div>
                     <div class="flex flex-col gap-3 sm:flex-row lg:col-span-4 lg:justify-end">
                         @if($waNumber)
                             <a href="https://wa.me/{{ $waNumber }}" target="_blank" rel="noopener"
-                               class="inline-flex items-center justify-center gap-1.5 rounded-full bg-white px-5 py-3 text-sm font-semibold text-blue-600 hover:bg-slate-50 transition-colors">
-                                <x-lucide-message-circle class="h-4 w-4"/>
+                               class="inline-flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-white px-5 py-3 text-sm font-semibold text-blue-600 transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:w-auto">
+                                <x-lucide-message-circle class="h-4 w-4" aria-hidden="true"/>
                                 {{ __('frontend.cta.button_whatsapp') }}
                             </a>
                         @endif
-                        <a href="{{ route('tour.index', ['locale' => $locale]) }}"
-                           class="inline-flex items-center justify-center gap-1.5 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800 transition-colors">
+                        <a href="{{ route('contact.index', ['locale' => $locale]) }}"
+                           class="inline-flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 sm:w-auto">
                             {{ __('frontend.cta.button_consult') }}
                         </a>
                     </div>

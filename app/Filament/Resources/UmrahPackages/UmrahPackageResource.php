@@ -26,6 +26,8 @@ class UmrahPackageResource extends Resource
 
     protected static string|null|\UnitEnum $navigationGroup = 'Layanan Umrah';
 
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static ?string $navigationLabel = 'Paket Umrah';
 
     protected static ?string $modelLabel = 'Paket Umrah';

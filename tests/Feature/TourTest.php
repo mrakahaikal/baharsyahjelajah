@@ -59,6 +59,11 @@ it('renders the tour index as an editorial catalog and hides inactive tours', fu
         ->assertSee('Perjalanan alam yang tenang.')
         ->assertSee('Buat Custom Trip')
         ->assertDontSee('Tour Draft Tersembunyi');
+
+    get('/id/tour?destination=Sungai&type=domestic')
+        ->assertSuccessful()
+        ->assertSee('Jelajah Sungai Hutan')
+        ->assertDontSee('Tour Draft Tersembunyi');
 });
 
 it('renders the tour show page with correct database data and no emojis', function () {

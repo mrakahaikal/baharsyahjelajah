@@ -3,15 +3,18 @@
     'locale' => app()->getLocale(),
     'imageHeight' => 'h-52',
     'featured' => false,
+    'stretch' => true,
 ])
 
 @php
     $publishedAt = $post->published_at ?? $post->created_at;
     $excerpt = $post->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($post->content ?? ''), 140);
+    $cardClass = 'group flex flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xs transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md';
+    $cardClass = $stretch ? $cardClass.' h-full' : $cardClass;
 @endphp
 
 <article {{ $attributes->merge([
-    'class' => 'group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xs transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md',
+    'class' => $cardClass,
 ]) }}>
     <a href="{{ route('blog.show', ['locale' => $locale, 'post' => $post->slug]) }}" class="block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600" aria-label="{{ $post->title }}">
         <div class="relative {{ $imageHeight }} overflow-hidden bg-slate-100">

@@ -30,7 +30,7 @@ class TourForm
                         ->schema([
                             Section::make()
                                 ->schema([
-                                    Select::make('tour_category_id')
+                                    Select::make('category_id')
                                         ->label('Kategori')
                                         ->relationship('category', 'name')
                                         ->searchable()
@@ -137,6 +137,7 @@ class TourForm
                                         ->label('Foto Utama')
                                         ->image()
                                         ->directory('tours/thumbnails')
+                                        ->visibility('public')
                                         ->columnSpanFull(),
                                     Grid::make(2)
                                         ->schema([

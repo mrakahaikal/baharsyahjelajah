@@ -82,7 +82,7 @@ class ToursTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('tour_category_id')
+                SelectFilter::make('category_id')
                     ->label('Kategori')
                     ->relationship('category', 'name')
                     ->searchable()

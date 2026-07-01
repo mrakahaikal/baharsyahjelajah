@@ -34,14 +34,25 @@ class GalleriesRelationManager extends RelationManager
                             ->label('Foto')
                             ->image()
                             ->directory('tours/galleries')
+                            ->visibility('public')
                             ->required()
                             ->columnSpanFull(),
                         Grid::make(2)
                             ->schema([
-                                TextInput::make('caption')
-                                    ->label('Keterangan / Caption')
-                                    ->placeholder('Misal: Pemandangan matahari terbit di Bromo')
-                                    ->maxLength(255),
+                                Grid::make(3)
+                                    ->schema([
+                                        TextInput::make('caption.id')
+                                            ->label('Caption ID')
+                                            ->placeholder('Misal: Pemandangan matahari terbit di Bromo')
+                                            ->maxLength(255),
+                                        TextInput::make('caption.en')
+                                            ->label('Caption EN')
+                                            ->maxLength(255),
+                                        TextInput::make('caption.ms')
+                                            ->label('Caption MS')
+                                            ->maxLength(255),
+                                    ])
+                                    ->columnSpanFull(),
                                 TextInput::make('sort_order')
                                     ->label('Urutan')
                                     ->placeholder('0')
@@ -55,16 +66,15 @@ class GalleriesRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('caption')
+            ->recordTitleAttribute('localized_caption')
             ->defaultSort('sort_order', 'asc')
             ->columns([
                 ImageColumn::make('image_path')
                     ->label('Foto')
                     ->square()
                     ->size(80),
-                TextColumn::make('caption')
+                TextColumn::make('localized_caption')
                     ->label('Keterangan')
-                    ->searchable()
                     ->placeholder('-'),
                 TextColumn::make('sort_order')
                     ->label('Urutan')

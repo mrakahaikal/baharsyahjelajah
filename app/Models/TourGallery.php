@@ -12,7 +12,7 @@ class TourGallery extends Model
     protected function casts(): array
     {
         return [
-            'caption'    => 'array',    // ['id' => '...', 'ms' => '...', 'en' => '...']
+            'caption' => 'array',    // ['id' => '...', 'ms' => '...', 'en' => '...']
             'sort_order' => 'integer',
         ];
     }
@@ -24,12 +24,22 @@ class TourGallery extends Model
 
     public function getLocalizedCaptionAttribute(): ?string
     {
-        if (empty($this->caption)) {
+        $caption = $this->caption;
+
+        if (blank($caption)) {
+            return null;
+        }
+
+        if (is_string($caption)) {
+            return $caption;
+        }
+
+        if (! is_array($caption)) {
             return null;
         }
 
         $locale = app()->getLocale();
 
-        return $this->caption[$locale] ?? $this->caption['id'] ?? null;
+        return $caption[$locale] ?? $caption['id'] ?? collect($caption)->filter()->first();
     }
 }

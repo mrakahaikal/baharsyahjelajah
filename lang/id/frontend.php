@@ -82,7 +82,7 @@ return [
     ],
     'blog' => [
         'title' => 'Artikel & Berita Terbaru',
-        'subtitle' => 'Dapatkan wawasan seputar perjalanan, tips umroh, dan berita terbaru dari dunia pariwisata.',
+        'subtitle' => 'Dapatkan wawasan seputar destinasi, persiapan perjalanan, dan ide itinerary untuk membantu memilih tour yang tepat.',
         'view_all' => 'Lihat Semua Artikel',
         'read_more' => 'Baca Selengkapnya',
         'empty' => [
@@ -98,10 +98,10 @@ return [
         ],
         'fields' => [
             'destination' => 'Destinasi',
-            'destination_placeholder' => 'Ke mana Anda ingin pergi?',
+            'destination_placeholder' => 'Contoh: Kalimantan, pantai, hutan...',
             'region' => 'Wilayah',
             'all_regions' => 'Semua Wilayah',
-            'capacity' => 'Kapasitas Penumpang',
+            'capacity' => 'Jumlah Peserta',
             'pax_placeholder' => 'Jumlah Pax',
             'vehicle_type' => 'Tipe Armada',
             'all_vehicles' => 'Semua Tipe',
@@ -118,7 +118,7 @@ return [
     ],
     'why_us' => [
         'title' => 'Mengapa Memilih :brand?',
-        'subtitle' => 'Kami berkomitmen menghadirkan pengalaman perjalanan yang tidak hanya nyaman, tapi juga memberikan ketenangan spiritual bagi setiap pelanggan.',
+        'subtitle' => 'Kami membantu calon traveler memahami rute, fasilitas, durasi, dan opsi penyesuaian sebelum mengambil keputusan.',
         'cta' => 'Apa Kata Mereka',
         'stats' => [
             'pilgrims' => 'Jamaah Terlayani',
@@ -129,25 +129,25 @@ return [
     ],
     'how_it_works' => [
         'title' => 'Cara Mudah Merencanakan Perjalanan',
-        'subtitle' => 'Proses pemesanan yang transparan dan tanpa ribet. Cukup 3 langkah mudah untuk mewujudkan perjalanan impian Anda.',
+        'subtitle' => 'Proses eksplorasi yang membantu Anda memahami pilihan sebelum masuk ke konsultasi.',
         'steps' => [
             '1' => [
-                'title' => 'Pilih & Sesuaikan',
-                'description' => 'Eksplorasi katalog kami dan gunakan filter interaktif untuk menemukan paket, armada, atau layanan yang sesuai dengan kebutuhan Anda.',
+                'title' => 'Eksplorasi Katalog',
+                'description' => 'Baca detail tour, itinerary, fasilitas, estimasi harga, dan artikel panduan yang relevan.',
             ],
             '2' => [
-                'title' => 'Konsultasi via WhatsApp',
-                'description' => 'Klik tombol pesan, dan sistem kami akan membuatkan draf pesan detail secara otomatis. Tim kami akan segera merespons pertanyaan Anda.',
+                'title' => 'Konsultasi Itinerary',
+                'description' => 'Ceritakan tanggal rencana, jumlah peserta, dan preferensi perjalanan agar tim bisa memberi opsi yang masuk akal.',
             ],
             '3' => [
-                'title' => 'Berangkat dengan Tenang',
-                'description' => 'Selesaikan administrasi dengan panduan tim kami, lalu bersiaplah untuk pengalaman perjalanan yang aman, nyaman, dan berkesan.',
+                'title' => 'Finalisasi Rencana',
+                'description' => 'Dapatkan rekomendasi rute dan penyesuaian sebelum Anda memutuskan paket yang paling sesuai.',
             ],
         ],
     ],
     'cta' => [
         'title' => 'Siap Merencanakan Perjalanan Anda?',
-        'subtitle' => 'Konsultasikan kebutuhan Wisata Halal, Umroh, atau Rental Mobil Anda bersama tim ahli kami sekarang juga.',
+        'subtitle' => 'Konsultasikan rute, tanggal, jumlah peserta, dan preferensi tour bersama tim Baharsyah Jelajah.',
         'button_whatsapp' => 'Hubungi via WhatsApp',
         'button_consult' => 'Konsultasi Gratis',
     ],

@@ -25,6 +25,21 @@ class TourController extends Controller
         $tours = Tour::query()
             ->active()
             ->with('category')
+            ->when($request->string('destination')->isNotEmpty(), function ($query) use ($request): void {
+                $keyword = $request->string('destination')->toString();
+                $locale = app()->getLocale();
+
+                $query->where(function ($keywordQuery) use ($keyword, $locale): void {
+                    $keywordQuery
+                        ->where("name->{$locale}", 'like', "%{$keyword}%")
+                        ->orWhere('name->id', 'like', "%{$keyword}%")
+                        ->orWhere("description->{$locale}", 'like', "%{$keyword}%")
+                        ->orWhere('description->id', 'like', "%{$keyword}%");
+                });
+            })
+            ->when($request->string('type')->isNotEmpty(), function ($query) use ($request): void {
+                $query->where('tour_type', $request->string('type')->toString());
+            })
             ->when($request->string('category')->isNotEmpty(), function ($query) use ($request): void {
                 $categorySlug = $request->string('category')->toString();
 

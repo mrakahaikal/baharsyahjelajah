@@ -96,7 +96,7 @@ return [
     ],
     'blog' => [
         'title' => 'Latest Articles & News',
-        'subtitle' => 'Read travel insights, umrah tips, and updates from the tourism world.',
+        'subtitle' => 'Read destination insights, trip preparation tips, and itinerary ideas to help you choose the right tour.',
         'view_all' => 'View All Articles',
         'read_more' => 'Read More',
         'empty' => [
@@ -112,10 +112,10 @@ return [
         ],
         'fields' => [
             'destination' => 'Destination',
-            'destination_placeholder' => 'Where would you like to go?',
+            'destination_placeholder' => 'Example: Borneo, beach, jungle...',
             'region' => 'Region',
             'all_regions' => 'All Regions',
-            'capacity' => 'Passenger Capacity',
+            'capacity' => 'Group Size',
             'pax_placeholder' => 'Number of Pax',
             'vehicle_type' => 'Vehicle Type',
             'all_vehicles' => 'All Types',
@@ -132,7 +132,7 @@ return [
     ],
     'why_us' => [
         'title' => 'Why Choose :brand?',
-        'subtitle' => 'We deliver travel experiences that are comfortable, thoughtful, and spiritually reassuring.',
+        'subtitle' => 'We help travelers understand routes, facilities, duration, and customization options before making a decision.',
         'cta' => 'What They Say',
         'stats' => [
             'pilgrims' => 'Customers Served',
@@ -146,22 +146,22 @@ return [
         'subtitle' => 'A transparent booking process in three simple steps for your ideal journey.',
         'steps' => [
             '1' => [
-                'title' => 'Choose & Customize',
-                'description' => 'Explore our catalog and choose packages, vehicles, or services that match your needs.',
+                'title' => 'Explore the Catalog',
+                'description' => 'Read tour details, itineraries, facilities, estimated pricing, and relevant travel guides.',
             ],
             '2' => [
-                'title' => 'Consult via WhatsApp',
-                'description' => 'Send your request and our team will respond with clear recommendations.',
+                'title' => 'Consult the Itinerary',
+                'description' => 'Share your dates, group size, and travel preferences so our team can suggest sensible options.',
             ],
             '3' => [
-                'title' => 'Depart with Confidence',
-                'description' => 'Complete the administration with our guidance, then travel with comfort and clarity.',
+                'title' => 'Finalize the Plan',
+                'description' => 'Get route recommendations and adjustments before choosing the most suitable package.',
             ],
         ],
     ],
     'cta' => [
         'title' => 'Ready to Plan Your Journey?',
-        'subtitle' => 'Consult your halal tour, umrah, or car rental needs with our team today.',
+        'subtitle' => 'Consult your route, dates, group size, and tour preferences with the Baharsyah Jelajah team.',
         'button_whatsapp' => 'Contact via WhatsApp',
         'button_consult' => 'Free Consultation',
     ],

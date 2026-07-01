@@ -31,7 +31,7 @@ it('sets the application locale based on the URL prefix', function (string $loca
         ->assertSee("<html lang=\"{$locale}\"", false);
 })->with(['id', 'ms', 'en']);
 
-it('renders the expanded OTA homepage sections', function () {
+it('renders the mvp homepage focused on tours, guides, and consultation', function () {
     $user = User::factory()->create();
     $category = PostCategory::create([
         'name' => ['id' => 'Panduan Wisata', 'en' => 'Travel Guide', 'ms' => 'Panduan Pelancongan'],
@@ -72,22 +72,35 @@ it('renders the expanded OTA homepage sections', function () {
         ->assertSee('aria-controls="mobile-navigation"', false)
         ->assertSee('aria-controls="tour-mega-menu"', false)
         ->assertSee('href="#main-content"', false)
-        ->assertSee('role="tablist"', false)
-        ->assertSee('aria-controls="search-panel-tour"', false)
-        ->assertSee('role="tabpanel"', false)
         ->assertSee('method="GET" action="'.route('tour.index', ['locale' => 'id']).'"', false)
+        ->assertSee('name="destination"', false)
+        ->assertSee('name="type"', false)
+        ->assertSee('name="pax"', false)
+        ->assertSee('lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_minmax(0,0.85fr)_minmax(10rem,auto)]', false)
+        ->assertSee('whitespace-nowrap rounded-2xl bg-slate-900', false)
+        ->assertSee('lg:grid-cols-[1.1fr_0.9fr] lg:items-start', false)
         ->assertSee('fetchpriority="high"', false)
         ->assertSee('width="1800" height="1100"', false)
         ->assertSee('aria-label="Testimoni sebelumnya"', false)
         ->assertSee('aria-label="Testimoni berikutnya"', false)
-        ->assertSee('Cari layanan perjalanan')
-        ->assertSee('Layanan utama')
-        ->assertSee('Konsultasi gratis')
+        ->assertSee('Cari Tour Pilihan')
+        ->assertSee('Rancang perjalanan')
+        ->assertSee('Jelajahi Paket Tour')
+        ->assertSee('Baca Panduan Destinasi')
+        ->assertSee('Diskusikan Itinerary')
+        ->assertSee('Mulai diskusi')
         ->assertSee('Baharsyah Jelajah')
         ->assertSee('Panduan Tour Kalimantan')
         ->assertSee('Butuh bantuan memilih perjalanan?')
         ->assertSee('Paket Tour')
         ->assertSee('Kontak')
+        ->assertDontSee('Fokus MVP')
+        ->assertDontSee('Home sekarang')
+        ->assertDontSee('Paket Umroh')
+        ->assertDontSee('Sewa Kendaraan')
+        ->assertDontSee('Layanan Visa')
+        ->assertDontSee('search-panel-transport')
+        ->assertDontSee('search-panel-umroh')
         ->assertDontSee("Where's your next adventure?")
         ->assertDontSee('Travel Agents')
         ->assertDontSee('Photo Contests');

@@ -96,7 +96,7 @@ return [
     ],
     'blog' => [
         'title' => 'Artikel & Berita Terkini',
-        'subtitle' => 'Dapatkan wawasan perjalanan, tip umrah, dan berita terkini dunia pelancongan.',
+        'subtitle' => 'Dapatkan wawasan destinasi, tip persiapan perjalanan, dan idea itinerari untuk memilih lawatan yang tepat.',
         'view_all' => 'Lihat Semua Artikel',
         'read_more' => 'Baca Selanjutnya',
         'empty' => [
@@ -112,10 +112,10 @@ return [
         ],
         'fields' => [
             'destination' => 'Destinasi',
-            'destination_placeholder' => 'Ke mana anda ingin pergi?',
+            'destination_placeholder' => 'Contoh: Borneo, pantai, hutan...',
             'region' => 'Wilayah',
             'all_regions' => 'Semua Wilayah',
-            'capacity' => 'Kapasiti Penumpang',
+            'capacity' => 'Jumlah Peserta',
             'pax_placeholder' => 'Jumlah Pax',
             'vehicle_type' => 'Jenis Armada',
             'all_vehicles' => 'Semua Jenis',
@@ -132,7 +132,7 @@ return [
     ],
     'why_us' => [
         'title' => 'Mengapa Memilih :brand?',
-        'subtitle' => 'Kami menghadirkan pengalaman perjalanan yang selesa, tersusun, dan memberi ketenangan rohani.',
+        'subtitle' => 'Kami membantu calon pengembara memahami laluan, kemudahan, tempoh, dan pilihan penyesuaian sebelum membuat keputusan.',
         'cta' => 'Apa Kata Mereka',
         'stats' => [
             'pilgrims' => 'Pelanggan Dilayani',
@@ -146,22 +146,22 @@ return [
         'subtitle' => 'Proses tempahan yang telus dalam tiga langkah mudah untuk perjalanan impian anda.',
         'steps' => [
             '1' => [
-                'title' => 'Pilih & Sesuaikan',
-                'description' => 'Jelajahi katalog kami dan pilih pakej, armada, atau layanan yang sesuai dengan keperluan anda.',
+                'title' => 'Jelajahi Katalog',
+                'description' => 'Baca detail lawatan, itinerari, kemudahan, anggaran harga, dan panduan perjalanan berkaitan.',
             ],
             '2' => [
-                'title' => 'Konsultasi via WhatsApp',
-                'description' => 'Hantar keperluan anda dan pasukan kami akan memberi cadangan yang jelas.',
+                'title' => 'Konsultasi Itinerari',
+                'description' => 'Kongsikan tarikh rencana, jumlah peserta, dan pilihan perjalanan agar pasukan kami dapat memberi cadangan yang sesuai.',
             ],
             '3' => [
-                'title' => 'Berangkat dengan Tenang',
-                'description' => 'Selesaikan pentadbiran dengan panduan kami, lalu berangkat dengan selesa dan yakin.',
+                'title' => 'Muktamadkan Rencana',
+                'description' => 'Dapatkan cadangan laluan dan penyesuaian sebelum memilih pakej yang paling sesuai.',
             ],
         ],
     ],
     'cta' => [
         'title' => 'Sedia Merancang Perjalanan Anda?',
-        'subtitle' => 'Konsultasikan keperluan lawatan halal, umrah, atau sewa kereta bersama pasukan kami hari ini.',
+        'subtitle' => 'Konsultasikan laluan, tarikh, jumlah peserta, dan pilihan lawatan bersama pasukan Baharsyah Jelajah.',
         'button_whatsapp' => 'Hubungi via WhatsApp',
         'button_consult' => 'Konsultasi Percuma',
     ],
