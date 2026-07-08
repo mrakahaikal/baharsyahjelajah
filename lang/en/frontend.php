@@ -7,7 +7,7 @@ return [
         'umroh' => 'Umrah',
         'visa' => 'Visa',
         'shop' => 'Shop',
-        'blog' => 'Blog',
+        'blog' => 'Articles',
     ],
     'hero' => [
         'slides' => [

@@ -31,7 +31,7 @@
 </head>
 <body class="bg-white text-slate-700 font-sans antialiased {{ $themeClass }}">
     <div class="min-h-screen flex flex-col">
-        <x-shared.header />
+        <x-shared::header />
 
         <main id="main-content" class="flex-grow {{ $overlapHeader ? '' : '[&>*:first-child]:pt-28 lg:[&>*:first-child]:pt-32' }}">
             {{ $slot }}

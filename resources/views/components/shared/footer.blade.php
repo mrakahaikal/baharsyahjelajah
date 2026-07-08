@@ -76,19 +76,19 @@
     ];
 @endphp
 
-<footer class="border-t border-slate-800 bg-[#0b1324] text-white">
+<footer class="border-t border-slate-800 bg-brand-bg-dark text-white">
     <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         <div class="grid gap-8 border-b border-white/10 pb-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
             <div>
                 <a href="{{ route('home', ['locale' => $locale]) }}" class="inline-flex rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400" aria-label="Baharsyah Jelajah Home">
-                    <img src="{{ asset('images/logo-baharsyah-jelajah.png') }}" alt="Baharsyah Jelajah" width="176" height="44" class="h-11 w-auto brightness-0 invert">
+                    <img src="{{ asset('images/logo-baharsyah-jelajah.webp') }}" alt="Baharsyah Jelajah" width="176" height="44" class="h-11 w-auto brightness-0 invert">
                 </a>
                 <p class="mt-5 max-w-2xl text-sm leading-7 text-slate-300">
                     {{ $localized($footerSettings->brand_description) }}
                 </p>
             </div>
 
-            <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+            <div class="rounded-2xl border border-white/10 bg-white/4 p-6">
                 <p class="text-lg font-bold text-white">{{ $localized($footerSettings->cta_title) }}</p>
                 <p class="mt-2 text-sm leading-6 text-slate-300">{{ $localized($footerSettings->cta_subtitle) }}</p>
 

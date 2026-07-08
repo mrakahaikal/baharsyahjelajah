@@ -7,7 +7,14 @@ return [
         'umroh' => 'Umroh',
         'visa' => 'Visa',
         'shop' => 'Shop',
-        'blog' => 'Blog',
+        'blog' => 'Artikel',
+    ],
+    'header' => [
+        'tour-mega-menu' => [
+            'category-label' => 'Kategori & Destinasi',
+            'recommendation-label' => 'Rekomendasi Wisata Utama',
+            'trailing-link' => 'Lihat Semua Tour'
+        ],
     ],
     'hero' => [
         'slides' => [
