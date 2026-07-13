@@ -1,99 +1,84 @@
 @php
     $locale = app()->getLocale();
+    $packageCount = $tour->packages->count();
+    $previewPackage = $tour->packages->first();
+    $coverUrl = $previewPackage?->cover_url;
+    $startingPrice = $tour->packages
+        ->map(fn ($package) => $package->startingPriceTier())
+        ->filter()
+        ->sortBy(fn ($priceTier) => (float) $priceTier->price)
+        ->first();
+    $minimumDuration = $tour->packages->min('duration_days');
+    $maximumDuration = $tour->packages->max('duration_days');
+    $durationSummary = $packageCount === 1
+        ? $previewPackage?->duration_label
+        : ($packageCount > 1
+            ? __('frontend.tour.show.facts.duration_range', ['min' => $minimumDuration, 'max' => $maximumDuration])
+            : null);
     $descriptionText = trim(strip_tags((string) $tour->description));
     $seoTitle = $tour->name.' | '.config('app.name');
-    $seoDescription = \Illuminate\Support\Str::limit($descriptionText ?: $tour->name, 155);
+    $seoDescription = \Illuminate\Support\Str::limit($tour->short_description ?: $descriptionText, 155);
     $contactUrl = route('contact.index', ['locale' => $locale, 'tour' => $tour->slug]);
-
-    $galleryImages = collect([$tour->thumbnail_url]);
-    foreach ($tour->galleries as $gallery) {
-        $galleryImages->push(str_starts_with($gallery->image_path, 'http') ? $gallery->image_path : \Illuminate\Support\Facades\Storage::url($gallery->image_path));
-    }
-    $placeholders = [
-        'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=900&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?q=80&w=1200&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?q=80&w=900&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?q=80&w=900&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1590559899731-a382839ce501?q=80&w=900&auto=format&fit=crop',
-    ];
-    while ($galleryImages->count() < 5) {
-        $galleryImages->push($placeholders[$galleryImages->count()]);
-    }
-    $images = $galleryImages->take(5);
-
-    $highlightLines = collect(preg_split('/\r\n|\r|\n/', trim(strip_tags((string) $tour->highlights))))
-        ->map(fn (string $highlight) => trim($highlight))
-        ->filter();
-
     $schemaJson = json_encode([
         '@context' => 'https://schema.org',
-        '@type' => 'TouristTrip',
+        '@type' => 'CollectionPage',
         'name' => $tour->name,
         'description' => $seoDescription,
-        'image' => $images->values()->all(),
         'url' => route('tour.show', ['locale' => $locale, 'tour' => $tour->slug]),
-        'touristType' => __('frontend.tour.' . $tour->tour_type) ?? ucfirst($tour->tour_type),
-        'offers' => [
-            '@type' => 'Offer',
-            'price' => $tour->price,
-            'priceCurrency' => $tour->currency,
-            'availability' => 'https://schema.org/InStock',
-            'url' => $contactUrl,
-        ],
+        'image' => $coverUrl,
+        'numberOfItems' => $packageCount,
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 @endphp
 
-<x-layouts::app :title="$seoTitle" :meta-description="$seoDescription" :schema-json="$schemaJson">
+<x-layouts::app :title="$seoTitle" :meta-description="$seoDescription" :schema-json="$schemaJson" :$canonicalUrl :$alternateUrls>
     <article class="bg-white">
-        <header class="border-b border-slate-100 bg-slate-50">
-            <div class="mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
-                <nav class="mb-5 flex text-sm text-slate-500" aria-label="Breadcrumb">
+        <header class="relative isolate min-h-[31rem] overflow-hidden bg-slate-950 text-white sm:min-h-[34rem]">
+            @if($coverUrl)
+                <img src="{{ $coverUrl }}" alt="{{ $tour->name }}" class="absolute inset-0 -z-20 h-full w-full object-cover" width="1800" height="1000">
+            @endif
+            <div class="absolute inset-0 -z-10 bg-slate-950/65"></div>
+
+            <div class="mx-auto flex min-h-[31rem] max-w-7xl flex-col px-4 pb-10 pt-5 sm:min-h-[34rem] sm:px-6 sm:pb-14 lg:px-8">
+                <nav class="text-sm text-white/70" aria-label="Breadcrumb">
                     <ol class="flex min-w-0 items-center gap-2">
                         <li>
-                            <a href="{{ route('home', ['locale' => $locale]) }}" class="rounded-md transition-colors hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                                {{ $locale === 'id' ? 'Beranda' : ($locale === 'ms' ? 'Utama' : 'Home') }}
+                            <a href="{{ route('home', ['locale' => $locale]) }}" class="rounded-sm transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+                                {{ __('frontend.tour.show.breadcrumb_home') }}
                             </a>
                         </li>
-                        <li aria-hidden="true">/</li>
+                        <li aria-hidden="true"><x-lucide-chevron-right class="h-3.5 w-3.5" /></li>
                         <li>
-                            <a href="{{ route('tour.index', ['locale' => $locale]) }}" class="rounded-md transition-colors hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                                {{ $locale === 'id' ? 'Tour' : ($locale === 'ms' ? 'Lawatan' : 'Tours') }}
+                            <a href="{{ route('tour.index', ['locale' => $locale]) }}" class="rounded-sm transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+                                {{ __('frontend.tour.show.breadcrumb_tours') }}
                             </a>
                         </li>
-                        @if($tour->category)
-                            <li aria-hidden="true">/</li>
-                            <li>
-                                <a href="{{ route('tour.index', ['locale' => $locale, 'category' => $tour->category->slug]) }}" class="rounded-md transition-colors hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                                    {{ $tour->category->name }}
-                                </a>
-                            </li>
-                        @endif
-                        <li aria-hidden="true">/</li>
-                        <li class="truncate font-medium text-slate-900" aria-current="page">{{ $tour->name }}</li>
+                        <li aria-hidden="true"><x-lucide-chevron-right class="h-3.5 w-3.5" /></li>
+                        <li class="truncate font-medium text-white" aria-current="page">{{ $tour->name }}</li>
                     </ol>
                 </nav>
 
-                <div class="grid gap-8 lg:grid-cols-[1fr_22rem] lg:items-end">
-                    <div>
+                <div class="mt-auto max-w-4xl pt-16">
+                    <p class="text-xs font-semibold uppercase text-blue-200">{{ __('frontend.tour.show.hero_eyebrow') }}</p>
+                    <div class="mt-4 flex flex-wrap gap-2 text-xs font-semibold">
                         @if($tour->category)
-                            <p class="text-sm font-semibold uppercase tracking-wider text-blue-600">{{ $tour->category->name }}</p>
+                            <span class="rounded-full border border-white/20 bg-black/20 px-3 py-1.5">{{ $tour->category->name }}</span>
                         @endif
-                        <h1 class="mt-3 max-w-4xl text-3xl font-extrabold tracking-tight text-slate-900 text-balance sm:text-4xl lg:text-5xl">
-                            {{ $tour->name }}
-                        </h1>
-                        @if($descriptionText)
-                            <p class="mt-5 max-w-3xl text-sm leading-7 text-slate-500 sm:text-base">
-                                {{ \Illuminate\Support\Str::limit($descriptionText, 220) }}
-                            </p>
-                        @endif
+                        <span class="rounded-full border border-white/20 bg-black/20 px-3 py-1.5">{{ $tour->tour_type->getLabel() }}</span>
                     </div>
+                    <h1 class="mt-5 max-w-3xl text-3xl font-extrabold text-balance sm:text-5xl lg:text-6xl">{{ $tour->name }}</h1>
+                    @if($tour->short_description)
+                        <p class="mt-5 max-w-3xl text-base leading-7 text-slate-100 sm:text-lg sm:leading-8">{{ $tour->short_description }}</p>
+                    @endif
 
-                    <div class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs">
-                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">{{ __('frontend.featured_tour.labels.start_from') }}</p>
-                        <p class="mt-2 text-3xl font-extrabold tracking-tight text-slate-900">{{ $tour->formatted_price }}</p>
-                        <p class="mt-2 text-sm leading-6 text-slate-500">{{ __('frontend.tour.price_context') }}</p>
-                        <a href="{{ $contactUrl }}" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900">
-                            {{ __('frontend.tour.consult_tour') }}
+                    <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+                        @if($packageCount > 0)
+                            <a href="#packages" class="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition-colors hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+                                {{ __('frontend.tour.show.explore_packages') }}
+                                <x-lucide-arrow-down class="h-4 w-4" aria-hidden="true" />
+                            </a>
+                        @endif
+                        <a href="{{ $contactUrl }}" class="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-black/15 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+                            {{ __('frontend.tour.show.custom_trip') }}
                             <x-lucide-message-circle class="h-4 w-4" aria-hidden="true" />
                         </a>
                     </div>
@@ -101,238 +86,129 @@
             </div>
         </header>
 
-        <section class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8" aria-label="{{ __('frontend.tour.gallery') }}">
-            <div class="grid h-[21rem] grid-cols-2 grid-rows-2 gap-3 md:h-[28rem] md:grid-cols-4 md:gap-4">
-                <img src="{{ $images[0] }}" alt="{{ $tour->name }}" class="h-full w-full rounded-2xl object-cover shadow-sm">
-                <img src="{{ $images[1] }}" alt="{{ $tour->name }}" class="col-span-1 row-span-2 h-full w-full rounded-2xl object-cover shadow-sm md:col-span-2">
-                <img src="{{ $images[2] }}" alt="{{ $tour->name }}" class="h-full w-full rounded-2xl object-cover shadow-sm">
-                <img src="{{ $images[3] }}" alt="{{ $tour->name }}" class="h-full w-full rounded-2xl object-cover shadow-sm">
-                <img src="{{ $images[4] }}" alt="{{ $tour->name }}" class="h-full w-full rounded-2xl object-cover shadow-sm">
+        <section class="border-b border-slate-200 bg-slate-50" aria-label="{{ __('frontend.tour.quick_facts') }}">
+            <dl class="mx-auto grid max-w-7xl grid-cols-2 px-4 sm:px-6 lg:grid-cols-5 lg:px-8">
+                @if($tour->category)
+                    <div class="border-b border-r border-slate-200 py-5 pr-4 lg:border-b-0">
+                        <dt class="text-xs font-semibold uppercase text-slate-400">{{ __('frontend.tour.show.facts.category') }}</dt>
+                        <dd class="mt-1.5 text-sm font-bold text-slate-900">{{ $tour->category->name }}</dd>
+                    </div>
+                @endif
+                <div class="border-b border-slate-200 py-5 pl-4 lg:border-b-0 lg:border-r lg:pr-4">
+                    <dt class="text-xs font-semibold uppercase text-slate-400">{{ __('frontend.tour.show.facts.type') }}</dt>
+                    <dd class="mt-1.5 text-sm font-bold text-slate-900">{{ $tour->tour_type->getLabel() }}</dd>
+                </div>
+                <div class="border-r border-slate-200 py-5 pr-4 lg:pl-4">
+                    <dt class="text-xs font-semibold uppercase text-slate-400">{{ __('frontend.tour.show.facts.packages') }}</dt>
+                    <dd class="mt-1.5 text-sm font-bold text-slate-900">{{ trans_choice('frontend.tour.show.facts.package_count', $packageCount, ['count' => $packageCount]) }}</dd>
+                </div>
+                @if($durationSummary)
+                    <div class="py-5 pl-4 lg:border-r lg:border-slate-200 lg:pr-4">
+                        <dt class="text-xs font-semibold uppercase text-slate-400">{{ __('frontend.tour.show.facts.duration') }}</dt>
+                        <dd class="mt-1.5 text-sm font-bold text-slate-900">{{ $durationSummary }}</dd>
+                    </div>
+                @endif
+                @if($startingPrice)
+                    <div class="col-span-2 border-t border-slate-200 py-5 lg:col-span-1 lg:border-t-0 lg:pl-4">
+                        <dt class="text-xs font-semibold uppercase text-slate-400">{{ __('frontend.tour.show.facts.starting_price') }}</dt>
+                        <dd class="mt-1.5 text-sm font-extrabold text-blue-600">{{ $startingPrice->formatted_price }}</dd>
+                    </div>
+                @endif
+            </dl>
+        </section>
+
+        @if($destinationHighlights->isNotEmpty())
+            <section class="border-b border-slate-100 py-10 sm:py-12" aria-labelledby="destination-highlights-heading">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div class="max-w-2xl">
+                        <p class="text-sm font-semibold uppercase text-blue-600">{{ __('frontend.tour.show.destinations.eyebrow') }}</p>
+                        <h2 id="destination-highlights-heading" class="mt-2 text-2xl font-extrabold text-slate-900 sm:text-3xl">
+                            {{ __('frontend.tour.show.destinations.title') }}
+                        </h2>
+                        <p class="mt-3 text-sm leading-7 text-slate-600">{{ __('frontend.tour.show.destinations.description') }}</p>
+                    </div>
+
+                    <div class="mt-6 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+                        @foreach($destinationHighlights as $destination)
+                            <x-ui.destination-highlight-card
+                                :$destination
+                                data-tour-destination-id="{{ $destination->id }}"
+                            />
+                        @endforeach
+                    </div>
+                </div>
+            </section>
+        @endif
+
+        <section id="packages" class="scroll-mt-24 py-14 sm:py-18" aria-labelledby="package-options-heading">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="max-w-3xl">
+                    <p class="text-sm font-semibold uppercase text-blue-600">{{ __('frontend.tour.show.packages.eyebrow') }}</p>
+                    <h2 id="package-options-heading" class="mt-2 text-3xl font-extrabold text-balance text-slate-900 sm:text-4xl">
+                        {{ $packageCount === 1
+                            ? __('frontend.tour.show.packages.single_title')
+                            : __('frontend.tour.show.packages.multiple_title', ['count' => $packageCount]) }}
+                    </h2>
+                    <p class="mt-4 text-base leading-7 text-slate-600">
+                        {{ $packageCount === 1
+                            ? __('frontend.tour.show.packages.single_description')
+                            : __('frontend.tour.show.packages.multiple_description') }}
+                    </p>
+                </div>
+
+                @if($tour->packages->isNotEmpty())
+                    <div class="mt-8 grid gap-6">
+                        @foreach($tour->packages as $package)
+                            <x-ui.tour-package-card :$package :$tour :$locale />
+                        @endforeach
+                    </div>
+                @else
+                    <div class="mt-8 rounded-lg border border-slate-200 bg-slate-50 p-6 sm:p-8">
+                        <x-lucide-route class="h-7 w-7 text-blue-600" aria-hidden="true" />
+                        <h3 class="mt-4 text-xl font-bold text-slate-900">{{ __('frontend.tour.show.packages.empty_title') }}</h3>
+                        <p class="mt-2 max-w-2xl text-sm leading-7 text-slate-600">{{ __('frontend.tour.show.packages.empty_description') }}</p>
+                        <a href="{{ $contactUrl }}" class="mt-5 inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                            {{ __('frontend.tour.show.custom_trip') }}
+                            <x-lucide-message-circle class="h-4 w-4" aria-hidden="true" />
+                        </a>
+                    </div>
+                @endif
             </div>
         </section>
 
-        <div class="sticky top-20 z-20 border-y border-slate-100 bg-white/95 backdrop-blur">
-            <nav class="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-3 text-sm font-semibold text-slate-600 sm:px-6 lg:px-8" aria-label="{{ __('frontend.tour.page_nav') }}">
-                <a href="#overview" class="min-w-max rounded-full px-3 py-1.5 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">{{ __('frontend.tour.overview') }}</a>
-                <a href="#highlights" class="min-w-max rounded-full px-3 py-1.5 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">{{ __('frontend.tour.highlights') }}</a>
-                <a href="#itinerary" class="min-w-max rounded-full px-3 py-1.5 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">{{ __('frontend.tour.itinerary') }}</a>
-                <a href="#includes" class="min-w-max rounded-full px-3 py-1.5 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">{{ __('frontend.tour.whats_included') }}</a>
-                <a href="#related" class="min-w-max rounded-full px-3 py-1.5 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">{{ __('frontend.tour.related_content') }}</a>
-            </nav>
-        </div>
-
-        <div class="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_22rem] lg:px-8">
-            <div>
-                <section class="grid grid-cols-2 gap-3 sm:grid-cols-4" aria-label="{{ __('frontend.tour.quick_facts') }}">
-                    <div class="rounded-2xl border border-slate-200/80 bg-slate-50 p-4">
-                        <x-lucide-clock class="h-5 w-5 text-blue-600" aria-hidden="true" />
-                        <p class="mt-3 text-xs font-medium text-slate-500">{{ __('frontend.tour.duration') }}</p>
-                        <p class="mt-1 text-sm font-bold text-slate-900">{{ $tour->duration_label }}</p>
-                    </div>
-                    <div class="rounded-2xl border border-slate-200/80 bg-slate-50 p-4">
-                        <x-lucide-activity class="h-5 w-5 text-blue-600" aria-hidden="true" />
-                        <p class="mt-3 text-xs font-medium text-slate-500">{{ __('frontend.tour.difficulty') }}</p>
-                        <p class="mt-1 text-sm font-bold text-slate-900">{{ __('frontend.tour.' . $tour->difficulty) ?? ucfirst($tour->difficulty) }}</p>
-                    </div>
-                    <div class="rounded-2xl border border-slate-200/80 bg-slate-50 p-4">
-                        <x-lucide-users class="h-5 w-5 text-blue-600" aria-hidden="true" />
-                        <p class="mt-3 text-xs font-medium text-slate-500">{{ __('frontend.tour.group_size') }}</p>
-                        <p class="mt-1 text-sm font-bold text-slate-900">{{ $tour->max_pax ? __('frontend.tour.max_pax', ['count' => $tour->max_pax]) : __('frontend.tour.flexible_pax') }}</p>
-                    </div>
-                    <div class="rounded-2xl border border-slate-200/80 bg-slate-50 p-4">
-                        <x-lucide-map class="h-5 w-5 text-blue-600" aria-hidden="true" />
-                        <p class="mt-3 text-xs font-medium text-slate-500">{{ __('frontend.tour.tour_type') }}</p>
-                        <p class="mt-1 text-sm font-bold text-slate-900">{{ __('frontend.tour.' . $tour->tour_type) ?? ucfirst($tour->tour_type) }}</p>
-                    </div>
-                </section>
-
-                <section id="overview" class="scroll-mt-36 pt-12">
-                    <h2 class="text-2xl font-extrabold tracking-tight text-slate-900">{{ __('frontend.tour.overview') }}</h2>
-                    <div class="mt-5 max-w-3xl text-slate-600 [&_*+*]:mt-5 [&_a]:font-semibold [&_a]:text-blue-600 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-slate-900 [&_li]:mt-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:leading-8 [&_strong]:font-bold [&_strong]:text-slate-900 [&_ul]:list-disc [&_ul]:pl-5">
-                        {!! $tour->description !!}
-                    </div>
-                </section>
-
-                @if($highlightLines->isNotEmpty())
-                    <section id="highlights" class="scroll-mt-36 pt-12">
-                        <h2 class="text-2xl font-extrabold tracking-tight text-slate-900">{{ __('frontend.tour.highlights') }}</h2>
-                        <ul class="mt-5 grid grid-cols-1 gap-3 md:grid-cols-2">
-                            @foreach($highlightLines as $highlight)
-                                <li class="flex items-start gap-3 rounded-2xl border border-slate-200/80 bg-white p-4 text-sm leading-6 text-slate-600">
-                                    <x-lucide-check-circle class="mt-0.5 h-5 w-5 shrink-0 text-blue-600" aria-hidden="true" />
-                                    <span>{{ $highlight }}</span>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </section>
-                @endif
-
-                <section id="itinerary" x-data="{ activeDay: {{ $tour->itineraries->first()?->day_number ?? 1 }} }" class="scroll-mt-36 pt-12">
-                    <h2 class="text-2xl font-extrabold tracking-tight text-slate-900">{{ __('frontend.tour.itinerary') }}</h2>
-                    <div class="mt-6 space-y-0 border-l-2 border-slate-200">
-                        @foreach($tour->itineraries as $itinerary)
-                            <div class="relative pb-8 pl-8">
-                                <div class="absolute -left-2 top-1 h-4 w-4 rounded-full border-2 bg-white transition-colors duration-200"
-                                     :class="activeDay === {{ $itinerary->day_number }} ? 'border-slate-900 bg-slate-900' : 'border-slate-300'"></div>
-
-                                <button type="button" @click="activeDay = activeDay === {{ $itinerary->day_number }} ? null : {{ $itinerary->day_number }}"
-                                        class="group flex w-full items-start justify-between gap-4 text-left"
-                                        :aria-expanded="activeDay === {{ $itinerary->day_number }}">
-                                    <span>
-                                        <span class="text-sm font-semibold text-blue-600">{{ __('frontend.tour.day') }} {{ $itinerary->day_number }}</span>
-                                        <span class="mt-1 block text-lg font-bold text-slate-900 transition-colors group-hover:text-blue-600">{{ $itinerary->title }}</span>
-                                    </span>
-                                    <x-lucide-chevron-down class="mt-1 h-5 w-5 shrink-0 text-slate-400 transition-transform duration-200" x-bind:class="activeDay === {{ $itinerary->day_number }} ? 'rotate-180' : ''" aria-hidden="true" />
-                                </button>
-
-                                <div x-show="activeDay === {{ $itinerary->day_number }}" x-collapse>
-                                    <div class="pt-4 text-sm leading-7 text-slate-600">
-                                        <p>{{ $itinerary->description }}</p>
-
-                                        @if(!empty($itinerary->meal_labels) || ($itinerary->accommodation && $itinerary->accommodation !== '-'))
-                                            <div class="mt-4 flex flex-wrap gap-3 rounded-xl border border-slate-100 bg-slate-50 p-4">
-                                                @if(!empty($itinerary->meal_labels))
-                                                    <div class="flex flex-wrap items-center gap-2">
-                                                        <span class="text-xs font-semibold text-slate-500">{{ __('frontend.tour.meals') }}:</span>
-                                                        @foreach($itinerary->meal_labels as $mealLabel)
-                                                            <span class="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-xs font-medium">{{ $mealLabel }}</span>
-                                                        @endforeach
-                                                    </div>
-                                                @endif
-
-                                                @if($itinerary->accommodation && $itinerary->accommodation !== '-')
-                                                    <div class="flex items-center gap-2">
-                                                        <span class="text-xs font-semibold text-slate-500">{{ __('frontend.tour.accommodation') }}:</span>
-                                                        <span class="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-xs font-medium">{{ $itinerary->accommodation }}</span>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </section>
-
-                <section id="includes" class="scroll-mt-36 pt-12">
-                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-                        <div>
-                            <h2 class="text-2xl font-extrabold tracking-tight text-slate-900">{{ __('frontend.tour.whats_included') }}</h2>
-                            <div class="mt-5 rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs">
-                                <ul class="space-y-3.5">
-                                    @forelse($tour->includes_only as $include)
-                                        <li class="flex items-start gap-3 text-sm font-medium text-slate-700">
-                                            <x-lucide-check class="mt-0.5 h-5 w-5 shrink-0 text-green-600" aria-hidden="true" />
-                                            <span>{{ $include->item }}</span>
-                                        </li>
-                                    @empty
-                                        <li class="text-sm italic text-slate-500">{{ __('frontend.tour.no_items') }}</li>
-                                    @endforelse
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h2 class="text-2xl font-extrabold tracking-tight text-slate-900">{{ __('frontend.tour.whats_excluded') }}</h2>
-                            <div class="mt-5 rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs">
-                                <ul class="space-y-3.5">
-                                    @forelse($tour->excludes_only as $exclude)
-                                        <li class="flex items-start gap-3 text-sm font-medium text-slate-700">
-                                            <x-lucide-x class="mt-0.5 h-5 w-5 shrink-0 text-red-500" aria-hidden="true" />
-                                            <span>{{ $exclude->item }}</span>
-                                        </li>
-                                    @empty
-                                        <li class="text-sm italic text-slate-500">{{ __('frontend.tour.no_items') }}</li>
-                                    @endforelse
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <aside class="lg:pt-12">
-                <div class="sticky top-36 rounded-2xl border border-slate-200/80 bg-white p-6 shadow-lg shadow-slate-900/5">
-                    @if($tour->is_featured)
-                        <span class="inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-amber-800">{{ __('frontend.tour.featured') }}</span>
-                    @elseif($tour->category)
-                        <span class="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-slate-700">{{ $tour->category->name }}</span>
+        <section class="border-y border-slate-100 bg-slate-50 py-14 sm:py-18" aria-labelledby="tour-overview-heading">
+            <div class="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_21rem] lg:gap-16 lg:px-8">
+                <div>
+                    <p class="text-sm font-semibold uppercase text-blue-600">{{ __('frontend.tour.show.overview.eyebrow') }}</p>
+                    <h2 id="tour-overview-heading" class="mt-2 text-3xl font-extrabold text-slate-900">{{ __('frontend.tour.show.overview.title') }}</h2>
+                    @if($tour->description)
+                        <div class="mt-6 max-w-3xl text-slate-600 [&_a]:font-semibold [&_a]:text-blue-600 [&_li]:mt-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:leading-8 [&_ul]:list-disc [&_ul]:pl-5">{!! $tour->description !!}</div>
                     @endif
+                </div>
 
-                    <h2 class="mt-4 text-xl font-extrabold tracking-tight text-slate-900">{{ __('frontend.tour.consultation_panel_title') }}</h2>
-                    <p class="mt-3 text-sm leading-7 text-slate-500">{{ __('frontend.tour.consultation_panel_text') }}</p>
-
-                    <dl class="mt-5 space-y-3 rounded-xl bg-slate-50 p-4">
-                        <div class="flex items-center justify-between gap-4 text-sm">
-                            <dt class="text-slate-500">{{ __('frontend.tour.duration') }}</dt>
-                            <dd class="font-semibold text-slate-900">{{ $tour->duration_label }}</dd>
-                        </div>
-                        <div class="flex items-center justify-between gap-4 text-sm">
-                            <dt class="text-slate-500">{{ __('frontend.featured_tour.labels.start_from') }}</dt>
-                            <dd class="font-semibold text-slate-900">{{ $tour->formatted_price }}</dd>
-                        </div>
-                        <div class="flex items-center justify-between gap-4 text-sm">
-                            <dt class="text-slate-500">{{ __('frontend.tour.group_size') }}</dt>
-                            <dd class="font-semibold text-slate-900">{{ $tour->max_pax ? __('frontend.tour.max_pax', ['count' => $tour->max_pax]) : __('frontend.tour.flexible_pax') }}</dd>
-                        </div>
-                    </dl>
-
-                    <a href="{{ $contactUrl }}" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900">
-                        {{ __('frontend.tour.consult_tour') }}
-                        <x-lucide-arrow-right class="h-4 w-4" aria-hidden="true" />
-                    </a>
-
-                    <a href="{{ $tour->whatsappUrl() }}" target="_blank" rel="noopener" class="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-800 transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                        {{ __('frontend.cta.button_whatsapp') }}
+                <aside class="border-t border-slate-200 pt-8 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+                    <p class="text-xs font-semibold uppercase text-slate-400">{{ __('frontend.tour.show.consultation.eyebrow') }}</p>
+                    <h2 class="mt-3 text-2xl font-extrabold text-slate-900">{{ __('frontend.tour.show.consultation.title') }}</h2>
+                    <p class="mt-3 text-sm leading-7 text-slate-600">{{ __('frontend.tour.consultation_panel_text') }}</p>
+                    <a href="{{ $contactUrl }}" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                        {{ __('frontend.tour.custom_trip_cta') }}
                         <x-lucide-message-circle class="h-4 w-4" aria-hidden="true" />
                     </a>
-                </div>
-            </aside>
-        </div>
-    </article>
+                </aside>
+            </div>
+        </section>
 
-    <section id="related" class="scroll-mt-36 bg-slate-50 py-14" aria-labelledby="related-tour-heading">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            @if($relatedTours->isNotEmpty())
-                <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                    <div>
-                        <p class="text-sm font-semibold uppercase tracking-wider text-blue-600">{{ __('frontend.tour.related_label') }}</p>
-                        <h2 id="related-tour-heading" class="mt-2 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">{{ __('frontend.tour.related_title') }}</h2>
-                    </div>
-                    <a href="{{ route('tour.index', ['locale' => $locale]) }}" class="inline-flex w-fit items-center gap-1.5 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                        {{ __('frontend.tour.see_all') }}
-                        <x-lucide-arrow-right class="h-4 w-4" aria-hidden="true" />
-                    </a>
-                </div>
-
-                <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-                    @foreach($relatedTours as $relatedTour)
-                        <x-ui.tour-card :tour="$relatedTour" :$locale imageHeight="h-48" :showMaxPax="false" />
-                    @endforeach
-                </div>
-            @endif
-
-            @if($relatedPosts->isNotEmpty())
-                <div class="{{ $relatedTours->isNotEmpty() ? 'mt-14 border-t border-slate-200 pt-12' : '' }}">
-                    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                        <div>
-                            <p class="text-sm font-semibold uppercase tracking-wider text-blue-600">Blog</p>
-                            <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">{{ __('frontend.tour.related_articles') }}</h2>
-                        </div>
-                        <a href="{{ route('blog.index', ['locale' => $locale]) }}" class="inline-flex w-fit items-center gap-1.5 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                            {{ __('frontend.blog.view_all') }}
-                            <x-lucide-arrow-right class="h-4 w-4" aria-hidden="true" />
-                        </a>
-                    </div>
-
-                    <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-                        @foreach($relatedPosts as $relatedPost)
-                            <x-ui.post-card :post="$relatedPost" :$locale />
+        @if($relatedTours->isNotEmpty())
+            <section class="py-14 sm:py-18" aria-labelledby="related-tours-heading">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <h2 id="related-tours-heading" class="text-2xl font-extrabold text-slate-900">{{ __('frontend.tour.show.related_title') }}</h2>
+                    <div class="mt-7 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        @foreach($relatedTours as $relatedTour)
+                            <x-ui.tour-card :tour="$relatedTour" :$locale />
                         @endforeach
                     </div>
                 </div>
-            @endif
-        </div>
-    </section>
+            </section>
+        @endif
+    </article>
 </x-layouts::app>

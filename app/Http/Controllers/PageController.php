@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Testimonial;
-use App\Models\TourGallery;
+use App\Models\TourPackage;
 use App\Models\VehicleGallery;
 use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class PageController extends Controller
 {
@@ -26,9 +27,10 @@ class PageController extends Controller
 
     public function gallery(): View
     {
-        $tourGalleries = TourGallery::query()
-            ->with('tour')
-            ->orderBy('sort_order')
+        $tourGalleries = Media::query()
+            ->where('model_type', TourPackage::class)
+            ->where('collection_name', TourPackage::MEDIA_COLLECTION_GALLERY)
+            ->orderBy('order_column')
             ->limit(18)
             ->get();
 

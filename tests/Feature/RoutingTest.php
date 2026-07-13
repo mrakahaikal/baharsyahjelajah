@@ -63,36 +63,21 @@ it('renders the mvp homepage focused on tours, guides, and consultation', functi
 
     get('/id')
         ->assertOk()
-        ->assertSee('class="fixed inset-x-0 top-3', false)
         ->assertSee('href="'.route('contact.index', ['locale' => 'id']).'"', false)
         ->assertSee('Hubungi Kami')
         ->assertDontSee('Book Trip')
-        ->assertSee('aria-label="Pilih bahasa, saat ini ID"', false)
-        ->assertSee('aria-label="Pilih mata uang, saat ini IDR"', false)
-        ->assertSee('fixed bottom-4 right-4 z-50', false)
-        ->assertSee('hidden whitespace-nowrap rounded-full', false)
-        ->assertSee('hidden lg:flex items-center gap-1.5 rounded-full border border-slate-200/70 bg-slate-50/70 p-1', false)
-        ->assertSee('grid size-10 place-items-center rounded-full text-slate-600', false)
-        ->assertSee('aria-controls="mobile-navigation"', false)
-        ->assertSee('aria-controls="tour-mega-menu"', false)
+        ->assertSee('id="mobile-navigation"', false)
+        ->assertSee('id="tour-mega-menu"', false)
         ->assertSee('href="#main-content"', false)
         ->assertSee('method="GET" action="'.route('tour.index', ['locale' => 'id']).'"', false)
         ->assertSee('name="destination"', false)
         ->assertSee('name="type"', false)
         ->assertSee('name="pax"', false)
-        ->assertSee('lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_minmax(0,0.85fr)_minmax(10rem,auto)]', false)
-        ->assertSee('whitespace-nowrap rounded-2xl bg-slate-900', false)
-        ->assertSee('lg:grid-cols-[1.1fr_0.9fr] lg:items-start', false)
-        ->assertSee('fetchpriority="high"', false)
-        ->assertSee('width="1800" height="1100"', false)
-        ->assertSee('relative isolate min-h-[720px] overflow-hidden text-white lg:min-h-[780px]', false)
-        ->assertSee('swiper js-hero-swiper absolute inset-0 h-full', false)
-        ->assertSee('swiper-slide h-full', false)
         ->assertSee('aria-label="Testimoni sebelumnya"', false)
         ->assertSee('aria-label="Testimoni berikutnya"', false)
         ->assertSee('Cari Tour Pilihan')
         ->assertSee('Rancang perjalanan')
-        ->assertSee('Jelajahi Paket Tour')
+        ->assertSee('Jelajahi Tour')
         ->assertSee('Baca Panduan Destinasi')
         ->assertSee('Diskusikan Itinerary')
         ->assertSee('Mulai diskusi')
@@ -145,14 +130,17 @@ it('renders blog index and show pages with reusable post card content', function
         ->assertDontSee('Blog Show - Locale');
 });
 
-it('applies floating header spacing to the first section on standard pages only', function () {
+it('renders page content directly below the sticky header without legacy spacing', function () {
     get('/id/tour')
         ->assertOk()
-        ->assertSee('class="flex-grow [&amp;&gt;*:first-child]:pt-28 lg:[&amp;&gt;*:first-child]:pt-32"', false);
+        ->assertSee('id="main-content" class="grow"', false)
+        ->assertDontSee('class="grow pt-8"', false)
+        ->assertDontSee('[&amp;&gt;*:first-child]:pt-28', false);
 
     get('/id')
         ->assertOk()
-        ->assertSee('class="flex-grow "', false)
+        ->assertSee('id="main-content" class="grow"', false)
+        ->assertDontSee('class="grow pt-8"', false)
         ->assertDontSee('[&amp;&gt;*:first-child]:pt-28', false);
 });
 
@@ -187,7 +175,7 @@ it('renders the correct page view', function (string $path, string $content) {
         ->assertSee($content);
 })->with([
     ['transport', 'Transport Index'],
-    ['tour', 'Paket Tour Wisata Halal'],
+    ['tour', 'Tour halal untuk perjalanan yang lebih terarah'],
     ['umroh', 'Umroh Index'],
     ['blog', 'Blog'],
     ['visa', 'Visa Page'],

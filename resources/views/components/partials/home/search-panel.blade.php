@@ -34,7 +34,7 @@
                         <select id="tour-type" name="type" autocomplete="off" class="min-w-0 w-full appearance-none bg-transparent pr-8 text-sm font-semibold text-slate-900 outline-none">
                             <option value="">{{ $locale === 'id' ? 'Semua tipe' : ($locale === 'ms' ? 'Semua jenis' : 'All types') }}</option>
                             <option value="domestic">{{ __('frontend.tour.domestic') }}</option>
-                            <option value="outbound">{{ __('frontend.tour.outbound') }}</option>
+                            <option value="international">{{ __('frontend.tour.outbound') }}</option>
                         </select>
                         <x-lucide-chevron-down class="pointer-events-none absolute right-0 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" aria-hidden="true" />
                     </div>

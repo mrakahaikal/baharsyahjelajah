@@ -14,22 +14,23 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::factory()->create([
-            'name'     => 'Admin Baharsyah',
-            'email'    => 'admin@baharsyahjelajah.test',
+            'name' => 'Admin Baharsyah',
+            'email' => 'admin@baharsyahjelajah.test',
             'password' => Hash::make('password'),
         ]);
 
         $this->call([
             // Katalog produk
+            DestinationSeeder::class,
             TourCategorySeeder::class,
             TourSeeder::class,
-            VehicleSeeder::class,
-            UmrahPackageSeeder::class,
+            //            VehicleSeeder::class,
+            //            UmrahPackageSeeder::class,
 
             // Konten website
-            BannerSeeder::class,
-            FaqSeeder::class,
-            TestimonialSeeder::class,
+            //            BannerSeeder::class,
+            //            FaqSeeder::class,
+            //            TestimonialSeeder::class,
 
             // Blog
             PostCategorySeeder::class,

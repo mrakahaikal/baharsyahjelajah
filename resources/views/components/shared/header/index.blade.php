@@ -9,17 +9,6 @@
         ['route' => 'blog.index', 'match' => 'blog.*', 'label' => __('frontend.nav.blog'), 'icon' => 'file'],
     ];
 
-    $menuCategories = \App\Models\TourCategory::ordered()
-        ->withCount(['tours' => function ($query) {
-            $query->where('is_active', true);
-        }])
-        ->take(4)
-        ->get();
-
-    $menuFeaturedTours = \App\Models\Tour::where('is_featured', true)
-        ->where('is_active', true)
-        ->take(2)
-        ->get();
 @endphp
 
 <header class="bg-white sticky top-0 z-50 border-b border-gray-100" x-data="{ mobileMenuOpen: false, tourMenuOpen: false }" @mouseleave="tourMenuOpen = false" @keydown.escape.window="tourMenuOpen = false; mobileMenuOpen = false">
@@ -68,7 +57,7 @@
         <x-shared.header.tour-mega-menu :$locale :$menuCategories :$menuFeaturedTours />
     </div>
 
-    <x-shared::header.mobile-nav :$locale :$navLinks :$menuCategories :$contactUrl />
+    <x-shared::header.mobile-nav :$locale :$localeUrls :$navLinks :$menuCategories :$contactUrl />
 
 </header>
 

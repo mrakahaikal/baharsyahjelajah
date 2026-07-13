@@ -1,4 +1,4 @@
-<x-layouts::app :overlap-header="true">
+<x-layouts::app>
     @php
         $locale = app()->getLocale();
         $waNumber = app(\App\Settings\GeneralSettings::class)->whatsapp_number;
@@ -21,7 +21,7 @@
 
             <div class="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
                 @foreach([
-                    ['icon' => 'map', 'title' => 'Jelajahi Paket Tour', 'desc' => 'Bandingkan rute, durasi, fasilitas, dan estimasi harga dari paket perjalanan yang tersedia.', 'route' => 'tour.index'],
+                    ['icon' => 'map', 'title' => 'Jelajahi Tour', 'desc' => 'Pilih tour tujuan, lalu bandingkan durasi, fasilitas, dan harga dari paket yang tersedia.', 'route' => 'tour.index'],
                     ['icon' => 'file', 'title' => 'Baca Panduan Destinasi', 'desc' => 'Temukan inspirasi rute, tips persiapan, dan catatan perjalanan sebelum menentukan pilihan.', 'route' => 'blog.index'],
                     ['icon' => 'message', 'title' => 'Diskusikan Itinerary', 'desc' => 'Ceritakan tanggal, jumlah peserta, dan gaya perjalanan agar tim dapat membantu menyesuaikan rute.', 'route' => 'contact.index'],
                 ] as $srv)

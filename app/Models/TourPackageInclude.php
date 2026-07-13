@@ -3,38 +3,43 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Translatable\HasTranslations;
 
-#[Fillable(['tour_id', 'item', 'type', 'sort_order'])]
-class TourInclude extends Model
+#[Fillable(['tour_package_id', 'item', 'type', 'sort_order'])]
+class TourPackageInclude extends Model
 {
     use HasTranslations;
 
+    protected $table = 'tour_includes';
+
     public array $translatable = ['item'];
 
-    protected $casts = [
-        'item' => 'array',
-        'sort_order' => 'integer',
-    ];
-
-    public function tour(): BelongsTo
+    protected function casts(): array
     {
-        return $this->belongsTo(Tour::class);
+        return [
+            'sort_order' => 'integer',
+        ];
     }
 
-    public function scopeIncludes($query)
+    public function tourPackage(): BelongsTo
+    {
+        return $this->belongsTo(TourPackage::class);
+    }
+
+    public function scopeIncludes(Builder $query): Builder
     {
         return $query->where('type', 'include');
     }
 
-    public function scopeExcludes($query)
+    public function scopeExcludes(Builder $query): Builder
     {
         return $query->where('type', 'exclude');
     }
 
-    public function scopeNotes($query)
+    public function scopeNotes(Builder $query): Builder
     {
         return $query->where('type', 'note');
     }

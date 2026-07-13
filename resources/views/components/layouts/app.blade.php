@@ -2,8 +2,11 @@
     'title' => null,
     'metaDescription' => null,
     'schemaJson' => null,
+    'canonicalUrl' => null,
+    'alternateUrls' => [],
+    'robots' => null,
+    'showFloatingWhatsapp' => true,
     'themeClass' => '',
-    'overlapHeader' => false,
 ])
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
@@ -15,6 +18,16 @@
     <title>{{ $title ?? config('app.name', 'Baharsyah Jelajah') }}</title>
     @if($metaDescription)
         <meta name="description" content="{{ $metaDescription }}">
+    @endif
+    @if($robots)
+        <meta name="robots" content="{{ $robots }}">
+    @endif
+    <link rel="canonical" href="{{ $canonicalUrl ?? url()->current() }}">
+    @foreach($alternateUrls as $alternateLocale => $alternateUrl)
+        <link rel="alternate" hreflang="{{ $alternateLocale }}" href="{{ $alternateUrl }}">
+    @endforeach
+    @if($alternateUrls)
+        <link rel="alternate" hreflang="x-default" href="{{ $alternateUrls['id'] ?? $canonicalUrl }}">
     @endif
     @if($schemaJson)
         <script type="application/ld+json">{!! $schemaJson !!}</script>
@@ -30,10 +43,14 @@
     @livewireStyles
 </head>
 <body class="bg-white text-slate-700 font-sans antialiased {{ $themeClass }}">
-    <div class="min-h-screen flex flex-col">
-        <x-shared::header />
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-60 focus:rounded-md focus:bg-slate-950 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+        {{ __('frontend.header.skip-to-content') }}
+    </a>
 
-        <main id="main-content" class="flex-grow {{ $overlapHeader ? '' : '[&>*:first-child]:pt-28 lg:[&>*:first-child]:pt-32' }}">
+    <div class="min-h-screen flex flex-col">
+        <x-shared-header :locale-urls="$alternateUrls" />
+
+        <main id="main-content" class="grow">
             {{ $slot }}
         </main>
 
@@ -42,7 +59,7 @@
 
     <!-- Floating WhatsApp Button -->
     @php $waNumber = app(\App\Settings\GeneralSettings::class)->whatsapp_number; @endphp
-    @if($waNumber)
+    @if($showFloatingWhatsapp && $waNumber)
         <a href="https://wa.me/{{ $waNumber }}" target="_blank" rel="noopener"
            class="group fixed bottom-4 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-xl shadow-emerald-900/20 transition-[background-color,transform] duration-200 hover:scale-105 hover:bg-[#1EBE5D] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 sm:bottom-6 sm:right-6">
             <x-lucide-message-circle class="h-6 w-6" aria-hidden="true" />

@@ -13,15 +13,17 @@ return new class extends Migration
     {
         Schema::create('tour_includes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tour_id')
-                ->constrained('tours')
+            $table->foreignId('tour_package_id')
+                ->constrained('tour_packages')
                 ->cascadeOnDelete();
             $table->json('item');
-            $table->string('type')->default('include'); // include | exclude | note
-            $table->unsignedSmallInteger('sort_order')->default(0);
+            $table->string('type')
+                ->default('include'); // include | exclude | note
+            $table->unsignedSmallInteger('sort_order')
+                ->default(0);
             $table->timestamps();
 
-            $table->index(['tour_id', 'type']);
+            $table->index(['tour_package_id', 'type']);
         });
     }
 

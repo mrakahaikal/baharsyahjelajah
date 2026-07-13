@@ -1,4 +1,4 @@
-@props(['locale','navLinks', 'menuCategories', 'contactUrl'])
+@props(['locale', 'localeUrls' => [], 'navLinks', 'menuCategories', 'contactUrl'])
 
 <div id="mobile-navigation" x-show="mobileMenuOpen" x-collapse x-cloak class="md:hidden bg-white/95 backdrop-blur-md border-t border-slate-200/50 shadow-lg rounded-b-2xl">
     <div class="px-4 pt-2 pb-6 space-y-4">
@@ -34,7 +34,7 @@
                             <a href="{{ route('tour.index', ['locale' => $locale, 'category' => $cat->slug]) }}"
                                class="flex items-center justify-between rounded-xl bg-slate-50 px-3.5 py-3 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
                                 <span>{{ $cat->name }}</span>
-                                <span class="text-xs text-slate-400">{{ $cat->tours_count }}</span>
+                                <span class="text-xs text-slate-400">{{ $cat->active_tours_count }}</span>
                             </a>
                         @endforeach
                     </div>
@@ -46,7 +46,7 @@
                 <div class="flex flex-wrap gap-2">
                     @foreach(['id' => 'Indonesian', 'ms' => 'Malay', 'en' => 'English'] as $code => $label)
                         @php $isCurrent = $locale === $code; @endphp
-                        <a href="{{ route(Route::currentRouteName() ?? 'home', array_merge(Route::current()?->parameters() ?? [], ['locale' => $code])) }}"
+                        <a href="{{ $localeUrls[$code] ?? route(Route::currentRouteName() ?? 'home', array_merge(Route::current()?->parameters() ?? [], ['locale' => $code])) }}"
                            class="rounded-full px-4 py-2 text-xs font-semibold border transition-[background-color,border-color,color] duration-200 {{ $isCurrent ? 'bg-blue-50 border-blue-200 text-blue-700 font-bold' : 'bg-slate-50 border-slate-200/60 text-slate-600 hover:bg-slate-100' }}">
                             {{ $label }}
                         </a>

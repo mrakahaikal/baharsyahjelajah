@@ -2,7 +2,11 @@
 
 namespace App\Filament\Resources\Tours\Tables;
 
-use App\Services\CurrencyService;
+use App\Enums\TourType;
+use App\Models\PackageTier;
+use App\Models\Tour;
+use App\Models\TourPackage;
+use App\Models\TourPriceTier;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -11,21 +15,32 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class ToursTable
 {
     public static function configure(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query): Builder => $query->with([
+                'packages.media',
+                'packages.tiers.priceTiers',
+            ]))
             ->columns([
-                ImageColumn::make('thumbnail')
+                ImageColumn::make('cover')
                     ->label('Foto')
-                    ->square(),
+                    ->state(fn (Tour $record): ?string => $record->packages
+                        ->first()
+                        ?->getFirstMediaUrl(TourPackage::MEDIA_COLLECTION_COVER) ?: null)
+                    ->square()
+                    ->size(56),
                 TextColumn::make('name')
                     ->label('Nama Tur')
                     ->searchable()
                     ->sortable()
+                    ->weight('bold')
                     ->wrap(),
                 TextColumn::make('category.name')
                     ->label('Kategori')
@@ -34,46 +49,48 @@ class ToursTable
                 TextColumn::make('tour_type')
                     ->label('Tipe')
                     ->badge()
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'open' => 'Open Trip',
-                        'private' => 'Private Trip',
-                        default => $state,
+                    ->formatStateUsing(fn (TourType $state): string => match ($state) {
+                        TourType::Domestic => 'Domestik',
+                        TourType::International => 'Internasional',
                     })
-                    ->color(fn (string $state): string => match ($state) {
-                        'open' => 'info',
-                        'private' => 'success',
-                        default => 'gray',
-                    }),
-                TextColumn::make('price')
-                    ->label('Harga')
-                    ->formatStateUsing(fn ($record): string => app(CurrencyService::class)->convert($record->price, $record->currency, $record->currency))
+                    ->color(fn (TourType $state): string => match ($state) {
+                        TourType::Domestic => 'success',
+                        TourType::International => 'info',
+                    })
                     ->sortable(),
-                TextColumn::make('duration_days')
-                    ->label('Durasi')
-                    ->state(fn ($record): string => "{$record->duration_days}H {$record->duration_nights}M")
-                    ->sortable(['duration_days', 'duration_nights']),
-                TextColumn::make('difficulty')
-                    ->label('Kesulitan')
+                TextColumn::make('packages_count')
+                    ->label('Paket')
+                    ->counts('packages')
                     ->badge()
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'easy' => 'Mudah',
-                        'moderate' => 'Sedang',
-                        'hard' => 'Sulit',
-                        default => $state,
-                    })
-                    ->color(fn (string $state): string => match ($state) {
-                        'easy' => 'success',
-                        'moderate' => 'warning',
-                        'hard' => 'danger',
-                        default => 'gray',
+                    ->alignCenter()
+                    ->sortable(),
+                TextColumn::make('duration_summary')
+                    ->label('Durasi')
+                    ->state(fn (Tour $record): string => $record->packages
+                        ->map(fn (TourPackage $package): string => $package->duration_label)
+                        ->unique()
+                        ->implode(', ') ?: '-'),
+                TextColumn::make('starting_price')
+                    ->label('Harga Mulai')
+                    ->state(function (Tour $record): string {
+                        /** @var TourPriceTier|null $priceTier */
+                        $priceTier = $record->packages
+                            ->flatMap(fn (TourPackage $package) => $package->tiers)
+                            ->flatMap(fn (PackageTier $tier) => $tier->priceTiers)
+                            ->sortBy(fn (TourPriceTier $price): float => (float) $price->price)
+                            ->first();
+
+                        return $priceTier?->formatted_price ?? '-';
                     }),
                 IconColumn::make('is_active')
                     ->label('Aktif')
                     ->boolean()
+                    ->alignCenter()
                     ->sortable(),
                 IconColumn::make('is_featured')
                     ->label('Unggulan')
                     ->boolean()
+                    ->alignCenter()
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Dibuat')
@@ -82,7 +99,7 @@ class ToursTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('category_id')
+                SelectFilter::make('tour_category_id')
                     ->label('Kategori')
                     ->relationship('category', 'name')
                     ->searchable()
@@ -90,16 +107,17 @@ class ToursTable
                 SelectFilter::make('tour_type')
                     ->label('Tipe Tur')
                     ->options([
-                        'open' => 'Open Trip',
-                        'private' => 'Private Trip',
+                        TourType::Domestic->value => 'Domestik',
+                        TourType::International->value => 'Internasional',
                     ]),
-                SelectFilter::make('difficulty')
-                    ->label('Tingkat Kesulitan')
-                    ->options([
-                        'easy' => 'Mudah',
-                        'moderate' => 'Sedang',
-                        'hard' => 'Sulit',
-                    ]),
+                TernaryFilter::make('is_active')
+                    ->label('Status Aktif')
+                    ->trueLabel('Aktif')
+                    ->falseLabel('Nonaktif'),
+                TernaryFilter::make('is_featured')
+                    ->label('Status Unggulan')
+                    ->trueLabel('Unggulan')
+                    ->falseLabel('Biasa'),
             ])
             ->recordActions([
                 ViewAction::make()
@@ -112,6 +130,7 @@ class ToursTable
                     DeleteBulkAction::make()
                         ->label('Hapus Terpilih'),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 }

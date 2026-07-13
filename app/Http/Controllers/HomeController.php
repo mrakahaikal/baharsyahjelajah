@@ -16,7 +16,13 @@ class HomeController extends Controller
         $featuredTours = Tour::query()
             ->where('is_featured', true)
             ->where('is_active', true)
-            ->with('category')
+            ->with([
+                'category',
+                'packages' => fn ($query) => $query
+                    ->oldest('id')
+                    ->with(['media', 'tiers.priceTiers']),
+            ])
+            ->withCount('packages')
             ->latest()
             ->limit(3)
             ->get();

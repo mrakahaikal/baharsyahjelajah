@@ -22,7 +22,7 @@
                            class="group flex items-center justify-between rounded-2xl p-3 hover:bg-slate-50 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600" role="menuitem">
                             <div>
                                 <h4 class="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{{ $cat->name }}</h4>
-                                <p class="text-xs text-slate-500 mt-0.5">{{ $cat->tours_count }} paket tersedia</p>
+                                <p class="mt-0.5 text-xs text-slate-500">{{ $cat->active_tours_count }} {{ $locale === 'en' ? 'active tours' : ($locale === 'ms' ? 'lawatan aktif' : 'tour aktif') }}</p>
                             </div>
                             <x-lucide-chevron-right class="h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true" />
                         </a>
@@ -40,7 +40,6 @@
                 </div>
                 <div class="grid grid-cols-2 gap-6">
                     @foreach($menuFeaturedTours as $menuTour)
-{{--                        <x-ui.tour-card :tour="$menuTour" :locale="$locale" imageHeight="h-36" />--}}
                         <x-ui.tour-image-card :tour="$menuTour" :locale="$locale" />
                     @endforeach
                 </div>

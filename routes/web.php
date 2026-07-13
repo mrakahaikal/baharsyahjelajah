@@ -54,8 +54,14 @@ Route::group([
     });
 
     Route::prefix('tour')->group(function () {
-        Route::get('/', [TourController::class, 'index'])->name('tour.index');
-        Route::get('/{tour:slug}', [TourController::class, 'show'])->name('tour.show');
+        Route::get('/', [TourController::class, 'index'])
+            ->name('tour.index');
+        Route::get('/{tour}/package/{package}', [TourController::class, 'showPackage'])
+            ->name('tour.package.show');
+        Route::get('/{tour}/package/{package}/booking', [TourController::class, 'booking'])
+            ->name('tour.package.booking');
+        Route::get('/{tour}', [TourController::class, 'show'])
+            ->name('tour.show');
     });
 
     Route::prefix('umroh')->group(function () {

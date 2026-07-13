@@ -6,9 +6,6 @@ use App\Filament\Resources\Tours\Pages\CreateTour;
 use App\Filament\Resources\Tours\Pages\EditTour;
 use App\Filament\Resources\Tours\Pages\ListTours;
 use App\Filament\Resources\Tours\Pages\ViewTour;
-use App\Filament\Resources\Tours\RelationManagers\GalleriesRelationManager;
-use App\Filament\Resources\Tours\RelationManagers\IncludesRelationManager;
-use App\Filament\Resources\Tours\RelationManagers\ItinerariesRelationManager;
 use App\Filament\Resources\Tours\Schemas\TourForm;
 use App\Filament\Resources\Tours\Schemas\TourInfolist;
 use App\Filament\Resources\Tours\Tables\ToursTable;
@@ -52,11 +49,7 @@ class TourResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            ItinerariesRelationManager::class,
-            IncludesRelationManager::class,
-            GalleriesRelationManager::class,
-        ];
+        return [];
     }
 
     public static function getPages(): array
