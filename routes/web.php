@@ -28,6 +28,18 @@ Route::get('/kontak', function (Request $request) {
     return redirect()->route('contact.index', ['locale' => $detected]);
 })->name('contact.redirect');
 
+Route::get('/tour/{path?}', function (Request $request, ?string $path = null) {
+    $destination = '/id/tour'.($path !== null ? '/'.$path : '');
+
+    if ($queryString = $request->getQueryString()) {
+        $destination .= '?'.$queryString;
+    }
+
+    return redirect($destination);
+})
+    ->where('path', '.*')
+    ->name('tour.redirect');
+
 // Route for Currency Switcher
 Route::get('/set-currency/{currency}', function (string $currency) {
     if (in_array($currency, ['IDR', 'MYR', 'SGD'])) {

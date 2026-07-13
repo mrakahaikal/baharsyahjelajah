@@ -226,8 +226,10 @@ return [
                 'title' => 'Filter tour',
                 'button' => 'Filter',
                 'category' => 'Kategori',
+                'destination' => 'Destinasi itinerary',
                 'type' => 'Tipe perjalanan',
                 'all' => 'Semua tour',
+                'all_destinations' => 'Semua destinasi',
                 'all_types' => 'Semua tipe',
                 'types' => [
                     'domestic' => 'Domestik',

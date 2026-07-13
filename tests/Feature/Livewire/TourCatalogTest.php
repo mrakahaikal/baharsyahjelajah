@@ -2,6 +2,7 @@
 
 use App\Enums\TourType;
 use App\Livewire\TourCatalog;
+use App\Models\Destination;
 use App\Models\Tour;
 use App\Models\TourCategory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -66,6 +67,26 @@ function tourCatalogComponent(): Testable
     ]);
 }
 
+function createCatalogDestination(Tour $tour, string $name, string $slug, int $dayNumber = 1): Destination
+{
+    $destination = Destination::create([
+        'name' => ['id' => $name, 'en' => $name.' EN', 'ms' => $name.' MS'],
+        'slug' => $slug,
+        'description' => ['id' => 'Destinasi '.$name, 'en' => $name.' destination', 'ms' => 'Destinasi '.$name],
+        'location' => $name.', Indonesia',
+    ]);
+
+    $itinerary = $tour->packages()->firstOrFail()->itineraries()->create([
+        'day_number' => $dayNumber,
+        'title' => ['id' => 'Mengunjungi '.$name, 'en' => 'Visiting '.$name, 'ms' => 'Melawat '.$name],
+        'description' => ['id' => 'Itinerary '.$name, 'en' => $name.' itinerary', 'ms' => 'Itinerari '.$name],
+    ]);
+
+    $itinerary->destinations()->attach($destination);
+
+    return $destination;
+}
+
 it('searches tours and package names while excluding inactive tours', function () {
     $nature = createCatalogCategory('Wisata Alam', 'wisata-alam');
     $city = createCatalogCategory('Wisata Kota', 'wisata-kota', 2);
@@ -102,6 +123,61 @@ it('combines translated category and tour type filters', function () {
         ->assertDontSee('Kota Internasional EN')
         ->assertSee('International')
         ->assertSee('Reset filters');
+});
+
+it('filters tours by itinerary destinations and only lists destinations from active tours', function () {
+    $category = createCatalogCategory('Wisata Alam', 'wisata-alam');
+    $borneoTour = createCatalogTour($category, 'Jelajah Borneo', 'jelajah-borneo');
+    $thailandTour = createCatalogTour($category, 'Jelajah Thailand', 'jelajah-thailand', TourType::International);
+    $inactiveTour = createCatalogTour($category, 'Tour Nonaktif', 'tour-nonaktif', isActive: false);
+
+    $tanjungPuting = createCatalogDestination($borneoTour, 'Tanjung Puting', 'tanjung-puting');
+    createCatalogDestination($thailandTour, 'Bangkok', 'bangkok');
+    createCatalogDestination($inactiveTour, 'Destinasi Nonaktif', 'destinasi-nonaktif');
+
+    $directPackageDestination = Destination::create([
+        'name' => ['id' => 'Destinasi Package', 'en' => 'Package Destination', 'ms' => 'Destinasi Pakej'],
+        'slug' => 'destinasi-package',
+    ]);
+    $thailandTour->packages()->firstOrFail()->destinations()->attach($directPackageDestination);
+
+    Destination::create([
+        'name' => ['id' => 'Destinasi Orphan', 'en' => 'Orphan Destination', 'ms' => 'Destinasi Orphan'],
+        'slug' => 'destinasi-orphan',
+    ]);
+
+    tourCatalogComponent()
+        ->assertSee('Destinasi itinerary')
+        ->assertSee('Tanjung Puting')
+        ->assertSee('Bangkok')
+        ->assertDontSee('Destinasi Package')
+        ->assertDontSee('Destinasi Nonaktif')
+        ->assertDontSee('Destinasi Orphan')
+        ->set('destinationSlug', $tanjungPuting->slug)
+        ->assertSee('Jelajah Borneo')
+        ->assertDontSee('Jelajah Thailand')
+        ->set('destinationSlug', $directPackageDestination->slug)
+        ->assertDontSee('Jelajah Borneo')
+        ->assertDontSee('Jelajah Thailand')
+        ->assertSee('Tour yang dicari belum ditemukan')
+        ->assertSet('paginators.page', 1);
+});
+
+it('hydrates the itinerary destination filter from the place query string', function () {
+    $category = createCatalogCategory('Wisata Kota', 'wisata-kota');
+    $borneoTour = createCatalogTour($category, 'Jelajah Borneo', 'jelajah-borneo');
+    $thailandTour = createCatalogTour($category, 'Jelajah Thailand', 'jelajah-thailand', TourType::International);
+    createCatalogDestination($borneoTour, 'Tanjung Puting', 'tanjung-puting');
+    createCatalogDestination($thailandTour, 'Bangkok', 'bangkok');
+
+    Livewire::withQueryParams(['place' => 'bangkok'])
+        ->test(TourCatalog::class, [
+            'heroImageUrl' => 'https://example.com/tour-cover.jpg',
+            'heroImageAlt' => 'Tour cover',
+        ])
+        ->assertSet('destinationSlug', 'bangkok')
+        ->assertSee('Jelajah Thailand')
+        ->assertDontSee('Jelajah Borneo');
 });
 
 it('hydrates supported filters from the query string and rejects invalid tour types', function () {
@@ -143,9 +219,11 @@ it('resets pagination when filters change and can clear every filter', function 
         ->assertSet('paginators.page', 1)
         ->set('category', 'wisata-alam')
         ->set('type', TourType::Domestic->value)
+        ->set('destinationSlug', 'tanjung-puting')
         ->call('resetFilters')
         ->assertSet('destination', '')
         ->assertSet('category', '')
         ->assertSet('type', '')
+        ->assertSet('destinationSlug', '')
         ->assertSet('paginators.page', 1);
 });

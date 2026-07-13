@@ -240,8 +240,10 @@ return [
                 'title' => 'Tapis lawatan',
                 'button' => 'Tapis',
                 'category' => 'Kategori',
+                'destination' => 'Destinasi itinerari',
                 'type' => 'Jenis perjalanan',
                 'all' => 'Semua lawatan',
+                'all_destinations' => 'Semua destinasi',
                 'all_types' => 'Semua jenis',
                 'types' => [
                     'domestic' => 'Domestik',

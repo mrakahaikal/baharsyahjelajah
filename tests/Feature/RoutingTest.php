@@ -25,6 +25,23 @@ it('redirects the contact shortcut to the detected supported locale', function (
         ->assertRedirect('/en/kontak');
 });
 
+it('redirects the tour shortcut to the default locale', function () {
+    get('/tour')
+        ->assertRedirect('/id/tour');
+});
+
+it('redirects tour child paths to the default locale while preserving the query string', function (string $path, string $destination) {
+    get($path)
+        ->assertRedirect($destination);
+})->with([
+    'tour show' => ['/tour/ekspedisi-orangutan', '/id/tour/ekspedisi-orangutan'],
+    'package show' => ['/tour/ekspedisi-orangutan/package/klotok-4-hari', '/id/tour/ekspedisi-orangutan/package/klotok-4-hari'],
+    'package booking' => [
+        '/tour/ekspedisi-orangutan/package/klotok-4-hari/booking?tier=standard&pax=4',
+        '/id/tour/ekspedisi-orangutan/package/klotok-4-hari/booking?pax=4&tier=standard',
+    ],
+]);
+
 it('sets the application locale based on the URL prefix', function (string $locale) {
     get("/{$locale}")
         ->assertStatus(200)

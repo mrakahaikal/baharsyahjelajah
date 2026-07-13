@@ -240,8 +240,10 @@ return [
                 'title' => 'Filter tours',
                 'button' => 'Filters',
                 'category' => 'Category',
+                'destination' => 'Itinerary destination',
                 'type' => 'Travel type',
                 'all' => 'All tours',
+                'all_destinations' => 'All destinations',
                 'all_types' => 'All types',
                 'types' => [
                     'domestic' => 'Domestic',
