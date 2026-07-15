@@ -56,14 +56,14 @@
         @endif
 
         @if($this->bookingUrl)
-            <a href="{{ $this->bookingUrl }}" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+            <x-ui::button tag="a" href="{{ $this->bookingUrl }}" class="mt-5 w-full hover:bg-blue-600">
                 {{ __('frontend.tour.package.calculator.booking_cta') }}
-                <x-lucide-arrow-right class="h-4 w-4" aria-hidden="true" />
-            </a>
+                <x-slot:trailingIcon><x-lucide-arrow-right /></x-slot:trailingIcon>
+            </x-ui::button>
         @else
-            <button type="button" disabled class="mt-5 inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-full bg-slate-300 px-5 py-3 text-sm font-semibold text-white">
+            <x-ui::button disabled class="mt-5 w-full">
                 {{ __('frontend.tour.package.calculator.booking_cta') }}
-            </button>
+            </x-ui::button>
         @endif
 
         <a href="{{ route('tour.show', ['locale' => app()->getLocale(), 'tour' => $this->package->tour->slug]) }}" class="mt-3 inline-flex w-full items-center justify-center text-sm font-semibold text-blue-600 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">

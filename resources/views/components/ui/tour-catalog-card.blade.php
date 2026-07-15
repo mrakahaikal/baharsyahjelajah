@@ -105,9 +105,9 @@
             @endif
         </div>
 
-        <a href="{{ route('tour.show', ['locale' => $locale, 'tour' => $tour->slug]) }}" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+        <x-ui::button tag="a" href="{{ route('tour.show', ['locale' => $locale, 'tour' => $tour->slug]) }}" class="w-full hover:bg-blue-600">
             {{ __('frontend.tour.catalog_card.view_tour') }}
-            <x-lucide-arrow-right class="h-4 w-4" aria-hidden="true" />
-        </a>
+            <x-slot:trailingIcon><x-lucide-arrow-right /></x-slot:trailingIcon>
+        </x-ui::button>
     </div>
 </article>

@@ -11,10 +11,11 @@ use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\TextSize;
-use Filament\Support\Icons\Heroicon;
 
 class TourInfolist
 {
@@ -24,7 +25,9 @@ class TourInfolist
             ->components([
                 Grid::make(3)
                     ->schema([
-                        Section::make('Informasi Tur')
+                        Section::make('Informasi Utama Tur')
+                            ->description('Detail dasar mengenai destinasi, kategori, tipe perjalanan, dan deskripsi tur.')
+                            ->icon('lucide-info')
                             ->schema([
                                 TextEntry::make('name')
                                     ->label('Nama Tur')
@@ -35,7 +38,7 @@ class TourInfolist
                                     ->badge()
                                     ->color('info'),
                                 TextEntry::make('tour_type')
-                                    ->label('Tipe Tur')
+                                    ->label('Tipe Perjalanan')
                                     ->badge()
                                     ->formatStateUsing(fn (TourType $state): string => $state->getLabel())
                                     ->color(fn (TourType $state): string => match ($state) {
@@ -43,7 +46,7 @@ class TourInfolist
                                         TourType::International => 'info',
                                     }),
                                 TextEntry::make('currency')
-                                    ->label('Mata Uang Dasar')
+                                    ->label('Mata Uang Utama')
                                     ->badge(),
                                 TextEntry::make('short_description')
                                     ->label('Deskripsi Singkat')
@@ -56,7 +59,9 @@ class TourInfolist
                             ])
                             ->columns(2)
                             ->columnSpan(2),
-                        Section::make('Status dan Metadata')
+                        Section::make('Status & Metadata')
+                            ->description('Informasi publikasi, tanggal pembuatan, dan pembaruan terakhir.')
+                            ->icon('lucide-settings')
                             ->schema([
                                 Grid::make(2)
                                     ->schema([
@@ -68,133 +73,177 @@ class TourInfolist
                                             ->boolean(),
                                     ]),
                                 TextEntry::make('created_at')
-                                    ->label('Dibuat Pada')
+                                    ->label('Tanggal Pembuatan')
                                     ->dateTime('d M Y H:i'),
                                 TextEntry::make('updated_at')
-                                    ->label('Terakhir Diperbarui')
+                                    ->label('Pembaruan Terakhir')
                                     ->dateTime('d M Y H:i'),
                             ])
                             ->columnSpan(1),
                     ]),
 
-                Section::make('Paket Tur')
-                    ->icon(Heroicon::OutlinedBriefcase)
+                Section::make('Kelola Paket Perjalanan')
+                    ->description('Daftar paket wisata lengkap dengan durasi, media, itinerary, fasilitas, dan harga.')
+                    ->icon('lucide-package')
                     ->schema([
                         RepeatableEntry::make('packages')
                             ->hiddenLabel()
                             ->schema([
-                                Grid::make(3)
-                                    ->schema([
-                                        SpatieMediaLibraryImageEntry::make('cover')
-                                            ->label('Foto Utama')
-                                            ->collection(TourPackage::MEDIA_COLLECTION_COVER)
-                                            ->height(220)
-                                            ->columnSpan(1),
-                                        Grid::make(2)
+                                Tabs::make('package_tabs')
+                                    ->tabs([
+                                        Tab::make('Detail & Durasi')
+                                            ->icon('lucide-info')
                                             ->schema([
-                                                TextEntry::make('name')
-                                                    ->label('Nama Paket')
-                                                    ->weight(FontWeight::Bold)
-                                                    ->size(TextSize::Large)
-                                                    ->columnSpanFull(),
-                                                TextEntry::make('duration_days')
-                                                    ->label('Durasi Hari')
-                                                    ->suffix(' Hari'),
-                                                TextEntry::make('duration_nights')
-                                                    ->label('Durasi Malam')
-                                                    ->suffix(' Malam'),
-                                                TextEntry::make('slug')
-                                                    ->label('Slug')
-                                                    ->copyable()
-                                                    ->columnSpanFull(),
-                                            ])
-                                            ->columnSpan(2),
-                                    ]),
-                                SpatieMediaLibraryImageEntry::make('gallery')
-                                    ->label('Galeri')
-                                    ->collection(TourPackage::MEDIA_COLLECTION_GALLERY)
-                                    ->height(120)
-                                    ->columnSpanFull(),
-
-                                Section::make('Tier dan Harga')
-                                    ->icon(Heroicon::OutlinedCurrencyDollar)
-                                    ->schema([
-                                        RepeatableEntry::make('tiers')
-                                            ->hiddenLabel()
-                                            ->schema([
-                                                TextEntry::make('name')
-                                                    ->label('Nama Tier')
-                                                    ->weight(FontWeight::Bold),
-                                                TextEntry::make('hotel_stars')
-                                                    ->label('Bintang Hotel')
-                                                    ->formatStateUsing(fn (?int $state): string => $state ? "{$state} Bintang" : '-'),
-                                                RepeatableEntry::make('priceTiers')
-                                                    ->label('Rentang Harga')
+                                                Section::make('Detail Utama Paket')
+                                                    ->description('Nama paket tur, tautan URL, dan durasi perjalanan.')
+                                                    ->icon('lucide-file-text')
                                                     ->schema([
-                                                        TextEntry::make('min_pax')
-                                                            ->label('Minimal Pax'),
-                                                        TextEntry::make('max_pax')
-                                                            ->label('Maksimal Pax')
-                                                            ->placeholder('Tanpa batas'),
-                                                        TextEntry::make('price')
-                                                            ->label('Harga per Pax')
-                                                            ->money(fn (TourPriceTier $record): string => $record->currency, locale: 'id')
-                                                            ->weight(FontWeight::Bold)
-                                                            ->color('success'),
-                                                    ])
-                                                    ->columns(3)
-                                                    ->columnSpanFull(),
-                                            ])
-                                            ->columns(2),
-                                    ]),
+                                                        Grid::make(3)
+                                                            ->schema([
+                                                                TextEntry::make('name')
+                                                                    ->label('Nama Paket')
+                                                                    ->weight(FontWeight::Bold)
+                                                                    ->size(TextSize::Large)
+                                                                    ->columnSpan(2),
+                                                                TextEntry::make('slug')
+                                                                    ->label('Slug URL')
+                                                                    ->copyable()
+                                                                    ->columnSpan(1),
+                                                            ]),
+                                                        Grid::make(2)
+                                                            ->schema([
+                                                                TextEntry::make('duration_days')
+                                                                    ->label('Durasi Hari')
+                                                                    ->suffix(' Hari'),
+                                                                TextEntry::make('duration_nights')
+                                                                    ->label('Durasi Malam')
+                                                                    ->suffix(' Malam'),
+                                                            ]),
+                                                    ]),
+                                            ]),
 
-                                Section::make('Itinerary')
-                                    ->icon(Heroicon::OutlinedMap)
-                                    ->schema([
-                                        RepeatableEntry::make('itineraries')
-                                            ->hiddenLabel()
+                                        Tab::make('Media')
+                                            ->icon('lucide-image')
                                             ->schema([
-                                                TextEntry::make('day_number')
-                                                    ->label('Hari')
-                                                    ->badge()
-                                                    ->formatStateUsing(fn (int $state): string => "Hari {$state}"),
-                                                TextEntry::make('title')
-                                                    ->label('Agenda')
-                                                    ->weight(FontWeight::Bold),
-                                                TextEntry::make('description')
-                                                    ->label('Deskripsi')
-                                                    ->html()
-                                                    ->prose()
-                                                    ->columnSpanFull(),
-                                            ])
-                                            ->columns(2),
-                                    ]),
+                                                Section::make('Media Visual Paket')
+                                                    ->description('Foto utama dan galeri pendukung untuk paket tur ini.')
+                                                    ->icon('lucide-images')
+                                                    ->schema([
+                                                        SpatieMediaLibraryImageEntry::make('cover')
+                                                            ->label('Foto Utama (Cover)')
+                                                            ->collection(TourPackage::MEDIA_COLLECTION_COVER)
+                                                            ->height(220)
+                                                            ->columnSpanFull(),
+                                                        SpatieMediaLibraryImageEntry::make('gallery')
+                                                            ->label('Galeri Foto Pendukung')
+                                                            ->collection(TourPackage::MEDIA_COLLECTION_GALLERY)
+                                                            ->height(120)
+                                                            ->columnSpanFull(),
+                                                    ]),
+                                            ]),
 
-                                Section::make('Cakupan Paket')
-                                    ->schema([
-                                        RepeatableEntry::make('includes')
-                                            ->hiddenLabel()
+                                        Tab::make('Itinerary')
+                                            ->icon('lucide-route')
                                             ->schema([
-                                                TextEntry::make('type')
-                                                    ->label('Jenis')
-                                                    ->badge()
-                                                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                                                        'include' => 'Termasuk',
-                                                        'exclude' => 'Tidak Termasuk',
-                                                        'note' => 'Catatan',
-                                                        default => $state,
-                                                    })
-                                                    ->color(fn (string $state): string => match ($state) {
-                                                        'include' => 'success',
-                                                        'exclude' => 'danger',
-                                                        'note' => 'warning',
-                                                        default => 'gray',
-                                                    }),
-                                                TextEntry::make('item')
-                                                    ->label('Item'),
-                                            ])
-                                            ->columns(2),
-                                    ]),
+                                                Section::make('Rencana Perjalanan Harian')
+                                                    ->description('Jadwal rincian aktivitas dan destinasi wisata yang dikunjungi.')
+                                                    ->icon('lucide-map')
+                                                    ->schema([
+                                                        RepeatableEntry::make('itineraries')
+                                                            ->hiddenLabel()
+                                                            ->schema([
+                                                                TextEntry::make('day_number')
+                                                                    ->label('Hari')
+                                                                    ->badge()
+                                                                    ->formatStateUsing(fn (int $state): string => "Hari {$state}"),
+                                                                TextEntry::make('title')
+                                                                    ->label('Agenda Kegiatan')
+                                                                    ->weight(FontWeight::Bold),
+                                                                TextEntry::make('description')
+                                                                    ->label('Deskripsi Kegiatan')
+                                                                    ->html()
+                                                                    ->prose()
+                                                                    ->columnSpanFull(),
+                                                                TextEntry::make('destinations.name')
+                                                                    ->label('Destinasi Wisata')
+                                                                    ->badge()
+                                                                    ->color('info')
+                                                                    ->columnSpanFull(),
+                                                            ])
+                                                            ->columns(2),
+                                                    ]),
+                                            ]),
+
+                                        Tab::make('Fasilitas')
+                                            ->icon('lucide-list-checks')
+                                            ->schema([
+                                                Section::make('Fasilitas & Cakupan Layanan')
+                                                    ->description('Daftar fasilitas yang termasuk, tidak termasuk, serta catatan khusus.')
+                                                    ->icon('lucide-clipboard-check')
+                                                    ->schema([
+                                                        RepeatableEntry::make('includes')
+                                                            ->hiddenLabel()
+                                                            ->schema([
+                                                                TextEntry::make('type')
+                                                                    ->label('Kategori')
+                                                                    ->badge()
+                                                                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                                                                        'include' => 'Termasuk',
+                                                                        'exclude' => 'Tidak Termasuk',
+                                                                        'note' => 'Catatan',
+                                                                        default => $state,
+                                                                    })
+                                                                    ->color(fn (string $state): string => match ($state) {
+                                                                        'include' => 'success',
+                                                                        'exclude' => 'danger',
+                                                                        'note' => 'warning',
+                                                                        default => 'gray',
+                                                                    }),
+                                                                TextEntry::make('item')
+                                                                    ->label('Nama Fasilitas / Item'),
+                                                            ])
+                                                            ->columns(2),
+                                                    ]),
+                                            ]),
+
+                                        Tab::make('Tiers & Harga')
+                                            ->icon('lucide-banknote')
+                                            ->schema([
+                                                Section::make('Tier Kualitas & Struktur Harga')
+                                                    ->description('Detail klasifikasi kualitas hotel dan aturan harga per pax berdasarkan jumlah peserta.')
+                                                    ->icon('lucide-trending-up')
+                                                    ->schema([
+                                                        RepeatableEntry::make('tiers')
+                                                            ->hiddenLabel()
+                                                            ->schema([
+                                                                TextEntry::make('name')
+                                                                    ->label('Nama Tier / Paket Kelas')
+                                                                    ->weight(FontWeight::Bold),
+                                                                TextEntry::make('hotel_stars')
+                                                                    ->label('Standar Bintang Hotel')
+                                                                    ->formatStateUsing(fn (?int $state): string => $state ? "{$state} Bintang" : 'Tanpa Hotel'),
+                                                                RepeatableEntry::make('priceTiers')
+                                                                    ->label('Struktur Harga Berdasarkan Pax')
+                                                                    ->schema([
+                                                                        TextEntry::make('min_pax')
+                                                                            ->label('Min Peserta'),
+                                                                        TextEntry::make('max_pax')
+                                                                            ->label('Max Peserta')
+                                                                            ->placeholder('Tanpa batas'),
+                                                                        TextEntry::make('price')
+                                                                            ->label('Harga per Pax')
+                                                                            ->money(fn (TourPriceTier $record): string => $record->currency, locale: 'id')
+                                                                            ->weight(FontWeight::Bold)
+                                                                            ->color('success'),
+                                                                    ])
+                                                                    ->columns(3)
+                                                                    ->columnSpanFull(),
+                                                            ])
+                                                            ->columns(2),
+                                                    ]),
+                                            ]),
+                                    ])
+                                    ->columnSpanFull(),
                             ])
                             ->columns(1),
                     ]),

@@ -5,9 +5,9 @@ use App\Filament\Resources\Vehicles\VehicleResource;
 use App\Models\TourPackage;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-it('hides non mvp service resources from filament navigation', function () {
-    expect(UmrahPackageResource::shouldRegisterNavigation())->toBeFalse()
-        ->and(VehicleResource::shouldRegisterNavigation())->toBeFalse();
+it('shows active catalog management resources', function () {
+    expect(UmrahPackageResource::shouldRegisterNavigation())->toBeTrue()
+        ->and(VehicleResource::shouldRegisterNavigation())->toBeTrue();
 });
 
 it('keeps tour media captions readable for scalar and localized values', function () {

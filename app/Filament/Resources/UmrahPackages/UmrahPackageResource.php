@@ -9,11 +9,11 @@ use App\Filament\Resources\UmrahPackages\Pages\ViewUmrahPackage;
 use App\Filament\Resources\UmrahPackages\Schemas\UmrahPackageForm;
 use App\Filament\Resources\UmrahPackages\Schemas\UmrahPackageInfolist;
 use App\Filament\Resources\UmrahPackages\Tables\UmrahPackagesTable;
+use App\Models\UmrahDeparture;
 use App\Models\UmrahPackage;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -22,11 +22,9 @@ class UmrahPackageResource extends Resource
 {
     protected static ?string $model = UmrahPackage::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedSparkles;
+    protected static string|BackedEnum|null $navigationIcon = 'lucide-sparkles';
 
     protected static string|null|\UnitEnum $navigationGroup = 'Layanan Umrah';
-
-    protected static bool $shouldRegisterNavigation = false;
 
     protected static ?string $navigationLabel = 'Paket Umrah';
 
@@ -54,9 +52,26 @@ class UmrahPackageResource extends Resource
     public static function getRelations(): array
     {
         return [
+            RelationManagers\PricesRelationManager::class,
             RelationManagers\DeparturesRelationManager::class,
+            RelationManagers\ItinerariesRelationManager::class,
             RelationManagers\IncludesRelationManager::class,
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withMin('prices', 'price_idr')
+            ->addSelect([
+                'next_departure_date' => UmrahDeparture::query()
+                    ->select('departure_date')
+                    ->whereColumn('package_id', (new UmrahPackage)->qualifyColumn('id'))
+                    ->whereDate('departure_date', '>=', today())
+                    ->where('status', '!=', 'closed')
+                    ->orderBy('departure_date')
+                    ->limit(1),
+            ]);
     }
 
     public static function getPages(): array

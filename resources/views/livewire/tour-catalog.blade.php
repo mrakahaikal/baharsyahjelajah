@@ -24,15 +24,15 @@
                 <label for="tour-search" class="sr-only">{{ __('frontend.tour.index.search.label') }}</label>
                 <input id="tour-search" type="search" wire:model.live.debounce.400ms="destination" autocomplete="off" placeholder="{{ __('frontend.tour.index.search.placeholder') }}" class="min-h-11 min-w-0 flex-1 bg-transparent px-1 text-sm font-semibold text-slate-900 outline-none placeholder:font-normal placeholder:text-slate-400">
                 @if(filled($destination))
-                    <button type="button" wire:click="clearFilter('destination')" class="grid size-11 shrink-0 place-items-center rounded-md text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600" title="{{ __('frontend.tour.index.search.clear') }}">
-                        <x-lucide-x class="h-5 w-5" aria-hidden="true" />
+                    <x-ui::button type="button" variant="ghost" size="icon" wire:click="clearFilter('destination')" aria-label="{{ __('frontend.tour.index.search.clear') }}" title="{{ __('frontend.tour.index.search.clear') }}">
+                        <x-slot:icon><x-lucide-x /></x-slot:icon>
                         <span class="sr-only">{{ __('frontend.tour.index.search.clear') }}</span>
-                    </button>
+                    </x-ui::button>
                 @endif
-                <button type="submit" class="grid size-11 shrink-0 place-items-center rounded-md bg-blue-600 text-white transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-200" title="{{ __('frontend.tour.index.search.submit') }}">
-                    <x-lucide-arrow-right class="h-5 w-5" aria-hidden="true" />
+                <x-ui::button type="submit" variant="secondary" size="icon" aria-label="{{ __('frontend.tour.index.search.submit') }}" title="{{ __('frontend.tour.index.search.submit') }}">
+                    <x-slot:icon><x-lucide-arrow-right /></x-slot:icon>
                     <span class="sr-only">{{ __('frontend.tour.index.search.submit') }}</span>
-                </button>
+                </x-ui::button>
             </form>
         </div>
     </section>
@@ -50,13 +50,13 @@
                         {{ trans_choice('frontend.tour.index.results.count', $tours->total(), ['count' => $tours->total()]) }}
                     </p>
                 </div>
-                <button type="button" x-on:click="filtersOpen = true; $nextTick(() => $refs.filterClose.focus())" class="relative inline-flex min-h-11 items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm font-bold text-slate-800 shadow-sm">
-                    <x-lucide-sliders-horizontal class="h-4 w-4" aria-hidden="true" />
+                <x-ui::button type="button" variant="outline" x-on:click="filtersOpen = true; $nextTick(() => $refs.filterClose.focus())" class="relative shadow-sm">
+                    <x-slot:icon><x-lucide-sliders-horizontal /></x-slot:icon>
                     {{ __('frontend.tour.index.filters.button') }}
                     @if($this->activeFilterCount > 0)
                         <span class="grid h-5 min-w-5 place-items-center rounded-full bg-blue-600 px-1 text-[10px] text-white">{{ $this->activeFilterCount }}</span>
                     @endif
-                </button>
+                </x-ui::button>
             </div>
 
             <div class="mt-6 lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start lg:gap-10">
@@ -64,10 +64,10 @@
                     <div class="flex items-center justify-between gap-3 border-b border-slate-200 pb-4">
                         <h2 id="desktop-filter-heading" class="text-base font-extrabold text-slate-900">{{ __('frontend.tour.index.filters.title') }}</h2>
                         @if($this->activeFilterCount > 0)
-                            <button type="button" wire:click="resetFilters" class="grid size-9 shrink-0 place-items-center rounded-md text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900" title="{{ __('frontend.tour.index.filters.reset') }}">
-                                <x-lucide-rotate-ccw class="h-4 w-4" aria-hidden="true" />
+                            <x-ui::button type="button" variant="ghost" size="icon" wire:click="resetFilters" class="size-9" aria-label="{{ __('frontend.tour.index.filters.reset') }}" title="{{ __('frontend.tour.index.filters.reset') }}">
+                                <x-slot:icon><x-lucide-rotate-ccw /></x-slot:icon>
                                 <span class="sr-only">{{ __('frontend.tour.index.filters.reset') }}</span>
-                            </button>
+                            </x-ui::button>
                         @endif
                     </div>
 
@@ -128,29 +128,29 @@
             @if($this->activeFilterCount > 0)
                 <div class="mt-5 flex flex-wrap items-center gap-2" aria-label="{{ __('frontend.tour.index.filters.active') }}">
                     @if(filled($destination))
-                        <button type="button" wire:click="clearFilter('destination')" class="inline-flex min-h-9 max-w-full items-center gap-2 rounded-full bg-blue-50 px-3 text-xs font-bold text-blue-700">
+                        <x-ui::button type="button" variant="soft" size="sm" wire:click="clearFilter('destination')" class="max-w-full rounded-full">
                             <span class="truncate">&ldquo;{{ $destination }}&rdquo;</span>
-                            <x-lucide-x class="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-                        </button>
+                            <x-slot:trailingIcon><x-lucide-x /></x-slot:trailingIcon>
+                        </x-ui::button>
                     @endif
                     @if($activeDestination)
-                        <button type="button" wire:click="clearFilter('destinationSlug')" class="inline-flex min-h-9 max-w-full items-center gap-2 rounded-full bg-blue-50 px-3 text-xs font-bold text-blue-700">
-                            <x-lucide-map-pin class="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                        <x-ui::button type="button" variant="soft" size="sm" wire:click="clearFilter('destinationSlug')" class="max-w-full rounded-full">
+                            <x-slot:icon><x-lucide-map-pin /></x-slot:icon>
                             <span class="truncate">{{ $activeDestination->name }}</span>
-                            <x-lucide-x class="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-                        </button>
+                            <x-slot:trailingIcon><x-lucide-x /></x-slot:trailingIcon>
+                        </x-ui::button>
                     @endif
                     @if($activeCategory)
-                        <button type="button" wire:click="clearFilter('category')" class="inline-flex min-h-9 items-center gap-2 rounded-full bg-blue-50 px-3 text-xs font-bold text-blue-700">
+                        <x-ui::button type="button" variant="soft" size="sm" wire:click="clearFilter('category')" class="rounded-full">
                             {{ $activeCategory->name }}
-                            <x-lucide-x class="h-3.5 w-3.5" aria-hidden="true" />
-                        </button>
+                            <x-slot:trailingIcon><x-lucide-x /></x-slot:trailingIcon>
+                        </x-ui::button>
                     @endif
                     @if($activeType)
-                        <button type="button" wire:click="clearFilter('type')" class="inline-flex min-h-9 items-center gap-2 rounded-full bg-blue-50 px-3 text-xs font-bold text-blue-700">
+                        <x-ui::button type="button" variant="soft" size="sm" wire:click="clearFilter('type')" class="rounded-full">
                             {{ __('frontend.tour.index.filters.types.'.$activeType->value) }}
-                            <x-lucide-x class="h-3.5 w-3.5" aria-hidden="true" />
-                        </button>
+                            <x-slot:trailingIcon><x-lucide-x /></x-slot:trailingIcon>
+                        </x-ui::button>
                     @endif
                 </div>
             @endif
@@ -200,14 +200,14 @@
                             <h3 class="mt-4 text-lg font-bold text-slate-900">{{ __('frontend.tour.index.empty.title') }}</h3>
                             <p class="mx-auto mt-2 max-w-md text-sm leading-7 text-slate-500">{{ __('frontend.tour.index.empty.description') }}</p>
                             <div class="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-                                <button type="button" wire:click="resetFilters" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-5 text-sm font-bold text-slate-800 transition-colors hover:bg-slate-100">
-                                    <x-lucide-rotate-ccw class="h-4 w-4" aria-hidden="true" />
+                                <x-ui::button type="button" variant="outline" wire:click="resetFilters">
+                                    <x-slot:icon><x-lucide-rotate-ccw /></x-slot:icon>
                                     {{ __('frontend.tour.index.filters.reset') }}
-                                </button>
-                                <a href="{{ route('contact.index', ['locale' => $locale]) }}" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-slate-900 px-5 text-sm font-bold text-white transition-colors hover:bg-blue-600">
+                                </x-ui::button>
+                                <x-ui::button tag="a" href="{{ route('contact.index', ['locale' => $locale]) }}" class="hover:bg-blue-600">
                                     {{ __('frontend.tour.custom_trip_cta') }}
-                                    <x-lucide-arrow-right class="h-4 w-4" aria-hidden="true" />
-                                </a>
+                                    <x-slot:trailingIcon><x-lucide-arrow-right /></x-slot:trailingIcon>
+                                </x-ui::button>
                             </div>
                         </div>
                     @endif
@@ -223,10 +223,10 @@
         <section x-show="filtersOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="translate-y-full" x-transition:enter-end="translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="translate-y-0" x-transition:leave-end="translate-y-full" x-trap.noscroll="filtersOpen" role="dialog" aria-modal="true" aria-labelledby="mobile-filter-heading" class="absolute inset-x-0 bottom-0 max-h-[85dvh] overflow-y-auto rounded-t-lg bg-white shadow-2xl">
             <div class="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3">
                 <h2 id="mobile-filter-heading" class="text-base font-extrabold text-slate-900">{{ __('frontend.tour.index.filters.title') }}</h2>
-                <button x-ref="filterClose" type="button" x-on:click="filtersOpen = false" class="grid size-11 place-items-center rounded-md text-slate-500 hover:bg-slate-100" title="{{ __('frontend.tour.index.filters.close') }}">
-                    <x-lucide-x class="h-5 w-5" aria-hidden="true" />
+                <x-ui::button x-ref="filterClose" type="button" variant="ghost" size="icon" x-on:click="filtersOpen = false" aria-label="{{ __('frontend.tour.index.filters.close') }}" title="{{ __('frontend.tour.index.filters.close') }}">
+                    <x-slot:icon><x-lucide-x /></x-slot:icon>
                     <span class="sr-only">{{ __('frontend.tour.index.filters.close') }}</span>
-                </button>
+                </x-ui::button>
             </div>
 
             <div class="space-y-7 px-4 py-6">
@@ -281,10 +281,10 @@
             </div>
 
             <div class="sticky bottom-0 grid grid-cols-[auto_minmax(0,1fr)] gap-3 border-t border-slate-200 bg-white p-4">
-                <button type="button" wire:click="resetFilters" class="min-h-12 rounded-lg px-4 text-sm font-bold text-slate-600 hover:bg-slate-100">{{ __('frontend.tour.index.filters.reset') }}</button>
-                <button type="button" x-on:click="filtersOpen = false" class="min-h-12 rounded-lg bg-slate-900 px-5 text-sm font-bold text-white">
+                <x-ui::button type="button" variant="ghost" size="lg" wire:click="resetFilters">{{ __('frontend.tour.index.filters.reset') }}</x-ui::button>
+                <x-ui::button type="button" size="lg" x-on:click="filtersOpen = false">
                     {{ trans_choice('frontend.tour.index.filters.show_results', $tours->total(), ['count' => $tours->total()]) }}
-                </button>
+                </x-ui::button>
             </div>
         </section>
     </div>

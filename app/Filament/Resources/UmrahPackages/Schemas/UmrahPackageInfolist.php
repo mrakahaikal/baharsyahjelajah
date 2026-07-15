@@ -2,16 +2,19 @@
 
 namespace App\Filament\Resources\UmrahPackages\Schemas;
 
+use App\Enums\UmrahPackageType;
+use App\Enums\UmrahRoomType;
 use App\Models\UmrahPackage;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\TextSize;
-use Filament\Support\Icons\Heroicon;
 
 class UmrahPackageInfolist
 {
@@ -21,96 +24,69 @@ class UmrahPackageInfolist
             ->components([
                 Grid::make(3)
                     ->schema([
-                        Grid::make(1)
+                        Section::make('Informasi Utama Paket')
+                            ->description('Detail utama berupa nama, tipe, durasi perjalanan, deskripsi, dan visual paket umrah.')
+                            ->icon('lucide-info')
                             ->schema([
-                                Section::make('Informasi Utama')
-                                    ->schema([
-                                        ImageEntry::make('thumbnail')
-                                            ->hiddenLabel()
-                                            ->square()
-                                            ->width('100%')
-                                            ->height(350),
-                                        Grid::make(2)
-                                            ->schema([
-                                                TextEntry::make('name')
-                                                    ->label('Nama Paket Umrah')
-                                                    ->weight(FontWeight::Bold)
-                                                    ->size(TextSize::Large),
-                                                TextEntry::make('package_type')
-                                                    ->label('Tipe Paket')
-                                                    ->badge()
-                                                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                                                        'regular' => 'Regular',
-                                                        'plus' => 'Plus',
-                                                        'vip' => 'VIP',
-                                                        'ramadan' => 'Ramadan',
-                                                        default => ucfirst($state),
-                                                    })
-                                                    ->color('info'),
-                                            ]),
-                                        TextEntry::make('description')
-                                            ->label('Deskripsi Lengkap')
-                                            ->html()
-                                            ->prose(),
-                                    ]),
-
-                                Section::make('Akomodasi & Transportasi')
-                                    ->icon(Heroicon::OutlinedBuildingOffice)
-                                    ->schema([
-                                        Grid::make(2)->schema([
-                                            TextEntry::make('airline')
-                                                ->label('Maskapai Penerbangan')
-                                                ->icon(Heroicon::OutlinedPaperAirplane),
-                                            TextEntry::make('room_type')
-                                                ->label('Tipe Kamar')
-                                                ->badge()
-                                                ->color('info'),
-                                        ]),
-                                        Grid::make(2)->schema([
-                                            TextEntry::make('hotel_makkah')
-                                                ->label('Hotel Makkah')
-                                                ->suffix(fn ($record) => $record->hotel_makkah_stars ? " (★{$record->hotel_makkah_stars})" : ''),
-                                            TextEntry::make('hotel_madinah')
-                                                ->label('Hotel Madinah')
-                                                ->suffix(fn ($record) => $record->hotel_madinah_stars ? " (★{$record->hotel_madinah_stars})" : ''),
-                                        ]),
-                                    ]),
+                                ImageEntry::make('cover')
+                                    ->hiddenLabel()
+                                    ->state(fn (UmrahPackage $record): string => $record->thumbnail_url)
+                                    ->height(320)
+                                    ->columnSpanFull(),
+                                SpatieMediaLibraryImageEntry::make('gallery')
+                                    ->label('Galeri Foto Pendukung')
+                                    ->collection(UmrahPackage::MEDIA_COLLECTION_GALLERY)
+                                    ->stacked()
+                                    ->limit(6)
+                                    ->limitedRemainingText()
+                                    ->columnSpanFull(),
+                                TextEntry::make('name')
+                                    ->label('Nama Paket')
+                                    ->weight(FontWeight::Bold)
+                                    ->size(TextSize::Large),
+                                TextEntry::make('package_type')
+                                    ->label('Tipe Paket Umrah')
+                                    ->badge()
+                                    ->formatStateUsing(fn (string $state): string => UmrahPackageType::tryFrom($state)?->getLabel() ?? $state),
+                                TextEntry::make('duration_days')
+                                    ->label('Durasi Perjalanan')
+                                    ->suffix(' Hari'),
+                                TextEntry::make('description')
+                                    ->label('Deskripsi Lengkap')
+                                    ->html()
+                                    ->prose()
+                                    ->columnSpanFull(),
                             ])
+                            ->columns(2)
                             ->columnSpan(2),
-
                         Grid::make(1)
                             ->schema([
-                                Section::make('Informasi Harga')
-                                    ->icon(Heroicon::OutlinedCurrencyDollar)
+                                Section::make('Struktur Harga Kamar')
+                                    ->description('Rincian biaya paket per jamaah berdasarkan pilihan tipe kamar.')
+                                    ->icon('lucide-banknote')
                                     ->schema([
-                                        TextEntry::make('price_idr')
-                                            ->label('Harga Dasar')
-                                            ->money('IDR', locale: 'id')
-                                            ->weight(FontWeight::Bold)
-                                            ->size(TextSize::Large)
-                                            ->color('success'),
-                                        TextEntry::make('duration_days')
-                                            ->label('Durasi Perjalanan')
-                                            ->icon(Heroicon::OutlinedClock)
-                                            ->suffix(' Hari'),
-                                        Grid::make(2)->schema([
-                                            IconEntry::make('visa_included')
-                                                ->label('Visa')
-                                                ->boolean(),
-                                            IconEntry::make('handling_included')
-                                                ->label('Handling')
-                                                ->boolean(),
-                                        ]),
+                                        RepeatableEntry::make('prices')
+                                            ->hiddenLabel()
+                                            ->schema([
+                                                TextEntry::make('room_type')
+                                                    ->label('Tipe Kamar')
+                                                    ->formatStateUsing(fn (string $state): string => UmrahRoomType::tryFrom($state)?->getLabel() ?? $state),
+                                                TextEntry::make('price_idr')
+                                                    ->label('Harga')
+                                                    ->money('IDR', locale: 'id'),
+                                            ])
+                                            ->columns(2),
                                     ]),
-
                                 Section::make('Status & Metadata')
+                                    ->description('Status aktif, status unggulan, dan tanggal pembaruan paket.')
+                                    ->icon('lucide-settings')
                                     ->schema([
                                         IconEntry::make('is_active')
-                                            ->label('Status Aktif')
+                                            ->label('Aktif')
                                             ->boolean(),
-                                        TextEntry::make('created_at')
-                                            ->label('Dibuat Pada')
-                                            ->dateTime('d M Y H:i'),
+                                        IconEntry::make('is_featured')
+                                            ->label('Unggulan')
+                                            ->boolean(),
                                         TextEntry::make('updated_at')
                                             ->label('Terakhir Diperbarui')
                                             ->dateTime('d M Y H:i'),
@@ -121,7 +97,41 @@ class UmrahPackageInfolist
                                     ]),
                             ])
                             ->columnSpan(1),
+                        Section::make('Detail Akomodasi & Fasilitas')
+                            ->description('Informasi maskapai penerbangan, hotel di Makkah & Madinah, serta cakupan visa dan handling.')
+                            ->icon('lucide-briefcase')
+                            ->schema([
+                                TextEntry::make('airline')
+                                    ->label('Maskapai Penerbangan')
+                                    ->placeholder('-'),
+                                Grid::make(2)
+                                    ->schema([
+                                        TextEntry::make('hotel_makkah')
+                                            ->label('Hotel Makkah')
+                                            ->placeholder('-'),
+                                        TextEntry::make('hotel_makkah_stars')
+                                            ->label('Bintang Hotel Makkah')
+                                            ->formatStateUsing(fn (?int $state): string => $state ? "{$state} Bintang" : '-'),
+                                        TextEntry::make('hotel_madinah')
+                                            ->label('Hotel Madinah')
+                                            ->placeholder('-'),
+                                        TextEntry::make('hotel_madinah_stars')
+                                            ->label('Bintang Hotel Madinah')
+                                            ->formatStateUsing(fn (?int $state): string => $state ? "{$state} Bintang" : '-'),
+                                    ]),
+                                Grid::make(2)
+                                    ->schema([
+                                        IconEntry::make('visa_included')
+                                            ->label('Termasuk Visa')
+                                            ->boolean(),
+                                        IconEntry::make('handling_included')
+                                            ->label('Termasuk Handling & Perlengkapan')
+                                            ->boolean(),
+                                    ]),
+                            ])
+                            ->columnSpanFull(),
                     ]),
-            ]);
+            ])
+            ->columns(1);
     }
 }

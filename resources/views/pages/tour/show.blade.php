@@ -72,15 +72,15 @@
 
                     <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
                         @if($packageCount > 0)
-                            <a href="#packages" class="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition-colors hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+                            <x-ui::button tag="a" href="#packages" variant="light">
                                 {{ __('frontend.tour.show.explore_packages') }}
-                                <x-lucide-arrow-down class="h-4 w-4" aria-hidden="true" />
-                            </a>
+                                <x-slot:trailingIcon><x-lucide-arrow-down /></x-slot:trailingIcon>
+                            </x-ui::button>
                         @endif
-                        <a href="{{ $contactUrl }}" class="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-black/15 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+                        <x-ui::button tag="a" href="{{ $contactUrl }}" variant="inverse">
                             {{ __('frontend.tour.show.custom_trip') }}
-                            <x-lucide-message-circle class="h-4 w-4" aria-hidden="true" />
-                        </a>
+                            <x-slot:trailingIcon><x-lucide-message-circle /></x-slot:trailingIcon>
+                        </x-ui::button>
                     </div>
                 </div>
             </div>
@@ -167,10 +167,10 @@
                         <x-lucide-route class="h-7 w-7 text-blue-600" aria-hidden="true" />
                         <h3 class="mt-4 text-xl font-bold text-slate-900">{{ __('frontend.tour.show.packages.empty_title') }}</h3>
                         <p class="mt-2 max-w-2xl text-sm leading-7 text-slate-600">{{ __('frontend.tour.show.packages.empty_description') }}</p>
-                        <a href="{{ $contactUrl }}" class="mt-5 inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                        <x-ui::button tag="a" href="{{ $contactUrl }}" class="mt-5 hover:bg-blue-600">
                             {{ __('frontend.tour.show.custom_trip') }}
-                            <x-lucide-message-circle class="h-4 w-4" aria-hidden="true" />
-                        </a>
+                            <x-slot:trailingIcon><x-lucide-message-circle /></x-slot:trailingIcon>
+                        </x-ui::button>
                     </div>
                 @endif
             </div>
@@ -190,10 +190,10 @@
                     <p class="text-xs font-semibold uppercase text-slate-400">{{ __('frontend.tour.show.consultation.eyebrow') }}</p>
                     <h2 class="mt-3 text-2xl font-extrabold text-slate-900">{{ __('frontend.tour.show.consultation.title') }}</h2>
                     <p class="mt-3 text-sm leading-7 text-slate-600">{{ __('frontend.tour.consultation_panel_text') }}</p>
-                    <a href="{{ $contactUrl }}" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                    <x-ui::button tag="a" href="{{ $contactUrl }}" class="mt-5 w-full hover:bg-blue-600">
                         {{ __('frontend.tour.custom_trip_cta') }}
-                        <x-lucide-message-circle class="h-4 w-4" aria-hidden="true" />
-                    </a>
+                        <x-slot:trailingIcon><x-lucide-message-circle /></x-slot:trailingIcon>
+                    </x-ui::button>
                 </aside>
             </div>
         </section>

@@ -1,9 +1,6 @@
-import AOS from 'aos';
-import 'aos/dist/aos.css';
 import Swiper from 'swiper';
-import { Autoplay, EffectFade, Navigation, Pagination } from 'swiper/modules';
+import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/effect-fade';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
@@ -11,50 +8,86 @@ import.meta.glob([
     '../images/**',
 ]);
 
-Swiper.use([Autoplay, EffectFade, Navigation, Pagination]);
+Swiper.use([Navigation, Pagination]);
+
+document.addEventListener('alpine:init', () => {
+    window.Alpine.data('contactWorkspace', () => ({
+        activeTab: 'trip',
+        tripCopy: {},
+        b2bCopy: {},
+
+        init() {
+            this.activeTab = this.$el.dataset.initialTab === 'b2b' ? 'b2b' : 'trip';
+            this.tripCopy = JSON.parse(this.$el.dataset.tripCopy);
+            this.b2bCopy = JSON.parse(this.$el.dataset.b2bCopy);
+        },
+
+        selectTab(tab, moveFocus = false) {
+            this.activeTab = tab;
+
+            const url = new URL(window.location.href);
+            url.searchParams.set('type', tab);
+            window.history.replaceState({}, '', url);
+
+            if (moveFocus) {
+                this.$nextTick(() => this.$refs[`${tab}Tab`]?.focus());
+            }
+        },
+
+        moveTab(direction) {
+            const nextTab = direction === 'first'
+                ? 'trip'
+                : direction === 'last'
+                    ? 'b2b'
+                    : this.activeTab === 'trip' ? 'b2b' : 'trip';
+
+            this.selectTab(nextTab, true);
+        },
+
+        field(form, name) {
+            return form.elements.namedItem(name)?.value?.trim() || '-';
+        },
+
+        syncTripMessage(form) {
+            const copy = this.tripCopy;
+
+            this.$refs.tripMessage.value = [
+                copy.greeting,
+                '',
+                copy.intent,
+                '',
+                `${copy.name}: ${this.field(form, 'customer_name')}`,
+                `${copy.destination}: ${this.field(form, 'destination_interest')}`,
+                `${copy.date}: ${this.field(form, 'estimated_date')}`,
+                `${copy.participants}: ${this.field(form, 'participants')}`,
+                `${copy.notes}: ${this.field(form, 'travel_notes')}`,
+                '',
+                copy.closing,
+            ].join('\n');
+        },
+
+        syncB2bMessage(form) {
+            const copy = this.b2bCopy;
+
+            this.$refs.b2bMessage.value = [
+                copy.greeting,
+                '',
+                copy.intent,
+                '',
+                `${copy.organization}: ${this.field(form, 'organization_name')}`,
+                `${copy.pic}: ${this.field(form, 'pic_name')}`,
+                `${copy.email}: ${this.field(form, 'business_email')}`,
+                `${copy.type}: ${this.field(form, 'partnership_type')}`,
+                `${copy.volume}: ${this.field(form, 'estimated_volume')}`,
+                `${copy.needs}: ${this.field(form, 'partnership_needs')}`,
+                '',
+                copy.closing,
+            ].join('\n');
+        },
+    }));
+});
 
 document.addEventListener('DOMContentLoaded', () => {
-    AOS.init({
-        duration: 650,
-        easing: 'ease-out-cubic',
-        once: true,
-        offset: 80,
-        disable: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-    });
-
-    document.querySelectorAll('.js-hero-swiper').forEach((element) => {
-        new Swiper(element, {
-            effect: 'fade',
-            loop: true,
-            speed: 900,
-            autoplay: {
-                delay: 5200,
-                disableOnInteraction: false,
-            },
-            pagination: {
-                el: element.querySelector('.swiper-pagination'),
-                clickable: true,
-            },
-        });
-    });
-
-    document.querySelectorAll('.js-promo-swiper').forEach((element) => {
-        new Swiper(element, {
-            loop: true,
-            speed: 700,
-            slidesPerView: 1,
-            spaceBetween: 20,
-            autoplay: {
-                delay: 4500,
-                disableOnInteraction: false,
-            },
-            pagination: {
-                el: element.querySelector('.swiper-pagination'),
-                clickable: true,
-            },
-        });
-    });
-
     document.querySelectorAll('.js-testimonial-swiper').forEach((element) => {
         const section = element.closest('section');
 

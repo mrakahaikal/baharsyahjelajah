@@ -2,9 +2,12 @@
 
 namespace App\Filament\Resources\UmrahPackages\Schemas;
 
-use Filament\Forms\Components\FileUpload;
+use App\Enums\UmrahPackageType;
+use App\Models\Destination;
+use App\Models\UmrahPackage;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
@@ -12,7 +15,6 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Wizard;
 use Filament\Schemas\Components\Wizard\Step;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use SolutionForest\FilamentTranslateField\Forms\Component\Translate;
 
 class UmrahPackageForm
@@ -23,135 +25,205 @@ class UmrahPackageForm
             ->components([
                 Wizard::make([
                     Step::make('Informasi Paket')
-                        ->description('Nama, tipe, dan deskripsi paket umrah.')
-                        ->icon(Heroicon::OutlinedSparkles)
+                        ->description('Identitas paket, tipe, durasi, dan penjelasan program.')
+                        ->icon('lucide-info')
                         ->schema([
-                            Section::make()
+                            Section::make('Informasi Dasar Paket Umrah')
+                                ->description('Atur klasifikasi jenis paket, durasi perjalanan, serta detail translasi nama dan penjelasan paket.')
+                                ->icon('lucide-file-text')
                                 ->schema([
-                                    Select::make('package_type')
-                                        ->label('Tipe Paket')
-                                        ->options([
-                                            'regular' => 'Regular',
-                                            'plus' => 'Plus',
-                                            'vip' => 'VIP',
-                                            'ramadan' => 'Ramadan',
-                                        ])
-                                        ->required()
-                                        ->columnSpanFull(),
+                                    Grid::make(3)
+                                        ->schema([
+                                            Select::make('package_type')
+                                                ->label('Tipe Paket Umrah')
+                                                ->options(UmrahPackageType::class)
+                                                ->required()
+                                                ->placeholder('Pilih tipe paket')
+                                                ->helperText('Klasifikasi jenis paket umrah (Regular, Plus, atau Ramadan).')
+                                                ->prefixIcon('lucide-tag')
+                                                ->native(false),
+                                            TextInput::make('duration_days')
+                                                ->label('Durasi Perjalanan')
+                                                ->numeric()
+                                                ->minValue(1)
+                                                ->suffix('Hari')
+                                                ->required()
+                                                ->placeholder('Contoh: 9')
+                                                ->helperText('Total jumlah hari perjalanan umrah.')
+                                                ->prefixIcon('lucide-calendar'),
+                                            TextInput::make('price_idr')
+                                                ->label('Harga Dasar Fallback')
+                                                ->numeric()
+                                                ->minValue(1)
+                                                ->prefix('Rp')
+                                                ->required()
+                                                ->placeholder('Contoh: 28500000')
+                                                ->helperText('Harga dasar acuan sebelum detail tipe kamar ditambahkan.')
+                                                ->prefixIcon('lucide-banknote'),
+                                        ]),
                                     Translate::make()
                                         ->locales(['id', 'en', 'ms'])
-                                        ->schema(fn (string $locale) => [
-                                            TextInput::make('name')
-                                                ->label('Nama Paket')
-                                                ->placeholder('Misal: Umrah Reguler Awal Musim')
-                                                ->required($locale === 'id')
-                                                ->maxLength(255)
-                                                ->columnSpanFull(),
+                                        ->schema(fn (string $locale): array => [
+                                            Grid::make(2)
+                                                ->schema([
+                                                    TextInput::make('name')
+                                                        ->label('Nama Paket')
+                                                        ->required($locale === 'id')
+                                                        ->maxLength(255)
+                                                        ->placeholder('Masukkan nama paket (contoh: Umrah Reguler Awal Musim)')
+                                                        ->helperText('Nama paket umrah unik yang tampil di website.')
+                                                        ->prefixIcon('lucide-type'),
+                                                    TextInput::make('slug')
+                                                        ->label('Slug URL')
+                                                        ->required($locale === 'id')
+                                                        ->maxLength(255)
+                                                        ->placeholder('umrah-reguler-awal-musim')
+                                                        ->helperText('Tautan URL halaman detail. Terisi otomatis dari nama paket.')
+                                                        ->prefixIcon('lucide-link-2'),
+                                                ]),
                                             RichEditor::make('description')
                                                 ->label('Deskripsi Paket')
-                                                ->placeholder('Tuliskan detail informasi paket umrah ini...')
                                                 ->required($locale === 'id')
-                                                ->columnSpanFull(),
+                                                ->columnSpanFull()
+                                                ->placeholder('Tuliskan detail program, kelebihan paket, dan rincian lengkap...')
+                                                ->helperText('Deskripsi lengkap paket umrah.'),
+                                        ])
+                                        ->columnSpanFull(),
+                                    Select::make('destinations')
+                                        ->label('Destinasi Terkait')
+                                        ->relationship('destinations', 'name')
+                                        ->getOptionLabelFromRecordUsing(fn (Destination $record): string => $record->name)
+                                        ->multiple()
+                                        ->searchable()
+                                        ->preload()
+                                        ->native(false)
+                                        ->helperText('Paket akan tampil pada halaman destinasi yang dipilih.')
+                                        ->columnSpanFull(),
+                                ]),
+                        ]),
+
+                    Step::make('Akomodasi')
+                        ->description('Maskapai penerbangan, hotel penginapan, dan kelengkapan visa.')
+                        ->icon('lucide-hotel')
+                        ->schema([
+                            Section::make('Fasilitas Transportasi & Hotel')
+                                ->description('Atur maskapai penerbangan, akomodasi hotel di Makkah dan Madinah, serta ketersediaan visa dan handling.')
+                                ->icon('lucide-briefcase')
+                                ->schema([
+                                    TextInput::make('airline')
+                                        ->label('Maskapai Penerbangan')
+                                        ->maxLength(100)
+                                        ->placeholder('Masukkan nama maskapai (contoh: Saudia, Garuda Indonesia)')
+                                        ->helperText('Nama maskapai penerbangan utama yang digunakan.')
+                                        ->prefixIcon('lucide-plane'),
+                                    Grid::make(2)
+                                        ->schema([
+                                            TextInput::make('hotel_makkah')
+                                                ->label('Hotel Makkah')
+                                                ->maxLength(255)
+                                                ->placeholder('Contoh: Hilton Suites Makkah')
+                                                ->helperText('Nama hotel tempat menginap selama berada di Makkah.')
+                                                ->prefixIcon('lucide-building-2'),
+                                            Select::make('hotel_makkah_stars')
+                                                ->label('Bintang Hotel Makkah')
+                                                ->options([
+                                                    3 => '3 Bintang',
+                                                    4 => '4 Bintang',
+                                                    5 => '5 Bintang',
+                                                ])
+                                                ->placeholder('Pilih bintang hotel')
+                                                ->helperText('Kelas hotel di Makkah.')
+                                                ->prefixIcon('lucide-star')
+                                                ->native(false),
+                                            TextInput::make('hotel_madinah')
+                                                ->label('Hotel Madinah')
+                                                ->maxLength(255)
+                                                ->placeholder('Contoh: Pullman Zamzam Madinah')
+                                                ->helperText('Nama hotel tempat menginap selama berada di Madinah.')
+                                                ->prefixIcon('lucide-building-2'),
+                                            Select::make('hotel_madinah_stars')
+                                                ->label('Bintang Hotel Madinah')
+                                                ->options([
+                                                    3 => '3 Bintang',
+                                                    4 => '4 Bintang',
+                                                    5 => '5 Bintang',
+                                                ])
+                                                ->placeholder('Pilih bintang hotel')
+                                                ->helperText('Kelas hotel di Madinah.')
+                                                ->prefixIcon('lucide-star')
+                                                ->native(false),
+                                        ]),
+                                    Grid::make(2)
+                                        ->schema([
+                                            Toggle::make('visa_included')
+                                                ->label('Termasuk Visa Umrah')
+                                                ->default(true)
+                                                ->helperText('Aktifkan jika harga paket sudah termasuk pengurusan visa.'),
+                                            Toggle::make('handling_included')
+                                                ->label('Termasuk Handling & Perlengkapan')
+                                                ->default(true)
+                                                ->helperText('Aktifkan jika harga paket sudah mencakup handling bandara dan perlengkapan.'),
                                         ]),
                                 ]),
                         ]),
 
-                    Step::make('Fasilitas & Hotel')
-                        ->description('Informasi maskapai, hotel Makkah dan Madinah.')
-                        ->icon(Heroicon::OutlinedBuildingOffice)
+                    Step::make('Media')
+                        ->description('Cover utama dan galeri foto pendukung paket.')
+                        ->icon('lucide-image')
                         ->schema([
-                            Section::make()
+                            Section::make('Media Visual Paket')
+                                ->description('Unggah foto utama dan foto-foto galeri pendukung untuk paket umrah ini.')
+                                ->icon('lucide-images')
                                 ->schema([
-                                    Grid::make(2)->schema([
-                                        TextInput::make('airline')
-                                            ->label('Maskapai Penerbangan')
-                                            ->placeholder('Misal: Saudi Arabian Airlines')
-                                            ->maxLength(100),
-                                        Select::make('room_type')
-                                            ->label('Tipe Kamar')
-                                            ->options([
-                                                'quad' => 'Quad (4 orang)',
-                                                'triple' => 'Triple (3 orang)',
-                                                'double' => 'Double (2 orang)',
-                                                'single' => 'Single (1 orang)',
-                                            ])
-                                            ->required(),
-                                    ]),
-                                    Grid::make(2)->schema([
-                                        TextInput::make('hotel_makkah')
-                                            ->label('Hotel Makkah')
-                                            ->placeholder('Misal: Pullman Zamzam Makkah')
-                                            ->maxLength(255),
-                                        Select::make('hotel_makkah_stars')
-                                            ->label('Bintang Hotel Makkah')
-                                            ->options([
-                                                3 => '★★★ 3 Bintang',
-                                                4 => '★★★★ 4 Bintang',
-                                                5 => '★★★★★ 5 Bintang',
-                                            ]),
-                                    ]),
-                                    Grid::make(2)->schema([
-                                        TextInput::make('hotel_madinah')
-                                            ->label('Hotel Madinah')
-                                            ->placeholder('Misal: Shaza Al Madinah')
-                                            ->maxLength(255),
-                                        Select::make('hotel_madinah_stars')
-                                            ->label('Bintang Hotel Madinah')
-                                            ->options([
-                                                3 => '★★★ 3 Bintang',
-                                                4 => '★★★★ 4 Bintang',
-                                                5 => '★★★★★ 5 Bintang',
-                                            ]),
-                                    ]),
+                                    SpatieMediaLibraryFileUpload::make('cover')
+                                        ->label('Foto Utama (Cover)')
+                                        ->collection(UmrahPackage::MEDIA_COLLECTION_COVER)
+                                        ->image()
+                                        ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                                        ->maxSize(5120)
+                                        ->imageEditor()
+                                        ->disk('public')
+                                        ->visibility('public')
+                                        ->helperText('Format: JPG, PNG, WebP (Rasio ideal 4:3, maks 5MB).'),
+                                    SpatieMediaLibraryFileUpload::make('gallery')
+                                        ->label('Galeri Foto Pendukung')
+                                        ->collection(UmrahPackage::MEDIA_COLLECTION_GALLERY)
+                                        ->image()
+                                        ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                                        ->maxSize(5120)
+                                        ->multiple()
+                                        ->reorderable()
+                                        ->appendFiles()
+                                        ->imageEditor()
+                                        ->disk('public')
+                                        ->visibility('public')
+                                        ->helperText('Format: JPG, PNG, WebP (Maks 5MB per file). Urutan foto bisa diseret (drag & drop).'),
                                 ]),
                         ]),
 
-                    Step::make('Harga & Media')
-                        ->description('Durasi, harga, dan foto utama paket.')
-                        ->icon(Heroicon::OutlinedCurrencyDollar)
+                    Step::make('Publikasi')
+                        ->description('Visibilitas dan status penayangan di website.')
+                        ->icon('lucide-check-circle')
                         ->schema([
-                            Section::make()
+                            Section::make('Pengaturan Status Publikasi')
+                                ->description('Tentukan status penayangan paket umrah dan setel sebagai paket unggulan di halaman utama.')
+                                ->icon('lucide-settings')
                                 ->schema([
-                                    Grid::make(2)->schema([
-                                        TextInput::make('duration_days')
-                                            ->label('Durasi (Hari)')
-                                            ->placeholder('9')
-                                            ->numeric()
-                                            ->suffix('Hari')
-                                            ->required(),
-                                        TextInput::make('price_idr')
-                                            ->label('Harga Dasar (IDR)')
-                                            ->placeholder('0')
-                                            ->numeric()
-                                            ->prefix('Rp')
-                                            ->required(),
-                                    ]),
-                                    Grid::make(2)->schema([
-                                        Toggle::make('visa_included')
-                                            ->label('Sudah Termasuk Visa')
-                                            ->default(true)
-                                            ->inline(false),
-                                        Toggle::make('handling_included')
-                                            ->label('Sudah Termasuk Handling')
-                                            ->default(true)
-                                            ->inline(false),
-                                    ]),
-                                    FileUpload::make('thumbnail')
-                                        ->label('Foto Utama Paket')
-                                        ->image()
-                                        ->directory('umrah/thumbnails')
-                                        ->visibility('public')
-                                        ->imageEditor()
-                                        ->columnSpanFull(),
-                                    Toggle::make('is_active')
-                                        ->label('Paket Aktif / Dapat Dipesan')
-                                        ->default(true)
-                                        ->inline(false),
+                                    Grid::make(2)
+                                        ->schema([
+                                            Toggle::make('is_active')
+                                                ->label('Aktif dan Dapat Diakses Publik')
+                                                ->default(true)
+                                                ->helperText('Jika dinonaktifkan, paket tidak akan muncul di katalog website.'),
+                                            Toggle::make('is_featured')
+                                                ->label('Tampilkan Sebagai Paket Unggulan')
+                                                ->default(false)
+                                                ->helperText('Menampilkan paket ini pada section rekomendasi utama di homepage.'),
+                                        ]),
                                 ]),
                         ]),
                 ])
-                ->skippable()
-                ->columnSpanFull(),
+                    ->columnSpanFull(),
             ]);
     }
 }

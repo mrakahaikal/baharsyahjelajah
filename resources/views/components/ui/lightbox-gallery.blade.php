@@ -149,25 +149,31 @@
                         <span class="ml-3 hidden text-white/70 sm:inline" x-text="images[currentIndex]?.caption || images[currentIndex]?.alt"></span>
                     </p>
 
-                    <button
+                    <x-ui::button
                         type="button"
-                        class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                        variant="inverse"
+                        size="icon"
+                        class="size-10 rounded-full"
                         @click="close()"
                         aria-label="Close gallery"
                     >
-                        <x-lucide-x class="h-5 w-5" aria-hidden="true" />
-                    </button>
+                        <x-slot:icon><x-lucide-x /></x-slot:icon>
+                        <span class="sr-only">Close gallery</span>
+                    </x-ui::button>
                 </div>
 
                 <div class="relative flex min-h-0 flex-1 items-center justify-center">
-                    <button
+                    <x-ui::button
                         type="button"
-                        class="absolute left-0 top-1/2 z-10 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                        variant="inverse"
+                        size="icon"
+                        class="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full"
                         @click="previous()"
                         aria-label="Previous image"
                     >
-                        <x-lucide-chevron-left class="h-6 w-6" aria-hidden="true" />
-                    </button>
+                        <x-slot:icon><x-lucide-chevron-left /></x-slot:icon>
+                        <span class="sr-only">Previous image</span>
+                    </x-ui::button>
 
                     <img
                         x-bind:src="images[currentIndex]?.src"
@@ -175,14 +181,17 @@
                         class="max-h-full max-w-full rounded-2xl object-contain shadow-2xl shadow-black/40"
                     >
 
-                    <button
+                    <x-ui::button
                         type="button"
-                        class="absolute right-0 top-1/2 z-10 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                        variant="inverse"
+                        size="icon"
+                        class="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full"
                         @click="next()"
                         aria-label="Next image"
                     >
-                        <x-lucide-chevron-right class="h-6 w-6" aria-hidden="true" />
-                    </button>
+                        <x-slot:icon><x-lucide-chevron-right /></x-slot:icon>
+                        <span class="sr-only">Next image</span>
+                    </x-ui::button>
                 </div>
 
                 <div class="mx-auto flex max-w-full gap-2 overflow-x-auto pb-1">

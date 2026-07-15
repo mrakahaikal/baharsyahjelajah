@@ -10,10 +10,16 @@ class ManageFaqs extends ManageRecords
 {
     protected static string $resource = FaqResource::class;
 
+    protected ?string $heading = 'Daftar Pertanyaan (FAQ)';
+
+    protected ?string $subheading = 'Kelola pertanyaan dan jawaban yang sering ditanyakan pelanggan.';
+
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->label('Tambah FAQ')
+                ->icon('lucide-plus'),
         ];
     }
 }

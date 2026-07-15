@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Posts\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -23,7 +24,7 @@ class PostsTable
                     ->square()
                     ->size(50),
                 TextColumn::make('title')
-                    ->label('Judul')
+                    ->label('Judul Artikel')
                     ->searchable()
                     ->sortable()
                     ->limit(50),
@@ -47,11 +48,11 @@ class PostsTable
                         default => 'gray',
                     }),
                 TextColumn::make('published_at')
-                    ->label('Dipublikasikan')
+                    ->label('Tanggal Publikasi')
                     ->dateTime('d M Y H:i')
                     ->sortable(),
                 TextColumn::make('created_at')
-                    ->label('Dibuat')
+                    ->label('Tanggal Dibuat')
                     ->dateTime('d M Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -63,19 +64,34 @@ class PostsTable
                         'draft' => 'Draft',
                         'published' => 'Dipublikasikan',
                         'archived' => 'Diarsipkan',
-                    ]),
+                    ])
+                    ->native(false),
                 SelectFilter::make('post_category_id')
                     ->label('Kategori')
-                    ->relationship('category', 'name'),
+                    ->relationship('category', 'name')
+                    ->native(false),
             ])
             ->recordActions([
-                ViewAction::make()->label('Lihat'),
-                EditAction::make()->label('Ubah'),
+                ViewAction::make()
+                    ->label('Lihat')
+                    ->icon('lucide-eye'),
+                EditAction::make()
+                    ->label('Ubah')
+                    ->icon('lucide-pencil')
+                    ->color('primary'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make()->label('Hapus Terpilih'),
                 ]),
+            ])
+            ->emptyStateHeading('Belum Ada Artikel Blog')
+            ->emptyStateDescription('Tulis artikel baru untuk mulai membagikan info atau tips perjalanan di blog.')
+            ->emptyStateIcon('lucide-newspaper')
+            ->emptyStateActions([
+                CreateAction::make()
+                    ->label('Tulis Artikel Baru')
+                    ->icon('lucide-plus'),
             ]);
     }
 }

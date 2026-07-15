@@ -2,15 +2,17 @@
 
 namespace App\Filament\Resources\Vehicles\Schemas;
 
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Str;
 use SolutionForest\FilamentTranslateField\Forms\Component\Translate;
 
 class VehicleForm
@@ -20,65 +22,101 @@ class VehicleForm
         return $schema
             ->components([
                 Section::make('Informasi Kendaraan')
-                    ->description('Kelola detail identitas dan merek kendaraan.')
-                    ->icon(Heroicon::OutlinedTruck)
+                    ->description('Kelola detail identitas, merek, tipe, deskripsi, dan fitur unik kendaraan.')
+                    ->icon('lucide-truck')
                     ->columnSpanFull()
                     ->schema([
                         Translate::make()
                             ->locales(['id', 'en', 'ms'])
                             ->schema(fn (string $locale) => [
                                 TextInput::make('name')
-                                    ->label('Nama Unit')
-                                    ->placeholder('Misal: Toyota Alphard Executive')
+                                    ->label('Nama Unit Kendaraan')
+                                    ->placeholder('Contoh: Toyota Alphard Executive')
                                     ->required($locale === 'id')
-                                    ->maxLength(255),
+                                    ->maxLength(255)
+                                    ->live(onBlur: true)
+                                    ->afterStateUpdated(function (?string $state, Set $set): void {
+                                        $set('slug', Str::slug($state ?? ''));
+                                    })
+                                    ->prefixIcon('lucide-type')
+                                    ->helperText('Nama lengkap tipe armada kendaraan.'),
+                                TextInput::make('slug')
+                                    ->label('Slug URL')
+                                    ->required($locale === 'id')
+                                    ->placeholder('toyota-alphard-executive')
+                                    ->maxLength(255)
+                                    ->prefixIcon('lucide-link-2')
+                                    ->helperText('Tautan URL kendaraan. Terisi otomatis dari nama.'),
+                                Textarea::make('description')
+                                    ->label('Deskripsi Kendaraan')
+                                    ->placeholder('Masukkan penjelasan rinci mengenai armada kendaraan...')
+                                    ->rows(4)
+                                    ->required($locale === 'id')
+                                    ->helperText('Deskripsi lengkap kondisi, kenyamanan, dan keunggulan armada.')
+                                    ->columnSpanFull(),
+                                TagsInput::make('features')
+                                    ->label('Fitur Tambahan')
+                                    ->placeholder('Ketik fitur (misal: Airbags, JBL Audio) lalu tekan enter')
+                                    ->helperText('Daftar kelengkapan fitur opsional kendaraan.')
+                                    ->columnSpanFull(),
                             ]),
                         Grid::make(3)->schema([
                             TextInput::make('brand')
                                 ->label('Merek')
-                                ->placeholder('Misal: Toyota')
+                                ->placeholder('Contoh: Toyota')
                                 ->required()
-                                ->maxLength(100),
+                                ->maxLength(100)
+                                ->prefixIcon('lucide-tag'),
                             TextInput::make('model')
                                 ->label('Model / Seri')
-                                ->placeholder('Misal: Alphard G')
+                                ->placeholder('Contoh: Alphard G')
                                 ->required()
-                                ->maxLength(100),
+                                ->maxLength(100)
+                                ->prefixIcon('lucide-settings'),
                             TextInput::make('year')
-                                ->label('Tahun')
-                                ->placeholder('2024')
+                                ->label('Tahun Pembuatan')
+                                ->placeholder('Contoh: 2024')
                                 ->numeric()
                                 ->minValue(2000)
-                                ->maxValue(2030),
+                                ->maxValue((int) date('Y') + 1)
+                                ->prefixIcon('lucide-calendar')
+                                ->helperText('Tahun pembuatan armada.'),
                         ]),
                     ]),
 
                 Section::make('Spesifikasi & Fasilitas')
-                    ->description('Tentukan kapasitas dan fitur kenyamanan kendaraan.')
-                    ->icon(Heroicon::OutlinedCog6Tooth)
+                    ->description('Tentukan kapasitas penumpang, bagasi, transmisi, dan fitur kenyamanan.')
+                    ->icon('lucide-cog')
                     ->columnSpanFull()
                     ->schema([
                         Grid::make(3)->schema([
                             TextInput::make('capacity_pax')
                                 ->label('Kapasitas Penumpang')
-                                ->placeholder('7')
+                                ->placeholder('Contoh: 7')
                                 ->numeric()
                                 ->suffix('Orang')
-                                ->required(),
+                                ->required()
+                                ->prefixIcon('lucide-users')
+                                ->helperText('Maksimal jumlah penumpang.'),
                             TextInput::make('capacity_luggage')
                                 ->label('Kapasitas Bagasi')
-                                ->placeholder('3')
+                                ->placeholder('Contoh: 3')
                                 ->numeric()
                                 ->suffix('Koper')
-                                ->default(0),
+                                ->default(0)
+                                ->prefixIcon('lucide-briefcase')
+                                ->helperText('Estimasi kapasitas koper besar di bagasi.'),
                             Select::make('transmission')
-                                ->label('Transmisi')
+                                ->label('Tipe Transmisi')
                                 ->options([
                                     'automatic' => 'Otomatis',
                                     'manual' => 'Manual',
                                 ])
                                 ->default('automatic')
-                                ->required(),
+                                ->required()
+                                ->prefixIcon('lucide-activity')
+                                ->native(false)
+                                ->helperText('Pilih sistem transmisi kendaraan.'),
                         ]),
                         Grid::make(2)->schema([
                             Toggle::make('has_ac')
@@ -90,42 +128,61 @@ class VehicleForm
                                 ->default(false)
                                 ->inline(false),
                         ]),
-                        TagsInput::make('features')
-                            ->label('Fitur Tambahan Lainnya')
-                            ->placeholder('Tambah fitur (tekan enter)...')
-                            ->columnSpanFull(),
                     ]),
 
                 Section::make('Harga & Media')
-                    ->description('Atur harga sewa dan foto utama kendaraan.')
-                    ->icon(Heroicon::OutlinedCurrencyDollar)
+                    ->description('Atur tarif sewa per hari, per trip, foto utama, dan status penampilan katalog.')
+                    ->icon('lucide-banknote')
                     ->columnSpanFull()
                     ->schema([
                         Grid::make(2)->schema([
                             TextInput::make('price_per_day_idr')
-                                ->label('Harga per Hari')
-                                ->placeholder('0')
+                                ->label('Harga Sewa per Hari')
+                                ->placeholder('Contoh: 1500000')
                                 ->numeric()
+                                ->minValue(0)
+                                ->requiredWithout('price_per_trip_idr')
                                 ->prefix('Rp')
+                                ->prefixIcon('lucide-banknote')
                                 ->helperText('Biaya sewa untuk penggunaan harian.'),
                             TextInput::make('price_per_trip_idr')
-                                ->label('Harga per Trip')
-                                ->placeholder('0')
+                                ->label('Harga Sewa per Trip')
+                                ->placeholder('Contoh: 800000')
                                 ->numeric()
+                                ->minValue(0)
+                                ->requiredWithout('price_per_day_idr')
                                 ->prefix('Rp')
+                                ->prefixIcon('lucide-banknote')
                                 ->helperText('Biaya sewa untuk satu kali perjalanan.'),
                         ]),
-                        FileUpload::make('thumbnail')
+                        SpatieMediaLibraryFileUpload::make('cover')
                             ->label('Foto Utama Kendaraan')
+                            ->collection('cover')
                             ->image()
-                            ->directory('vehicles/thumbnails')
                             ->visibility('public')
                             ->imageEditor()
+                            ->helperText('Foto cover utama kendaraan (JPG, PNG, WebP rasio 4:3 maks 5MB).')
                             ->columnSpanFull(),
-                        Toggle::make('is_available')
-                            ->label('Unit Tersedia / Siap Jalan')
-                            ->default(true)
-                            ->inline(false),
+                        SpatieMediaLibraryFileUpload::make('gallery')
+                            ->label('Galeri Foto Kendaraan')
+                            ->collection('gallery')
+                            ->multiple()
+                            ->reorderable()
+                            ->image()
+                            ->visibility('public')
+                            ->imageEditor()
+                            ->helperText('Kumpulan foto interior & eksterior kendaraan (JPG, PNG, WebP rasio 4:3 maks 5MB).')
+                            ->columnSpanFull(),
+                        Grid::make(2)->schema([
+                            Toggle::make('is_active')
+                                ->label('Tampilkan di Katalog')
+                                ->default(true)
+                                ->inline(false),
+                            Toggle::make('is_featured')
+                                ->label('Armada Unggulan')
+                                ->default(false)
+                                ->inline(false),
+                        ]),
                     ]),
             ]);
     }

@@ -1,0 +1,50 @@
+<?php
+
+return [
+    'seo' => [
+        'index_title' => 'Destinasi dan Perjalanan | Baharsyah Jelajah',
+        'index_description' => 'Temui destinasi perjalanan bersama pakej lawatan, pakej umrah, dan panduan perjalanan yang tersedia.',
+        'show_title' => ':destination - Pakej dan Panduan Perjalanan | Baharsyah Jelajah',
+    ],
+    'breadcrumb' => [
+        'label' => 'Breadcrumb',
+        'home' => 'Laman utama',
+        'index' => 'Destinasi',
+    ],
+    'index' => [
+        'eyebrow' => 'Inspirasi perjalanan',
+        'title' => 'Kenali destinasi sebelum menentukan perjalanan.',
+        'subtitle' => 'Lihat gambaran tempat, pakej yang tersedia, dan artikel yang membantu anda merancang perjalanan dengan lebih jelas.',
+        'list_eyebrow' => 'Terokai destinasi',
+        'list_title' => 'Tempat yang boleh anda kunjungi',
+        'total' => ':count destinasi',
+        'empty_title' => 'Destinasi belum tersedia',
+        'empty_text' => 'Pasukan kami sedang menyediakan maklumat destinasi untuk anda terokai.',
+    ],
+    'card' => [
+        'featured' => 'Pilihan',
+        'available_content' => 'Kandungan tersedia',
+        'tours' => 'Pakej lawatan',
+        'umrah' => 'Pakej umrah',
+        'articles' => 'Artikel',
+        'view' => 'Lihat destinasi',
+    ],
+    'show' => [
+        'eyebrow' => 'Destinasi perjalanan',
+        'overview_eyebrow' => 'Tentang destinasi',
+        'overview_title' => 'Kenali :destination',
+        'fallback_description' => 'Temui pilihan perjalanan dan maklumat terkini yang berkaitan dengan :name.',
+        'location_title' => 'Lokasi',
+        'open_map' => 'Buka peta',
+        'gallery' => 'Galeri destinasi',
+        'tours_eyebrow' => 'Pakej perjalanan',
+        'tours_title' => 'Pakej lawatan ke :destination',
+        'umrah_eyebrow' => 'Perjalanan ibadah',
+        'umrah_title' => 'Pakej umrah berkaitan :destination',
+        'articles_eyebrow' => 'Panduan perjalanan',
+        'articles_title' => 'Artikel tentang :destination',
+        'empty_title' => 'Pakej berkaitan sedang disediakan',
+        'empty_text' => 'Anda masih boleh melihat katalog lawatan atau menghubungi pasukan kami untuk perjalanan tersuai.',
+        'explore_tours' => 'Terokai katalog lawatan',
+    ],
+];

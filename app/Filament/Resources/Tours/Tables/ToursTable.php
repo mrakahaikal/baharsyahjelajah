@@ -8,6 +8,7 @@ use App\Models\Tour;
 use App\Models\TourPackage;
 use App\Models\TourPriceTier;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -103,27 +104,34 @@ class ToursTable
                     ->label('Kategori')
                     ->relationship('category', 'name')
                     ->searchable()
-                    ->preload(),
+                    ->preload()
+                    ->native(false),
                 SelectFilter::make('tour_type')
                     ->label('Tipe Tur')
                     ->options([
                         TourType::Domestic->value => 'Domestik',
                         TourType::International->value => 'Internasional',
-                    ]),
+                    ])
+                    ->native(false),
                 TernaryFilter::make('is_active')
                     ->label('Status Aktif')
                     ->trueLabel('Aktif')
-                    ->falseLabel('Nonaktif'),
+                    ->falseLabel('Nonaktif')
+                    ->native(false),
                 TernaryFilter::make('is_featured')
                     ->label('Status Unggulan')
                     ->trueLabel('Unggulan')
-                    ->falseLabel('Biasa'),
+                    ->falseLabel('Biasa')
+                    ->native(false),
             ])
             ->recordActions([
                 ViewAction::make()
-                    ->label('Lihat'),
+                    ->label('Lihat')
+                    ->icon('lucide-eye'),
                 EditAction::make()
-                    ->label('Ubah'),
+                    ->label('Ubah')
+                    ->icon('lucide-pencil')
+                    ->color('primary'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
@@ -131,6 +139,14 @@ class ToursTable
                         ->label('Hapus Terpilih'),
                 ]),
             ])
-            ->defaultSort('created_at', 'desc');
+            ->defaultSort('created_at', 'desc')
+            ->emptyStateHeading('Belum Ada Paket Tur')
+            ->emptyStateDescription('Buat paket tur baru untuk menawarkan destinasi perjalanan wisata kepada pelanggan Anda.')
+            ->emptyStateIcon('lucide-map')
+            ->emptyStateActions([
+                CreateAction::make()
+                    ->label('Buat Paket Tur')
+                    ->icon('lucide-plus'),
+            ]);
     }
 }

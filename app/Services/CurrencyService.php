@@ -2,76 +2,79 @@
 
 namespace App\Services;
 
+use App\Exceptions\MissingCurrencyRateException;
 use App\Models\CurrencyRate;
+use Illuminate\Support\Facades\Cache;
 
 class CurrencyService
 {
-    private array $symbols = [
-        'IDR' => 'Rp',
-        'MYR' => 'RM',
-        'SGD' => 'S$',
-        'USD' => '$',
-    ];
-
-    /**
-     * Convert amount dari currency asal ke currency target.
-     * Rate diambil dari DB dengan cache 1 jam.
-     */
     public function convert(int|float $amount, string $toCurrency, ?string $fromCurrency = null): string
     {
-        $fromCurrency = $fromCurrency ?? 'IDR';
+        $fromCurrency = strtoupper($fromCurrency ?? (string) config('currencies.base'));
+        $toCurrency = strtoupper($toCurrency);
 
-        if ($fromCurrency === $toCurrency) {
-            return $this->format($amount, $toCurrency);
+        try {
+            $converted = $this->convertRaw($amount, $toCurrency, $fromCurrency);
+        } catch (MissingCurrencyRateException $exception) {
+            if (Cache::add('currency-rate-warning:'.$fromCurrency.':'.$toCurrency, true, now()->addHour())) {
+                logger()->warning($exception->getMessage(), [
+                    'from_currency' => $fromCurrency,
+                    'to_currency' => $toCurrency,
+                ]);
+            }
+
+            return $this->format($amount, $fromCurrency);
         }
-
-        $converted = $this->convertRaw($amount, $toCurrency, $fromCurrency);
 
         return $this->format($converted, $toCurrency);
     }
 
-    /**
-     * Hanya mengembalikan angka tanpa simbol — berguna untuk meta/schema.
-     */
     public function convertRaw(int|float $amount, string $toCurrency, ?string $fromCurrency = null): float
     {
-        $fromCurrency = $fromCurrency ?? 'IDR';
+        $baseCurrency = (string) config('currencies.base');
+        $fromCurrency = strtoupper($fromCurrency ?? $baseCurrency);
+        $toCurrency = strtoupper($toCurrency);
 
         if ($fromCurrency === $toCurrency) {
             return (float) $amount;
         }
 
         $rates = CurrencyRate::getCached();
+        $amountInBaseCurrency = (float) $amount;
 
-        // 1. Convert source currency to IDR
-        $amountInIdr = (float) $amount;
-        if ($fromCurrency !== 'IDR') {
+        if ($fromCurrency !== $baseCurrency) {
             $fromRate = (float) ($rates[$fromCurrency] ?? 0);
-            if ($fromRate > 0) {
-                $amountInIdr = $amount / $fromRate;
+
+            if ($fromRate <= 0) {
+                throw MissingCurrencyRateException::between($fromCurrency, $baseCurrency);
             }
+
+            $amountInBaseCurrency = $amount / $fromRate;
         }
 
-        // 2. Convert IDR to target currency
-        if ($toCurrency === 'IDR') {
-            return round($amountInIdr, 2);
+        if ($toCurrency === $baseCurrency) {
+            return round($amountInBaseCurrency, 2);
         }
 
         $toRate = (float) ($rates[$toCurrency] ?? 0);
-        if ($toRate > 0) {
-            return round($amountInIdr * $toRate, 2);
+
+        if ($toRate <= 0) {
+            throw MissingCurrencyRateException::between($baseCurrency, $toCurrency);
         }
 
-        return round($amountInIdr, 2);
+        return round($amountInBaseCurrency * $toRate, 2);
     }
 
     private function format(int|float $amount, string $currency): string
     {
-        $symbol = $this->symbols[$currency] ?? $currency;
+        $metadata = config("currencies.supported.{$currency}", []);
+        $symbol = $metadata['symbol'] ?? $currency;
+        $decimals = (int) ($metadata['decimals'] ?? 2);
 
-        return match ($currency) {
-            'IDR' => $symbol.' '.number_format($amount, 0, ',', '.'),
-            default => $symbol.' '.number_format($amount, 2),
-        };
+        if ($currency === config('currencies.base')) {
+            return $symbol.' '.number_format($amount, $decimals, ',', '.');
+        }
+
+        return $symbol.' '.number_format($amount, $decimals, '.', ',');
     }
 }

@@ -1,0 +1,50 @@
+<?php
+
+return [
+    'seo' => [
+        'index_title' => 'Travel Destinations and Journeys | Baharsyah Jelajah',
+        'index_description' => 'Discover travel destinations with available tour packages, Umrah packages, and practical travel guides.',
+        'show_title' => ':destination - Packages and Travel Guides | Baharsyah Jelajah',
+    ],
+    'breadcrumb' => [
+        'label' => 'Breadcrumb',
+        'home' => 'Home',
+        'index' => 'Destinations',
+    ],
+    'index' => [
+        'eyebrow' => 'Travel inspiration',
+        'title' => 'Understand the destination before choosing your journey.',
+        'subtitle' => 'Explore each place, available packages, and useful articles to plan your trip with greater clarity.',
+        'list_eyebrow' => 'Explore destinations',
+        'list_title' => 'Places you can visit',
+        'total' => ':count destination|:count destinations',
+        'empty_title' => 'No destinations are available yet',
+        'empty_text' => 'Our team is preparing destination information for you to explore.',
+    ],
+    'card' => [
+        'featured' => 'Featured',
+        'available_content' => 'Available content',
+        'tours' => 'Tour packages',
+        'umrah' => 'Umrah packages',
+        'articles' => 'Articles',
+        'view' => 'View destination',
+    ],
+    'show' => [
+        'eyebrow' => 'Travel destination',
+        'overview_eyebrow' => 'About the destination',
+        'overview_title' => 'Discover :destination',
+        'fallback_description' => 'Explore available journeys and the latest information related to :name.',
+        'location_title' => 'Location',
+        'open_map' => 'Open map',
+        'gallery' => 'Destination gallery',
+        'tours_eyebrow' => 'Travel packages',
+        'tours_title' => 'Tour packages for :destination',
+        'umrah_eyebrow' => 'Worship journey',
+        'umrah_title' => 'Umrah packages related to :destination',
+        'articles_eyebrow' => 'Travel guides',
+        'articles_title' => 'Articles about :destination',
+        'empty_title' => 'Related packages are being prepared',
+        'empty_text' => 'You can still browse our tour catalogue or contact our team for a tailored journey.',
+        'explore_tours' => 'Explore tour catalogue',
+    ],
+];

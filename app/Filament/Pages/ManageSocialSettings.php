@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Clusters\Settings\SettingsCluster;
 use App\Settings\SocialSettings;
 use BackedEnum;
 use Filament\Forms\Components\TextInput;
@@ -9,13 +10,10 @@ use Filament\Pages\SettingsPage;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 
 class ManageSocialSettings extends SettingsPage
 {
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShare;
-
-    protected static string|null|\UnitEnum $navigationGroup = 'Pengaturan';
+    protected static string|BackedEnum|null $navigationIcon = 'lucide-share-2';
 
     protected static ?string $navigationLabel = 'Media Sosial';
 
@@ -29,37 +27,44 @@ class ManageSocialSettings extends SettingsPage
 
     protected ?string $subheading = 'Hubungkan website dengan akun media sosial resmi Anda.';
 
+    protected static ?string $cluster = SettingsCluster::class;
+
     public function form(Schema $schema): Schema
     {
         return $schema
             ->components([
-                Section::make('Tautan Media Sosial')
-                    ->description('Masukkan URL lengkap profil media sosial Anda.')
-                    ->icon(Heroicon::OutlinedGlobeAlt)
+                Section::make('Tautan Media Sosial Resmi')
+                    ->description('Kelola alamat tautan lengkap profil akun media sosial resmi perusahaan Anda.')
+                    ->icon('lucide-share-2')
                     ->schema([
                         Grid::make(2)->schema([
                             TextInput::make('instagram')
-                                ->label('Instagram')
-                                ->placeholder('https://instagram.com/username')
+                                ->label('Instagram URL')
+                                ->placeholder('Contoh: https://instagram.com/username')
                                 ->url()
-                                ->prefixIcon('heroicon-o-camera'),
+                                ->helperText('Tautan URL lengkap profil Instagram.')
+                                ->prefixIcon('lucide-instagram'),
                             TextInput::make('facebook')
-                                ->label('Facebook')
-                                ->placeholder('https://facebook.com/username')
+                                ->label('Facebook URL')
+                                ->placeholder('Contoh: https://facebook.com/username')
                                 ->url()
-                                ->prefixIcon('heroicon-o-user-group'),
+                                ->helperText('Tautan URL lengkap profil Facebook.')
+                                ->prefixIcon('lucide-facebook'),
                             TextInput::make('tiktok')
-                                ->label('TikTok')
-                                ->placeholder('https://tiktok.com/@username')
+                                ->label('TikTok URL')
+                                ->placeholder('Contoh: https://tiktok.com/@username')
                                 ->url()
-                                ->prefixIcon('heroicon-o-musical-note'),
+                                ->helperText('Tautan URL lengkap profil TikTok.')
+                                ->prefixIcon('lucide-music'),
                             TextInput::make('youtube')
-                                ->label('YouTube')
-                                ->placeholder('https://youtube.com/@channel')
+                                ->label('YouTube URL')
+                                ->placeholder('Contoh: https://youtube.com/@channel')
                                 ->url()
-                                ->prefixIcon('heroicon-o-video-camera'),
+                                ->helperText('Tautan URL lengkap channel YouTube.')
+                                ->prefixIcon('lucide-youtube'),
                         ]),
-                    ]),
+                    ])
+                    ->columnSpanFull(),
             ]);
     }
 }

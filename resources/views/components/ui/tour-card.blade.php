@@ -70,9 +70,9 @@
             </div>
         @endif
 
-        <a href="{{ route('tour.show', ['locale' => $locale, 'tour' => $tour->slug]) }}" class="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 {{ $startingPrice ? 'mt-5' : 'mt-6' }}">
+        <x-ui::button tag="a" href="{{ route('tour.show', ['locale' => $locale, 'tour' => $tour->slug]) }}" variant="outline" class="mt-auto w-full {{ $startingPrice ? 'mt-5' : 'mt-6' }}">
             {{ $locale === 'en' ? 'View package options' : ($locale === 'ms' ? 'Lihat pilihan pakej' : 'Lihat pilihan paket') }}
-            <x-lucide-arrow-right class="h-4 w-4" aria-hidden="true" />
-        </a>
+            <x-slot:trailingIcon><x-lucide-arrow-right /></x-slot:trailingIcon>
+        </x-ui::button>
     </div>
 </article>

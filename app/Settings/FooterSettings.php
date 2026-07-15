@@ -16,9 +16,15 @@ class FooterSettings extends Settings
 
     public string $cta_button_route;
 
-    public array $subscribe_title;
+    public array $social_title;
 
-    public array $subscribe_subtitle;
+    public array $social_description;
+
+    public array $contact_title;
+
+    public array $destinations_all_label;
+
+    public int $destination_limit;
 
     public array $link_groups;
 

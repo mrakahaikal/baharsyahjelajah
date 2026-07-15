@@ -24,8 +24,10 @@ class DatabaseSeeder extends Seeder
             DestinationSeeder::class,
             TourCategorySeeder::class,
             TourSeeder::class,
-            //            VehicleSeeder::class,
-            //            UmrahPackageSeeder::class,
+            VehicleSeeder::class,
+            UmrahPackageSeeder::class,
+            CountrySeeder::class,
+            VisaServiceSeeder::class,
 
             // Konten website
             //            BannerSeeder::class,

@@ -1,0 +1,50 @@
+<?php
+
+return [
+    'seo' => [
+        'index_title' => 'Destinasi Wisata dan Perjalanan | Baharsyah Jelajah',
+        'index_description' => 'Temukan destinasi wisata dan perjalanan beserta paket tour, paket umrah, dan panduan perjalanan yang tersedia.',
+        'show_title' => ':destination - Paket dan Panduan Perjalanan | Baharsyah Jelajah',
+    ],
+    'breadcrumb' => [
+        'label' => 'Breadcrumb',
+        'home' => 'Beranda',
+        'index' => 'Destinasi',
+    ],
+    'index' => [
+        'eyebrow' => 'Inspirasi perjalanan',
+        'title' => 'Kenali destinasi sebelum menentukan perjalanan.',
+        'subtitle' => 'Lihat gambaran tempat, paket yang tersedia, dan artikel yang membantu Anda merencanakan perjalanan dengan lebih jelas.',
+        'list_eyebrow' => 'Jelajahi destinasi',
+        'list_title' => 'Tempat yang dapat Anda kunjungi',
+        'total' => ':count destinasi',
+        'empty_title' => 'Destinasi belum tersedia',
+        'empty_text' => 'Tim kami sedang menyiapkan informasi destinasi yang dapat Anda jelajahi.',
+    ],
+    'card' => [
+        'featured' => 'Unggulan',
+        'available_content' => 'Konten tersedia',
+        'tours' => 'Paket tour',
+        'umrah' => 'Paket umrah',
+        'articles' => 'Artikel',
+        'view' => 'Lihat destinasi',
+    ],
+    'show' => [
+        'eyebrow' => 'Destinasi perjalanan',
+        'overview_eyebrow' => 'Tentang destinasi',
+        'overview_title' => 'Mengenal :destination',
+        'fallback_description' => 'Temukan pilihan perjalanan dan informasi terbaru yang berkaitan dengan :name.',
+        'location_title' => 'Lokasi',
+        'open_map' => 'Buka peta',
+        'gallery' => 'Galeri destinasi',
+        'tours_eyebrow' => 'Paket perjalanan',
+        'tours_title' => 'Paket tour menuju :destination',
+        'umrah_eyebrow' => 'Perjalanan ibadah',
+        'umrah_title' => 'Paket umrah terkait :destination',
+        'articles_eyebrow' => 'Panduan perjalanan',
+        'articles_title' => 'Artikel tentang :destination',
+        'empty_title' => 'Paket terkait sedang disiapkan',
+        'empty_text' => 'Anda tetap dapat melihat katalog tour atau menghubungi tim kami untuk perjalanan yang disesuaikan.',
+        'explore_tours' => 'Jelajahi katalog tour',
+    ],
+];

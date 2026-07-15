@@ -23,7 +23,7 @@ class GeneralSettings extends Settings
     public array $office_hours;
 
     // Default preferences
-    public string $default_currency;   // IDR | MYR | SGD
+    public string $default_currency;   // IDR | MYR | SGD | USD
 
     public int $default_pax;
 

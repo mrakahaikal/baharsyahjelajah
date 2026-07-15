@@ -16,11 +16,28 @@ class TravelCatalogSeeder extends Seeder
 
     private function seedCurrencyRates(): void
     {
-        DB::table('currency_rates')->upsert([
-            ['from_currency' => 'IDR', 'to_currency' => 'MYR', 'rate' => 0.00029200, 'created_at' => now(), 'updated_at' => now()],
-            ['from_currency' => 'IDR', 'to_currency' => 'SGD', 'rate' => 0.00008500, 'created_at' => now(), 'updated_at' => now()],
-            ['from_currency' => 'IDR', 'to_currency' => 'USD', 'rate' => 0.00006250, 'created_at' => now(), 'updated_at' => now()],
-        ], ['from_currency', 'to_currency'], ['rate', 'updated_at']);
+        DB::table('currency_rates')->upsert(collect([
+            ['to_currency' => 'MYR', 'rate' => 0.00027000],
+            ['to_currency' => 'SGD', 'rate' => 0.00007800],
+            ['to_currency' => 'USD', 'rate' => 0.00006100],
+            ['to_currency' => 'EUR', 'rate' => 0.00005600],
+            ['to_currency' => 'EGP', 'rate' => 0.00305000],
+            ['to_currency' => 'SAR', 'rate' => 0.00022900],
+            ['to_currency' => 'GBP', 'rate' => 0.00004700],
+            ['to_currency' => 'AED', 'rate' => 0.00022400],
+            ['to_currency' => 'JPY', 'rate' => 0.00910000],
+            ['to_currency' => 'THB', 'rate' => 0.00200000],
+        ])
+            ->map(fn (array $rate): array => [
+                ...$rate,
+                'from_currency' => 'IDR',
+                'provider' => 'seed',
+                'source_updated_at' => now(),
+                'fetched_at' => now(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ])
+            ->all(), ['from_currency', 'to_currency'], ['rate', 'provider', 'source_updated_at', 'fetched_at', 'updated_at']);
     }
 
     private function seedWhatsappTemplates(): void
@@ -84,6 +101,26 @@ class TravelCatalogSeeder extends Seeder
                 'locale' => 'en',
                 'template' => "Assalamu'alaikum,\n\nI'm interested in the *Umrah Package {product_name}* ({duration} days).\n\nDetails:\n- Departure date: {departure_date}\n- Number of pilgrims: {pax} person(s)\n- Estimated price: {price}/person\n\nKindly provide full info and registration procedure. Jazakallahu khairan 🙏",
                 'variables' => json_encode(['product_name', 'duration', 'departure_date', 'pax', 'price']),
+            ],
+
+            // ── Visa ──────────────────────────────────────────────
+            [
+                'product_type' => 'visa',
+                'locale' => 'id',
+                'template' => "Halo,\n\nSaya ingin berkonsultasi mengenai *{product_name}* untuk tujuan {country}.",
+                'variables' => json_encode(['product_name', 'country', 'visa_type', 'applicant_name', 'applicants', 'departure_date', 'price', 'notes']),
+            ],
+            [
+                'product_type' => 'visa',
+                'locale' => 'ms',
+                'template' => "Helo,\n\nSaya ingin mendapatkan konsultasi mengenai *{product_name}* untuk tujuan {country}.",
+                'variables' => json_encode(['product_name', 'country', 'visa_type', 'applicant_name', 'applicants', 'departure_date', 'price', 'notes']),
+            ],
+            [
+                'product_type' => 'visa',
+                'locale' => 'en',
+                'template' => "Hello,\n\nI'd like to consult about *{product_name}* for travel to {country}.",
+                'variables' => json_encode(['product_name', 'country', 'visa_type', 'applicant_name', 'applicants', 'departure_date', 'price', 'notes']),
             ],
         ];
 

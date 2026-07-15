@@ -19,9 +19,12 @@ class EditTour extends EditRecord
     {
         return [
             ViewAction::make()
-                ->label('Lihat Detail'),
+                ->label('Lihat Detail')
+                ->icon('lucide-eye'),
             DeleteAction::make()
-                ->label('Hapus Paket'),
+                ->label('Hapus Paket')
+                ->icon('lucide-trash')
+                ->color('danger'),
         ];
     }
 }

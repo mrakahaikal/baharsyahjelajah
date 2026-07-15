@@ -13,7 +13,6 @@ use App\Models\Vehicle;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -22,11 +21,9 @@ class VehicleResource extends Resource
 {
     protected static ?string $model = Vehicle::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTruck;
+    protected static string|BackedEnum|null $navigationIcon = 'lucide-truck';
 
     protected static string|null|\UnitEnum $navigationGroup = 'Layanan Transportasi';
-
-    protected static bool $shouldRegisterNavigation = false;
 
     protected static ?string $navigationLabel = 'Armada Kendaraan';
 
@@ -53,9 +50,7 @@ class VehicleResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            RelationManagers\GalleriesRelationManager::class,
-        ];
+        return [];
     }
 
     public static function getPages(): array

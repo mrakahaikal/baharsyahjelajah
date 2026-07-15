@@ -21,13 +21,20 @@ class EditVehicle extends EditRecord
     {
         return [
             ViewAction::make()
-                ->label('Lihat Detail'),
+                ->label('Lihat Detail')
+                ->icon('lucide-eye'),
             DeleteAction::make()
-                ->label('Hapus'),
+                ->label('Hapus Unit')
+                ->icon('lucide-trash')
+                ->color('danger'),
             ForceDeleteAction::make()
-                ->label('Hapus Permanen'),
+                ->label('Hapus Permanen')
+                ->icon('lucide-trash-2')
+                ->color('danger'),
             RestoreAction::make()
-                ->label('Pulihkan'),
+                ->label('Pulihkan')
+                ->icon('lucide-rotate-ccw')
+                ->color('success'),
         ];
     }
 }

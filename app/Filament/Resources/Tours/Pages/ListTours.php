@@ -18,7 +18,8 @@ class ListTours extends ListRecords
     {
         return [
             CreateAction::make()
-                ->label('Buat Paket Tur'),
+                ->label('Buat Paket Tur')
+                ->icon('lucide-plus'),
         ];
     }
 }

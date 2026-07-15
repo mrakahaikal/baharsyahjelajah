@@ -13,14 +13,13 @@ use App\Models\Tour;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
 class TourResource extends Resource
 {
     protected static ?string $model = Tour::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMap;
+    protected static string|BackedEnum|null $navigationIcon = 'lucide-map';
 
     protected static string|null|\UnitEnum $navigationGroup = 'Manajemen Tur';
 

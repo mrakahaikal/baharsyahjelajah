@@ -1,4 +1,4 @@
-@props(['locale', 'localeUrls' => [], 'navLinks', 'menuCategories', 'contactUrl'])
+@props(['locale', 'localeUrls' => [], 'navLinks', 'menuCategories', 'contactUrl', 'languages', 'currencies', 'currentCurrency'])
 
 <div id="mobile-navigation" x-show="mobileMenuOpen" x-collapse x-cloak class="md:hidden bg-white/95 backdrop-blur-md border-t border-slate-200/50 shadow-lg rounded-b-2xl">
     <div class="px-4 pt-2 pb-6 space-y-4">
@@ -42,26 +42,28 @@
             @endif
 
             <div class="flex flex-col gap-1.5">
-                <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Pilih Bahasa</span>
+                <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">{{ __('frontend.header.switchers.language') }}</span>
                 <div class="flex flex-wrap gap-2">
-                    @foreach(['id' => 'Indonesian', 'ms' => 'Malay', 'en' => 'English'] as $code => $label)
+                    @foreach($languages as $code => $language)
                         @php $isCurrent = $locale === $code; @endphp
                         <a href="{{ $localeUrls[$code] ?? route(Route::currentRouteName() ?? 'home', array_merge(Route::current()?->parameters() ?? [], ['locale' => $code])) }}"
-                           class="rounded-full px-4 py-2 text-xs font-semibold border transition-[background-color,border-color,color] duration-200 {{ $isCurrent ? 'bg-blue-50 border-blue-200 text-blue-700 font-bold' : 'bg-slate-50 border-slate-200/60 text-slate-600 hover:bg-slate-100' }}">
-                            {{ $label }}
+                           class="inline-flex min-h-11 items-center gap-2 rounded-lg border px-3 text-xs font-semibold transition-[background-color,border-color,color] duration-200 {{ $isCurrent ? 'bg-blue-50 border-blue-200 text-blue-700 font-bold' : 'bg-slate-50 border-slate-200/60 text-slate-600 hover:bg-slate-100' }}" @if($isCurrent) aria-current="page" @endif>
+                            <img src="{{ $language['flag'] }}" alt="" width="28" height="20" class="h-5 w-7 rounded-sm border border-slate-200 object-cover" aria-hidden="true">
+                            {{ $language['label'] }}
                         </a>
                     @endforeach
                 </div>
             </div>
 
             <div class="flex flex-col gap-1.5 pt-2">
-                <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Pilih Mata Uang</span>
+                <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">{{ __('frontend.header.switchers.currency') }}</span>
                 <div class="flex flex-wrap gap-2">
-                    @foreach(['IDR', 'MYR', 'SGD'] as $code)
-                        @php $isCurrent = \App\Helpers\LocaleHelper::currency() === $code; @endphp
+                    @foreach($currencies as $code => $label)
+                        @php $isCurrent = $currentCurrency === $code; @endphp
                         <a href="{{ route('set.currency', ['currency' => $code]) }}"
-                           class="rounded-full px-4 py-2 text-xs font-semibold border transition-[background-color,border-color,color] duration-200 {{ $isCurrent ? 'bg-blue-50 border-blue-200 text-blue-700 font-bold' : 'bg-slate-50 border-slate-200/60 text-slate-600 hover:bg-slate-100' }}">
-                            {{ $code }}
+                           class="inline-flex min-h-11 items-center gap-1.5 rounded-lg border px-3 text-xs font-semibold transition-[background-color,border-color,color] duration-200 {{ $isCurrent ? 'bg-blue-50 border-blue-200 text-blue-700 font-bold' : 'bg-slate-50 border-slate-200/60 text-slate-600 hover:bg-slate-100' }}" @if($isCurrent) aria-current="true" @endif>
+                            <span>{{ $label }}</span>
+                            <span class="text-[10px] opacity-60">{{ $code }}</span>
                         </a>
                     @endforeach
                 </div>

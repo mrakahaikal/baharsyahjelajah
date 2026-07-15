@@ -4,6 +4,7 @@ use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\Testimonial;
 use App\Models\User;
+use App\Settings\GeneralSettings;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use function Pest\Laravel\get;
@@ -25,6 +26,11 @@ it('redirects the contact shortcut to the detected supported locale', function (
         ->assertRedirect('/en/kontak');
 });
 
+it('preserves the contact inquiry context while detecting the locale', function () {
+    get('/kontak?tour=danau-labuan-cermin&type=b2b', ['Accept-Language' => 'en-US,en;q=0.9'])
+        ->assertRedirect('/en/kontak?tour=danau-labuan-cermin&type=b2b');
+});
+
 it('redirects the tour shortcut to the default locale', function () {
     get('/tour')
         ->assertRedirect('/id/tour');
@@ -42,11 +48,75 @@ it('redirects tour child paths to the default locale while preserving the query 
     ],
 ]);
 
+it('redirects the blog shortcut to the default locale', function () {
+    get('/blog')
+        ->assertRedirect('/id/blog');
+});
+
+it('redirects blog child paths to the default locale while preserving the query string', function (string $path, string $destination) {
+    get($path)
+        ->assertRedirect($destination);
+})->with([
+    'blog show' => ['/blog/panduan-tanjung-puting', '/id/blog/panduan-tanjung-puting'],
+    'blog show with query' => [
+        '/blog/panduan-tanjung-puting?ref=homepage&utm_source=search',
+        '/id/blog/panduan-tanjung-puting?ref=homepage&utm_source=search',
+    ],
+]);
+
+it('redirects visa paths to the default locale while preserving the query string', function (string $path, string $destination) {
+    get($path)
+        ->assertRedirect($destination);
+})->with([
+    'visa index' => ['/visa', '/id/visa'],
+    'visa detail' => ['/visa/visa-kunjungan-mesir', '/id/visa/visa-kunjungan-mesir'],
+    'visa detail with query' => [
+        '/visa/visa-kunjungan-mesir?ref=homepage&utm_source=search',
+        '/id/visa/visa-kunjungan-mesir?ref=homepage&utm_source=search',
+    ],
+]);
+
 it('sets the application locale based on the URL prefix', function (string $locale) {
     get("/{$locale}")
         ->assertStatus(200)
         ->assertSee("<html lang=\"{$locale}\"", false);
 })->with(['id', 'ms', 'en']);
+
+it('renders language and currency switchers with local flag images', function () {
+    get('/id')
+        ->assertOk()
+        ->assertSee('id="language-switcher"', false)
+        ->assertSee('id="currency-switcher"', false)
+        ->assertSee('images/flags/indonesia-flag.webp', false)
+        ->assertSee('images/flags/malaysia-flag.webp', false)
+        ->assertSee('images/flags/uk-flag.webp', false)
+        ->assertSee('href="'.route('home', ['locale' => 'ms']).'"', false)
+        ->assertSee('href="'.route('home', ['locale' => 'en']).'"', false)
+        ->assertSee('href="'.route('set.currency', ['currency' => 'MYR']).'"', false)
+        ->assertSee('href="'.route('set.currency', ['currency' => 'SGD']).'"', false)
+        ->assertSee('href="'.route('set.currency', ['currency' => 'USD']).'"', false)
+        ->assertSee('href="'.route('set.currency', ['currency' => 'EUR']).'"', false)
+        ->assertSee('href="'.route('set.currency', ['currency' => 'SAR']).'"', false)
+        ->assertSee('href="'.route('set.currency', ['currency' => 'JPY']).'"', false);
+});
+
+it('only switches to a supported currency', function () {
+    $this->withSession(['app_currency' => 'IDR'])
+        ->from('/id')
+        ->get('/set-currency/USD')
+        ->assertRedirect('/id')
+        ->assertSessionHas('app_currency', 'USD');
+
+    $this->from('/id')
+        ->get('/set-currency/EUR')
+        ->assertRedirect('/id')
+        ->assertSessionHas('app_currency', 'EUR');
+
+    $this->from('/id')
+        ->get('/set-currency/CAD')
+        ->assertRedirect('/id')
+        ->assertSessionHas('app_currency', 'EUR');
+});
 
 it('renders the mvp homepage focused on tours, guides, and consultation', function () {
     $user = User::factory()->create();
@@ -89,15 +159,14 @@ it('renders the mvp homepage focused on tours, guides, and consultation', functi
         ->assertSee('method="GET" action="'.route('tour.index', ['locale' => 'id']).'"', false)
         ->assertSee('name="destination"', false)
         ->assertSee('name="type"', false)
-        ->assertSee('name="pax"', false)
+        ->assertDontSee('name="pax"', false)
         ->assertSee('aria-label="Testimoni sebelumnya"', false)
         ->assertSee('aria-label="Testimoni berikutnya"', false)
-        ->assertSee('Cari Tour Pilihan')
-        ->assertSee('Rancang perjalanan')
-        ->assertSee('Jelajahi Tour')
-        ->assertSee('Baca Panduan Destinasi')
-        ->assertSee('Diskusikan Itinerary')
-        ->assertSee('Mulai diskusi')
+        ->assertSee('Mulai pencarian')
+        ->assertSee('Tour unggulan')
+        ->assertSee('Perjalanan ibadah')
+        ->assertSee('Pendampingan perjalanan')
+        ->assertSee('Mulai merencanakan')
         ->assertSee('Baharsyah Jelajah')
         ->assertSee('Panduan Tour Kalimantan')
         ->assertSee('Butuh bantuan memilih perjalanan?')
@@ -105,9 +174,10 @@ it('renders the mvp homepage focused on tours, guides, and consultation', functi
         ->assertSee('Kontak')
         ->assertDontSee('Fokus MVP')
         ->assertDontSee('Home sekarang')
-        ->assertDontSee('Paket Umroh')
-        ->assertDontSee('Sewa Kendaraan')
-        ->assertDontSee('Layanan Visa')
+        ->assertSee('href="'.route('transport.index', ['locale' => 'id']).'"', false)
+        ->assertSee('Armada pilihan, perjalanan lebih tenang')
+        ->assertSee('Layanan Visa untuk WNI')
+        ->assertSee('href="'.route('visa.index', ['locale' => 'id']).'"', false)
         ->assertDontSee('search-panel-transport')
         ->assertDontSee('search-panel-umroh')
         ->assertDontSee("Where's your next adventure?")
@@ -161,24 +231,55 @@ it('renders page content directly below the sticky header without legacy spacing
         ->assertDontSee('[&amp;&gt;*:first-child]:pt-28', false);
 });
 
-it('renders the contact page with whatsapp inquiry forms and map context', function () {
-    get('/id/kontak')
+it('renders the contact page as an accessible whatsapp consultation workspace', function () {
+    get('/id/kontak?tour=danau-labuan-cermin&type=b2b')
         ->assertOk()
-        ->assertSee('Kontak Resmi')
-        ->assertSee('Hubungi Tim Baharsyah Jelajah')
-        ->assertSee('Buka di Google Maps')
-        ->assertSee('Inquiry Perjalanan')
-        ->assertSee('Permohonan B2B')
-        ->assertSee('Form ini tidak menyimpan data di website')
+        ->assertSee('Mulai perjalanan Anda dengan rencana yang lebih jelas.')
+        ->assertSee('Apa yang sedang Anda rencanakan?')
+        ->assertSee('Konsultasi Trip')
+        ->assertSee('Kerja Sama B2B')
+        ->assertSee('Buka petunjuk arah')
         ->assertSee('action="https://wa.me/6281234567890"', false)
+        ->assertSee('role="tablist"', false)
+        ->assertSee('role="tabpanel"', false)
+        ->assertSee('data-initial-tab="b2b"', false)
         ->assertSee('name="text"', false)
-        ->assertSee('name="customer_phone"', false)
         ->assertSee('name="destination_interest"', false)
+        ->assertSee('value="Danau Labuan Cermin"', false)
+        ->assertSee('type="date" name="estimated_date"', false)
         ->assertSee('name="organization_name"', false)
         ->assertSee('name="business_email"', false)
+        ->assertSee('name="partnership_needs" rows="4" autocomplete="off" required', false)
         ->assertSee('title="Peta lokasi Baharsyah Jelajah"', false)
-        ->assertSee('Kanal Resmi')
-        ->assertSee('Respons Personal');
+        ->assertSee('<link rel="canonical" href="'.route('contact.index', ['locale' => 'id']).'">', false)
+        ->assertSee('<link rel="alternate" hreflang="en" href="'.route('contact.index', ['locale' => 'en']).'">', false)
+        ->assertDontSee('fixed bottom-4 right-4', false);
+});
+
+it('localizes contact content and metadata', function (string $locale, string $title, string $tabLabel) {
+    get("/{$locale}/kontak")
+        ->assertOk()
+        ->assertSee($title)
+        ->assertSee($tabLabel)
+        ->assertSee('<html lang="'.$locale.'"', false)
+        ->assertSee('<link rel="canonical" href="'.route('contact.index', ['locale' => $locale]).'">', false);
+})->with([
+    'Indonesian' => ['id', 'Mulai perjalanan Anda dengan rencana yang lebih jelas.', 'Konsultasi Trip'],
+    'English' => ['en', 'Start your journey with a clearer plan.', 'Trip Consultation'],
+    'Malay' => ['ms', 'Mulakan perjalanan anda dengan rancangan yang lebih jelas.', 'Konsultasi Lawatan'],
+]);
+
+it('offers email as a fallback when whatsapp consultation is unavailable', function () {
+    $settings = app(GeneralSettings::class);
+    $settings->whatsapp_number = '';
+    $settings->save();
+
+    get('/id/kontak')
+        ->assertOk()
+        ->assertSee('Konsultasi WhatsApp sedang tidak tersedia')
+        ->assertSee('href="mailto:'.$settings->email.'"', false)
+        ->assertDontSee('role="tablist"', false)
+        ->assertDontSee('action="https://wa.me/', false);
 });
 
 it('returns 404 for invalid locales', function () {
@@ -191,13 +292,13 @@ it('renders the correct page view', function (string $path, string $content) {
         ->assertStatus(200)
         ->assertSee($content);
 })->with([
-    ['transport', 'Transport Index'],
+    ['transport', 'Armada yang tepat untuk setiap perjalanan'],
     ['tour', 'Tour halal untuk perjalanan yang lebih terarah'],
-    ['umroh', 'Umroh Index'],
+    ['umroh', 'Persiapan yang baik untuk perjalanan ibadah yang lebih tenang.'],
     ['blog', 'Blog'],
-    ['visa', 'Visa Page'],
+    ['visa', 'Persiapan dokumen yang lebih jelas sebelum keberangkatan.'],
     ['shop', 'Shop Index'],
     ['gallery', 'Gallery Page'],
     ['testimonials', 'Testimonials Page'],
-    ['kontak', 'Hubungi Tim Baharsyah Jelajah'],
+    ['kontak', 'Mulai perjalanan Anda dengan rencana yang lebih jelas.'],
 ]);

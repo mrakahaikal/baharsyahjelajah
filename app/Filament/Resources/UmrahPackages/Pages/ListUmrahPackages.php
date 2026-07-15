@@ -18,7 +18,8 @@ class ListUmrahPackages extends ListRecords
     {
         return [
             CreateAction::make()
-                ->label('Tambah Paket Umrah'),
+                ->label('Tambah Paket Umrah')
+                ->icon('lucide-plus'),
         ];
     }
 }

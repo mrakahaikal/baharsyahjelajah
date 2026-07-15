@@ -4,14 +4,13 @@ namespace App\Filament\Resources\Vehicles\Schemas;
 
 use App\Models\Vehicle;
 use Filament\Infolists\Components\IconEntry;
-use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\TextSize;
-use Filament\Support\Icons\Heroicon;
 
 class VehicleInfolist
 {
@@ -24,9 +23,12 @@ class VehicleInfolist
                         Grid::make(1)
                             ->schema([
                                 Section::make('Informasi Utama')
+                                    ->description('Detail nama unit, deskripsi, dan galeri foto.')
+                                    ->icon('lucide-truck')
                                     ->schema([
-                                        ImageEntry::make('thumbnail')
+                                        SpatieMediaLibraryImageEntry::make('cover')
                                             ->hiddenLabel()
+                                            ->collection('cover')
                                             ->square()
                                             ->width('100%')
                                             ->height(300),
@@ -44,9 +46,18 @@ class VehicleInfolist
                                         TextEntry::make('model')
                                             ->label('Model / Seri')
                                             ->placeholder('-'),
+                                        TextEntry::make('description')
+                                            ->label('Deskripsi')
+                                            ->columnSpanFull(),
+                                        SpatieMediaLibraryImageEntry::make('gallery')
+                                            ->label('Galeri')
+                                            ->collection('gallery')
+                                            ->columnSpanFull(),
                                     ]),
 
                                 Section::make('Fitur & Spesifikasi Lengkap')
+                                    ->description('Daftar kelengkapan fitur tambahan armada.')
+                                    ->icon('lucide-cog')
                                     ->schema([
                                         TextEntry::make('features')
                                             ->label('Daftar Fitur Tambahan')
@@ -59,15 +70,16 @@ class VehicleInfolist
                         Grid::make(1)
                             ->schema([
                                 Section::make('Detail Kapasitas')
-                                    ->icon(Heroicon::OutlinedTruck)
+                                    ->description('Kapasitas penumpang, bagasi, dan transmisi.')
+                                    ->icon('lucide-users')
                                     ->schema([
                                         TextEntry::make('capacity_pax')
                                             ->label('Kapasitas Penumpang')
-                                            ->icon(Heroicon::OutlinedUsers)
+                                            ->icon('lucide-users')
                                             ->suffix(' Orang'),
                                         TextEntry::make('capacity_luggage')
                                             ->label('Kapasitas Bagasi')
-                                            ->icon(Heroicon::OutlinedBriefcase)
+                                            ->icon('lucide-briefcase')
                                             ->suffix(' Koper'),
                                         TextEntry::make('transmission')
                                             ->label('Tipe Transmisi')
@@ -81,6 +93,8 @@ class VehicleInfolist
                                     ]),
 
                                 Section::make('Fasilitas & Harga')
+                                    ->description('Ketersediaan fasilitas AC/WiFi dan harga sewa.')
+                                    ->icon('lucide-banknote')
                                     ->schema([
                                         Grid::make(2)
                                             ->schema([
@@ -103,9 +117,14 @@ class VehicleInfolist
                                     ]),
 
                                 Section::make('Status Unit')
+                                    ->description('Status penayangan di katalog dan tanggal sistem.')
+                                    ->icon('lucide-info')
                                     ->schema([
-                                        IconEntry::make('is_available')
-                                            ->label('Status Ketersediaan')
+                                        IconEntry::make('is_active')
+                                            ->label('Tampil di Katalog')
+                                            ->boolean(),
+                                        IconEntry::make('is_featured')
+                                            ->label('Armada Unggulan')
                                             ->boolean(),
                                         TextEntry::make('created_at')
                                             ->label('Ditambahkan Pada')

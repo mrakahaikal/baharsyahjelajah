@@ -405,6 +405,11 @@ it('converts the starting package price using the selected currency', function (
         ->get('/id/tour/tour-usd')
         ->assertSuccessful()
         ->assertSee('RM 467.20');
+
+    $this->withSession(['app_currency' => 'USD'])
+        ->get('/id/tour/tour-usd')
+        ->assertSuccessful()
+        ->assertSee('$ 100.00');
 });
 
 it('renders featured tours and localized header data without legacy package copy', function () {
@@ -428,7 +433,7 @@ it('renders featured tours and localized header data without legacy package copy
         ->assertSee('Tour Borneo Unggulan')
         ->assertSee('1 pilihan paket')
         ->assertSee('1 tour aktif')
-        ->assertSee('Jelajahi Tour')
+        ->assertSee('Lihat semua tour')
         ->assertSee('<option value="international">', false)
         ->assertDontSee('<option value="outbound">', false)
         ->assertDontSee('Tour Unggulan Tersembunyi')

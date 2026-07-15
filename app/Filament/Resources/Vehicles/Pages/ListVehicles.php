@@ -18,7 +18,8 @@ class ListVehicles extends ListRecords
     {
         return [
             CreateAction::make()
-                ->label('Tambah Kendaraan'),
+                ->label('Tambah Kendaraan')
+                ->icon('lucide-plus'),
         ];
     }
 }

@@ -6,6 +6,7 @@ use App\Filament\Resources\TourCategories\Pages\ManageTourCategories;
 use App\Models\TourCategory;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -15,7 +16,6 @@ use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -26,7 +26,7 @@ class TourCategoryResource extends Resource
 {
     protected static ?string $model = TourCategory::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleGroup;
+    protected static string|BackedEnum|null $navigationIcon = 'lucide-tags';
 
     protected static string|null|\UnitEnum $navigationGroup = 'Manajemen Tur';
 
@@ -43,8 +43,8 @@ class TourCategoryResource extends Resource
         return $schema
             ->components([
                 Section::make('Informasi Kategori')
-                    ->description('Kelola detail informasi dan tampilan kategori tur.')
-                    ->icon(Heroicon::OutlinedTag)
+                    ->description('Kelola detail nama, slug, ikon, dan urutan prioritas kategori tur.')
+                    ->icon('lucide-tag')
                     ->columnSpanFull()
                     ->schema([
                         Translate::make()
@@ -53,30 +53,36 @@ class TourCategoryResource extends Resource
                                 Grid::make(2)
                                     ->schema([
                                         TextInput::make('name')
-                                            ->label('Nama')
-                                            ->placeholder('Masukkan nama kategori...')
+                                            ->label('Nama Kategori')
+                                            ->placeholder('Contoh: Wisata Alam')
                                             ->required($locale === 'id')
                                             ->live(onBlur: true)
                                             ->afterStateUpdated(fn ($state, Set $set) => $set("slug.{$locale}", Str::slug($state)))
-                                            ->maxLength(255),
+                                            ->maxLength(255)
+                                            ->prefixIcon('lucide-type'),
                                         TextInput::make('slug')
-                                            ->label('Slug')
-                                            ->placeholder('slug-kategori')
+                                            ->label('Slug URL')
+                                            ->placeholder('wisata-alam')
                                             ->required($locale === 'id')
-                                            ->maxLength(255),
+                                            ->maxLength(255)
+                                            ->prefixIcon('lucide-link-2'),
                                     ]),
                             ]),
                         Grid::make(2)
                             ->schema([
                                 TextInput::make('icon')
-                                    ->label('Ikon')
-                                    ->placeholder('heroicon-o-tag')
-                                    ->maxLength(255),
+                                    ->label('Ikon Kategori (Lucide)')
+                                    ->placeholder('Contoh: lucide-compass')
+                                    ->maxLength(255)
+                                    ->helperText('Masukkan kode nama ikon Lucide (misal: lucide-tag, lucide-compass).')
+                                    ->prefixIcon('lucide-image'),
                                 TextInput::make('sort_order')
-                                    ->label('Urutan')
-                                    ->placeholder('0')
+                                    ->label('Urutan Tampilan')
+                                    ->placeholder('Contoh: 0')
                                     ->numeric()
-                                    ->default(0),
+                                    ->default(0)
+                                    ->helperText('Prioritas urutan penampilan kategori pada website.')
+                                    ->prefixIcon('lucide-sort-asc'),
                             ]),
                     ]),
             ]);
@@ -90,14 +96,14 @@ class TourCategoryResource extends Resource
             ->columns([
                 IconColumn::make('icon')
                     ->label('Ikon')
-                    ->icon(fn (string $state): string|Heroicon => $state ?: Heroicon::OutlinedRectangleStack)
+                    ->icon(fn (string $state): string => $state ?: 'lucide-square-dashed')
                     ->color('primary'),
                 TextColumn::make('name')
-                    ->label('Nama')
+                    ->label('Nama Kategori')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('slug')
-                    ->label('Slug')
+                    ->label('Slug URL')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('sort_order')
@@ -106,7 +112,7 @@ class TourCategoryResource extends Resource
                     ->sortable()
                     ->alignCenter(),
                 TextColumn::make('created_at')
-                    ->label('Dibuat')
+                    ->label('Tanggal Dibuat')
                     ->dateTime('d M Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -116,15 +122,27 @@ class TourCategoryResource extends Resource
             ])
             ->recordActions([
                 EditAction::make()
-                    ->label('Ubah'),
+                    ->label('Ubah')
+                    ->icon('lucide-pencil')
+                    ->color('primary'),
                 DeleteAction::make()
-                    ->label('Hapus'),
+                    ->label('Hapus')
+                    ->icon('lucide-trash')
+                    ->color('danger'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make()
                         ->label('Hapus Terpilih'),
                 ]),
+            ])
+            ->emptyStateHeading('Belum Ada Kategori Tur')
+            ->emptyStateDescription('Buat kategori baru untuk mulai mengelompokkan paket perjalanan wisata Anda.')
+            ->emptyStateIcon('lucide-tag')
+            ->emptyStateActions([
+                CreateAction::make()
+                    ->label('Tambah Kategori')
+                    ->icon('lucide-plus'),
             ]);
     }
 

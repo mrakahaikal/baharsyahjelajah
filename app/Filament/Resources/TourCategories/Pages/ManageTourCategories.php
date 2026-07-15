@@ -18,7 +18,8 @@ class ManageTourCategories extends ManageRecords
     {
         return [
             CreateAction::make()
-                ->label('Tambah Kategori'),
+                ->label('Tambah Kategori')
+                ->icon('lucide-plus'),
         ];
     }
 }

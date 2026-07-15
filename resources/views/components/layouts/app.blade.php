@@ -5,6 +5,8 @@
     'canonicalUrl' => null,
     'alternateUrls' => [],
     'robots' => null,
+    'ogType' => null,
+    'ogImage' => null,
     'showFloatingWhatsapp' => true,
     'themeClass' => '',
 ])
@@ -32,11 +34,38 @@
     @if($schemaJson)
         <script type="application/ld+json">{!! $schemaJson !!}</script>
     @endif
+    @if($ogType)
+        <meta property="og:type" content="{{ $ogType }}">
+        <meta property="og:locale" content="{{ str_replace('-', '_', app()->getLocale()) }}">
+        <meta property="og:title" content="{{ $title ?? config('app.name') }}">
+        @if($metaDescription)
+            <meta property="og:description" content="{{ $metaDescription }}">
+        @endif
+        <meta property="og:url" content="{{ $canonicalUrl ?? url()->current() }}">
+        @if($ogImage)
+            <meta property="og:image" content="{{ $ogImage }}">
+        @endif
+        <meta name="twitter:card" content="{{ $ogImage ? 'summary_large_image' : 'summary' }}">
+        <meta name="twitter:title" content="{{ $title ?? config('app.name') }}">
+        @if($metaDescription)
+            <meta name="twitter:description" content="{{ $metaDescription }}">
+        @endif
+        @if($ogImage)
+            <meta name="twitter:image" content="{{ $ogImage }}">
+        @endif
+    @endif
+
+    @if(request()->routeIs('umroh.*'))
+        <link rel="icon" href="{{ asset('images/favicon-umrah.png') }}">
+    @else
+        <link rel="icon" href="{{ asset('images/favicon.png') }}">
+    @endif
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://images.unsplash.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Scripts & Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])

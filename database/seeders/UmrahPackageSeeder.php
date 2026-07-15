@@ -5,7 +5,10 @@ namespace Database\Seeders;
 use App\Models\UmrahDeparture;
 use App\Models\UmrahInclude;
 use App\Models\UmrahPackage;
+use App\Models\UmrahPackageItinerary;
+use App\Models\UmrahPackagePrice;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class UmrahPackageSeeder extends Seeder
 {
@@ -23,20 +26,20 @@ class UmrahPackageSeeder extends Seeder
                     'en' => 'An affordable umrah package with complete and comfortable facilities. Ideal for pilgrims who want a focused worship experience without overspending.',
                     'ms' => 'Pakej umrah yang berpatutan dengan kemudahan lengkap dan selesa. Sesuai untuk jemaah yang ingin beribadat dengan khusyuk tanpa kos yang tinggi.',
                 ],
-                'package_type'       => 'regular',
-                'duration_days'      => 9,
-                'price_idr'          => 28000000,
-                'airline'            => 'Garuda Indonesia',
-                'hotel_makkah'       => 'Ajyad Makkah Hotel',
+                'package_type' => 'regular',
+                'duration_days' => 9,
+                'price_idr' => 28000000,
+                'airline' => 'Garuda Indonesia',
+                'hotel_makkah' => 'Ajyad Makkah Hotel',
                 'hotel_makkah_stars' => 3,
-                'hotel_madinah'      => 'Al Shohada Hotel',
-                'hotel_madinah_stars'=> 3,
-                'room_type'          => 'quad',
-                'visa_included'      => true,
-                'handling_included'  => true,
-                'is_active'          => true,
-                'thumbnail'          => 'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=800&q=80&fit=crop',
-                'departures'         => [
+                'hotel_madinah' => 'Al Shohada Hotel',
+                'hotel_madinah_stars' => 3,
+                'room_type' => 'quad',
+                'visa_included' => true,
+                'handling_included' => true,
+                'is_active' => true,
+                'thumbnail' => 'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=800&q=80&fit=crop',
+                'departures' => [
                     ['departure_date' => '2026-07-15', 'return_date' => '2026-07-23', 'quota_total' => 40, 'quota_booked' => 12, 'status' => 'open'],
                     ['departure_date' => '2026-08-20', 'return_date' => '2026-08-28', 'quota_total' => 40, 'quota_booked' => 28, 'status' => 'nearly_full'],
                     ['departure_date' => '2026-09-10', 'return_date' => '2026-09-18', 'quota_total' => 40, 'quota_booked' => 5, 'status' => 'open'],
@@ -65,20 +68,20 @@ class UmrahPackageSeeder extends Seeder
                     'en' => 'An extended umrah package with 4-star hotel facilities and a comprehensive ziarah program to historical sites in Makkah and Madinah.',
                     'ms' => 'Pakej umrah dengan tempoh lebih lama dan kemudahan hotel bintang 4. Program ziarah ke pelbagai tempat bersejarah di Makkah dan Madinah tersedia.',
                 ],
-                'package_type'       => 'plus',
-                'duration_days'      => 12,
-                'price_idr'          => 35000000,
-                'airline'            => 'Garuda Indonesia',
-                'hotel_makkah'       => 'Movenpick Hajar Tower',
+                'package_type' => 'plus',
+                'duration_days' => 12,
+                'price_idr' => 35000000,
+                'airline' => 'Garuda Indonesia',
+                'hotel_makkah' => 'Movenpick Hajar Tower',
                 'hotel_makkah_stars' => 4,
-                'hotel_madinah'      => 'Crowne Plaza Madinah',
-                'hotel_madinah_stars'=> 4,
-                'room_type'          => 'triple',
-                'visa_included'      => true,
-                'handling_included'  => true,
-                'is_active'          => true,
-                'thumbnail'          => 'https://images.unsplash.com/photo-1564769662533-4f00a87b4056?w=800&q=80&fit=crop',
-                'departures'         => [
+                'hotel_madinah' => 'Crowne Plaza Madinah',
+                'hotel_madinah_stars' => 4,
+                'room_type' => 'triple',
+                'visa_included' => true,
+                'handling_included' => true,
+                'is_active' => true,
+                'thumbnail' => 'https://images.unsplash.com/photo-1564769662533-4f00a87b4056?w=800&q=80&fit=crop',
+                'departures' => [
                     ['departure_date' => '2026-07-05', 'return_date' => '2026-07-16', 'quota_total' => 30, 'quota_booked' => 8, 'status' => 'open'],
                     ['departure_date' => '2026-09-01', 'return_date' => '2026-09-12', 'quota_total' => 30, 'quota_booked' => 0, 'status' => 'open'],
                 ],
@@ -105,20 +108,20 @@ class UmrahPackageSeeder extends Seeder
                     'en' => 'A premium umrah experience with 5-star hotels near Masjidil Haram. Exclusive double rooms, personal spiritual guide, and premium services throughout.',
                     'ms' => 'Pengalaman umrah terbaik dengan hotel bintang 5 berdekatan Masjidil Haram. Bilik double eksklusif, pembimbing peribadi, dan perkhidmatan premium.',
                 ],
-                'package_type'       => 'vip',
-                'duration_days'      => 15,
-                'price_idr'          => 48000000,
-                'airline'            => 'Garuda Indonesia',
-                'hotel_makkah'       => 'Fairmont Makkah Clock Royal Tower',
+                'package_type' => 'vip',
+                'duration_days' => 15,
+                'price_idr' => 48000000,
+                'airline' => 'Garuda Indonesia',
+                'hotel_makkah' => 'Fairmont Makkah Clock Royal Tower',
                 'hotel_makkah_stars' => 5,
-                'hotel_madinah'      => 'Oberoi Madinah',
-                'hotel_madinah_stars'=> 5,
-                'room_type'          => 'double',
-                'visa_included'      => true,
-                'handling_included'  => true,
-                'is_active'          => true,
-                'thumbnail'          => 'https://images.unsplash.com/photo-1609770231080-e321deccc34c?w=800&q=80&fit=crop',
-                'departures'         => [
+                'hotel_madinah' => 'Oberoi Madinah',
+                'hotel_madinah_stars' => 5,
+                'room_type' => 'double',
+                'visa_included' => true,
+                'handling_included' => true,
+                'is_active' => true,
+                'thumbnail' => 'https://images.unsplash.com/photo-1609770231080-e321deccc34c?w=800&q=80&fit=crop',
+                'departures' => [
                     ['departure_date' => '2026-08-01', 'return_date' => '2026-08-15', 'quota_total' => 20, 'quota_booked' => 6, 'status' => 'open'],
                     ['departure_date' => '2026-10-05', 'return_date' => '2026-10-19', 'quota_total' => 20, 'quota_booked' => 0, 'status' => 'open'],
                 ],
@@ -137,17 +140,34 @@ class UmrahPackageSeeder extends Seeder
             ],
         ];
 
-        foreach ($packages as $data) {
+        foreach ($packages as $packageIndex => $data) {
             $departures = $data['departures'];
-            $includes   = $data['includes'];
+            $includes = $data['includes'];
             unset($data['departures'], $data['includes']);
 
-            $package = UmrahPackage::create($data);
+            $data['slug'] = collect($data['name'])
+                ->map(fn (string $name): string => Str::slug($name))
+                ->all();
+            $data['is_featured'] = $packageIndex < 2;
 
-            foreach ($departures as $departure) {
+            $package = UmrahPackage::query()->updateOrCreate(
+                ['package_type' => $data['package_type']],
+                $data,
+            );
+
+            $package->departures()->delete();
+            $package->includes()->delete();
+            $package->prices()->delete();
+            $package->itineraries()->delete();
+
+            foreach ($departures as $departureIndex => $departure) {
+                $departureDate = now()->addMonths($departureIndex + $packageIndex + 1)->startOfMonth()->addDays(9);
+
                 UmrahDeparture::create([
                     'package_id' => $package->id,
                     ...$departure,
+                    'departure_date' => $departureDate->toDateString(),
+                    'return_date' => $departureDate->copy()->addDays($package->duration_days - 1)->toDateString(),
                 ]);
             }
 
@@ -157,6 +177,57 @@ class UmrahPackageSeeder extends Seeder
                     ...$include,
                 ]);
             }
+
+            foreach ([
+                'quad' => 0,
+                'triple' => 2_000_000,
+                'double' => 5_000_000,
+                'single' => 11_000_000,
+            ] as $roomType => $surcharge) {
+                UmrahPackagePrice::query()->create([
+                    'umrah_package_id' => $package->id,
+                    'room_type' => $roomType,
+                    'price_idr' => $package->price_idr + $surcharge,
+                ]);
+            }
+
+            foreach ($this->itineraries($package->duration_days) as $itinerary) {
+                UmrahPackageItinerary::query()->create([
+                    'umrah_package_id' => $package->id,
+                    ...$itinerary,
+                ]);
+            }
         }
+    }
+
+    /** @return array<int, array<string, mixed>> */
+    private function itineraries(int $durationDays): array
+    {
+        return [
+            [
+                'day_number' => 1,
+                'title' => ['id' => 'Keberangkatan menuju Jeddah', 'en' => 'Departure for Jeddah', 'ms' => 'Berlepas ke Jeddah'],
+                'location' => ['id' => 'Banjarmasin - Jeddah', 'en' => 'Banjarmasin - Jeddah', 'ms' => 'Banjarmasin - Jeddah'],
+                'description' => ['id' => 'Berkumpul bersama rombongan, pengarahan, dan penerbangan menuju Jeddah.', 'en' => 'Meet the group, attend the briefing, and depart for Jeddah.', 'ms' => 'Berkumpul bersama kumpulan, taklimat, dan penerbangan ke Jeddah.'],
+            ],
+            [
+                'day_number' => 2,
+                'title' => ['id' => 'Tiba dan menuju Makkah', 'en' => 'Arrival and transfer to Makkah', 'ms' => 'Tiba dan menuju ke Makkah'],
+                'location' => ['id' => 'Jeddah - Makkah', 'en' => 'Jeddah - Makkah', 'ms' => 'Jeddah - Makkah'],
+                'description' => ['id' => 'Proses imigrasi, perjalanan ke hotel, persiapan, dan pelaksanaan ibadah Umrah.', 'en' => 'Immigration, hotel transfer, preparation, and performance of Umrah.', 'ms' => 'Imigresen, perjalanan ke hotel, persediaan, dan pelaksanaan ibadah Umrah.'],
+            ],
+            [
+                'day_number' => max(3, $durationDays - 3),
+                'title' => ['id' => 'Perjalanan menuju Madinah', 'en' => 'Journey to Madinah', 'ms' => 'Perjalanan ke Madinah'],
+                'location' => ['id' => 'Makkah - Madinah', 'en' => 'Makkah - Madinah', 'ms' => 'Makkah - Madinah'],
+                'description' => ['id' => 'Check-out hotel Makkah dan melanjutkan perjalanan menuju Madinah.', 'en' => 'Check out from the Makkah hotel and continue to Madinah.', 'ms' => 'Daftar keluar hotel Makkah dan meneruskan perjalanan ke Madinah.'],
+            ],
+            [
+                'day_number' => $durationDays,
+                'title' => ['id' => 'Kepulangan ke Indonesia', 'en' => 'Return to Indonesia', 'ms' => 'Pulang ke Indonesia'],
+                'location' => ['id' => 'Madinah - Indonesia', 'en' => 'Madinah - Indonesia', 'ms' => 'Madinah - Indonesia'],
+                'description' => ['id' => 'Persiapan kepulangan dan penerbangan kembali bersama rombongan.', 'en' => 'Prepare for the return flight home with the group.', 'ms' => 'Persediaan pulang dan penerbangan kembali bersama kumpulan.'],
+            ],
+        ];
     }
 }

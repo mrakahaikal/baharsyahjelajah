@@ -3,6 +3,8 @@
 namespace App\Helpers;
 
 use App\Services\CurrencyService;
+use App\Settings\GeneralSettings;
+use Throwable;
 
 class LocaleHelper
 {
@@ -19,7 +21,21 @@ class LocaleHelper
      */
     public static function currency(): string
     {
-        return session('app_currency', 'IDR');
+        $currency = session('app_currency');
+
+        if (is_string($currency) && array_key_exists($currency, config('currencies.supported', []))) {
+            return $currency;
+        }
+
+        try {
+            $defaultCurrency = app(GeneralSettings::class)->default_currency;
+        } catch (Throwable) {
+            $defaultCurrency = (string) config('currencies.base');
+        }
+
+        return array_key_exists($defaultCurrency, config('currencies.supported', []))
+            ? $defaultCurrency
+            : (string) config('currencies.base');
     }
 
     /**

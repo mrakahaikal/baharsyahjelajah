@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\UmrahPackages\RelationManagers;
 
+use App\Enums\UmrahItemType;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
@@ -13,7 +14,6 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -23,38 +23,49 @@ class IncludesRelationManager extends RelationManager
 {
     protected static string $relationship = 'includes';
 
-    protected static ?string $title = 'Fasilitas Paket (Include & Exclude)';
+    protected static ?string $title = 'Fasilitas & Persyaratan';
 
     public function form(Schema $schema): Schema
     {
         return $schema
             ->components([
-                Section::make()->schema([
-                    Grid::make(2)->schema([
-                        Select::make('type')
-                            ->label('Tipe Fasilitas')
-                            ->options([
-                                'include' => 'Termasuk (Include)',
-                                'exclude' => 'Tidak Termasuk (Exclude)',
-                            ])
-                            ->required()
-                            ->default('include'),
-                        TextInput::make('sort_order')
-                            ->label('Urutan')
-                            ->numeric()
-                            ->default(0),
-                    ]),
-                    Translate::make()
-                        ->locales(['id', 'en', 'ms'])
-                        ->schema(fn (string $locale) => [
-                            TextInput::make('item')
-                                ->label('Nama Fasilitas')
-                                ->placeholder('Misal: Tiket Pesawat PP')
-                                ->required($locale === 'id')
-                                ->maxLength(255),
+                Section::make('Kelola Fasilitas & Persyaratan')
+                    ->description('Tentukan item fasilitas yang termasuk, tidak termasuk, persyaratan, atau catatan khusus untuk paket umrah ini.')
+                    ->icon('lucide-clipboard-check')
+                    ->schema([
+                        Grid::make(2)->schema([
+                            Select::make('type')
+                                ->label('Kategori Item')
+                                ->options(UmrahItemType::class)
+                                ->required()
+                                ->default('include')
+                                ->placeholder('Pilih kategori')
+                                ->helperText('Kategori dari item (Termasuk, Tidak Termasuk, Persyaratan, atau Catatan).')
+                                ->prefixIcon('lucide-help-circle')
+                                ->native(false),
+                            TextInput::make('sort_order')
+                                ->label('Urutan Tampilan')
+                                ->numeric()
+                                ->default(0)
+                                ->placeholder('Contoh: 0')
+                                ->helperText('Nomor urutan tampilan pada halaman informasi paket.')
+                                ->prefixIcon('lucide-sort-asc'),
                         ]),
-                ]),
-            ]);
+                        Translate::make()
+                            ->locales(['id', 'en', 'ms'])
+                            ->schema(fn (string $locale) => [
+                                TextInput::make('item')
+                                    ->label('Nama Fasilitas / Item')
+                                    ->placeholder('Masukkan nama item (contoh: Tiket Pesawat Pulang Pergi)')
+                                    ->required($locale === 'id')
+                                    ->maxLength(255)
+                                    ->helperText('Rincian item fasilitas atau persyaratan.')
+                                    ->prefixIcon('lucide-check-square'),
+                            ])
+                            ->columnSpanFull(),
+                    ]),
+            ])
+            ->columns(1);
     }
 
     public function table(Table $table): Table
@@ -66,14 +77,12 @@ class IncludesRelationManager extends RelationManager
                 TextColumn::make('type')
                     ->label('Tipe')
                     ->badge()
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'include' => 'Termasuk',
-                        'exclude' => 'Tidak Termasuk',
-                        default => $state,
-                    })
+                    ->formatStateUsing(fn (string $state): string => UmrahItemType::tryFrom($state)?->getLabel() ?? $state)
                     ->color(fn (string $state): string => match ($state) {
                         'include' => 'success',
                         'exclude' => 'danger',
+                        'requirement' => 'warning',
+                        'note' => 'info',
                         default => 'gray',
                     }),
                 TextColumn::make('item')
@@ -88,16 +97,13 @@ class IncludesRelationManager extends RelationManager
             ])
             ->filters([
                 SelectFilter::make('type')
-                    ->label('Filter Tipe')
-                    ->options([
-                        'include' => 'Termasuk',
-                        'exclude' => 'Tidak Termasuk',
-                    ]),
+                    ->label('Kategori')
+                    ->options(UmrahItemType::class),
             ])
             ->headerActions([
                 CreateAction::make()
                     ->label('Tambah Fasilitas')
-                    ->icon(Heroicon::OutlinedPlus),
+                    ->icon('lucide-plus'),
             ])
             ->recordActions([
                 EditAction::make()

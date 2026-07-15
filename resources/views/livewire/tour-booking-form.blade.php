@@ -78,11 +78,16 @@
                 <x-lucide-shield-check class="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" aria-hidden="true" />
                 {{ __('frontend.tour.booking.form.privacy_note') }}
             </p>
-            <button type="submit" wire:loading.attr="disabled" wire:target="submit" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:cursor-wait disabled:bg-slate-400 sm:w-auto">
-                <span wire:loading.remove wire:target="submit">{{ __('frontend.tour.booking.form.submit') }}</span>
-                <span wire:loading wire:target="submit">{{ __('frontend.tour.booking.form.submitting') }}</span>
-                <x-lucide-message-circle class="h-4 w-4" aria-hidden="true" />
-            </button>
+            <x-ui::button
+                type="submit"
+                size="lg"
+                :loading="true"
+                loading-target="submit"
+                :loading-text="__('frontend.tour.booking.form.submitting')"
+                class="mt-5 w-full hover:bg-blue-600 disabled:cursor-wait sm:w-auto">
+                {{ __('frontend.tour.booking.form.submit') }}
+                <x-slot:trailingIcon><x-lucide-message-circle /></x-slot:trailingIcon>
+            </x-ui::button>
         </div>
     </form>
 

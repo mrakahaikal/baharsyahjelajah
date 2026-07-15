@@ -18,7 +18,9 @@ class ViewUmrahPackage extends ViewRecord
     {
         return [
             EditAction::make()
-                ->label('Ubah Detail'),
+                ->label('Ubah Detail')
+                ->icon('lucide-pencil')
+                ->color('primary'),
         ];
     }
 }

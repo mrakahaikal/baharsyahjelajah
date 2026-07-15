@@ -27,10 +27,11 @@ class BannerSeeder extends Seeder
                     'ms' => 'Lihat Pakej Pelancongan',
                 ],
                 'image_path' => 'https://images.unsplash.com/photo-1516690561799-46d8f74f9abf?w=1600&q=80&fit=crop',
-                'cta_type'   => 'whatsapp',
-                'cta_value'  => null,
+                'placement' => 'home_hero',
+                'cta_type' => 'route',
+                'cta_value' => 'tour.index',
                 'sort_order' => 1,
-                'is_active'  => true,
+                'is_active' => true,
             ],
             [
                 'title' => [
@@ -49,10 +50,11 @@ class BannerSeeder extends Seeder
                     'ms' => 'Lihat Pakej Umrah',
                 ],
                 'image_path' => 'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=1600&q=80&fit=crop',
-                'cta_type'   => 'whatsapp',
-                'cta_value'  => null,
+                'placement' => 'home_promo',
+                'cta_type' => 'route',
+                'cta_value' => 'umroh.index',
                 'sort_order' => 2,
-                'is_active'  => true,
+                'is_active' => true,
             ],
             [
                 'title' => [
@@ -71,15 +73,19 @@ class BannerSeeder extends Seeder
                     'ms' => 'Sewa Sekarang',
                 ],
                 'image_path' => 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1600&q=80&fit=crop',
-                'cta_type'   => 'whatsapp',
-                'cta_value'  => null,
+                'placement' => 'home_promo',
+                'cta_type' => 'route',
+                'cta_value' => 'transport.index',
                 'sort_order' => 3,
-                'is_active'  => true,
+                'is_active' => true,
             ],
         ];
 
         foreach ($banners as $banner) {
-            Banner::create($banner);
+            Banner::updateOrCreate(
+                ['sort_order' => $banner['sort_order']],
+                $banner,
+            );
         }
     }
 }
