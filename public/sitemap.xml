@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <sitemap>
+        <loc>http://baharsyahjelajah.test/sitemap-pages.xml</loc>
+            <lastmod>2026-07-15T14:08:15+00:00</lastmod>
+    </sitemap>
+    <sitemap>
+        <loc>http://baharsyahjelajah.test/sitemap-posts.xml</loc>
+            <lastmod>2026-07-15T14:08:15+00:00</lastmod>
+    </sitemap>
+    <sitemap>
+        <loc>http://baharsyahjelajah.test/sitemap-tours.xml</loc>
+            <lastmod>2026-07-15T14:08:15+00:00</lastmod>
+    </sitemap>
+    <sitemap>
+        <loc>http://baharsyahjelajah.test/sitemap-umrah.xml</loc>
+            <lastmod>2026-07-15T14:08:15+00:00</lastmod>
+    </sitemap>
+    <sitemap>
+        <loc>http://baharsyahjelajah.test/sitemap-destinations.xml</loc>
+            <lastmod>2026-07-15T14:08:15+00:00</lastmod>
+    </sitemap>
+    <sitemap>
+        <loc>http://baharsyahjelajah.test/sitemap-vehicles.xml</loc>
+            <lastmod>2026-07-15T14:08:15+00:00</lastmod>
+    </sitemap>
+    <sitemap>
+        <loc>http://baharsyahjelajah.test/sitemap-visas.xml</loc>
+            <lastmod>2026-07-15T14:08:15+00:00</lastmod>
+    </sitemap>
+</sitemapindex>

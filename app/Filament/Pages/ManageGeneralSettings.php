@@ -3,18 +3,22 @@
 namespace App\Filament\Pages;
 
 use App\Filament\Clusters\Settings\SettingsCluster;
+use App\Services\SitemapService;
 use App\Settings\GeneralSettings;
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Forms\Components\CodeEditor;
 use Filament\Forms\Components\CodeEditor\Enums\Language;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Pages\SettingsPage;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use SolutionForest\FilamentTranslateField\Forms\Component\Translate;
+use Throwable;
 
 class ManageGeneralSettings extends SettingsPage
 {
@@ -33,6 +37,41 @@ class ManageGeneralSettings extends SettingsPage
     protected ?string $subheading = 'Kelola identitas website, informasi kontak, dan preferensi default.';
 
     protected static ?string $cluster = SettingsCluster::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('generateSitemap')
+                ->label('Generate Sitemap')
+                ->icon('lucide-map')
+                ->color('primary')
+                ->requiresConfirmation()
+                ->modalHeading('Generate ulang sitemap?')
+                ->modalDescription('Sitemap lama akan diganti dengan daftar URL publik terbaru dari database.')
+                ->modalSubmitActionLabel('Generate')
+                ->action(function (SitemapService $sitemapService): void {
+                    try {
+                        $sitemapService->generate();
+                    } catch (Throwable $exception) {
+                        report($exception);
+
+                        Notification::make()
+                            ->danger()
+                            ->title('Sitemap gagal dibuat')
+                            ->body($exception->getMessage())
+                            ->send();
+
+                        return;
+                    }
+
+                    Notification::make()
+                        ->success()
+                        ->title('Sitemap berhasil dibuat')
+                        ->body('File sitemap.xml telah diperbarui di direktori public.')
+                        ->send();
+                }),
+        ];
+    }
 
     public function form(Schema $schema): Schema
     {

@@ -12,3 +12,8 @@ Schedule::command('currency-rates:sync')
     ->dailyAt('02:00')
     ->timezone('Asia/Jakarta')
     ->withoutOverlapping();
+
+Schedule::command('sitemap:generate')
+    ->dailyAt('03:00')
+    ->timezone('Asia/Jakarta')
+    ->withoutOverlapping();
