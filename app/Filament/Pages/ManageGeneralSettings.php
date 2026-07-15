@@ -5,6 +5,8 @@ namespace App\Filament\Pages;
 use App\Filament\Clusters\Settings\SettingsCluster;
 use App\Settings\GeneralSettings;
 use BackedEnum;
+use Filament\Forms\Components\CodeEditor;
+use Filament\Forms\Components\CodeEditor\Enums\Language;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -126,6 +128,17 @@ class ManageGeneralSettings extends SettingsPage
                                 ->helperText('Jumlah peserta default saat perhitungan harga pertama kali.')
                                 ->prefixIcon('lucide-users'),
                         ]),
+                    ]),
+                Section::make('Kode Snippet')
+                    ->description('Tambahkan snippet kode seperti JSON-LD, meta tags, dll.')
+                    ->icon('lucide-code')
+                    ->inlineLabel()
+                    ->columnSpanFull()
+                    ->schema([
+                        CodeEditor::make('head_snippets')
+                            ->label('Kode Snippet')
+                            ->language(Language::Html)
+                            ->helperText('Setiap kode ditampilkan secara global di seluruh tampilan situs.'),
                     ]),
             ])
             ->columns(1);

@@ -27,6 +27,8 @@ class GeneralSettings extends Settings
 
     public int $default_pax;
 
+    public ?string $head_snippets;
+
     public static function group(): string
     {
         return 'general';

@@ -100,6 +100,16 @@ it('renders language and currency switchers with local flag images', function ()
         ->assertSee('href="'.route('set.currency', ['currency' => 'JPY']).'"', false);
 });
 
+it('renders configured global head snippets', function () {
+    $settings = app(GeneralSettings::class);
+    $settings->head_snippets = '<meta name="site-verification" content="test-token">';
+    $settings->save();
+
+    get('/id')
+        ->assertOk()
+        ->assertSee('<meta name="site-verification" content="test-token">', false);
+});
+
 it('only switches to a supported currency', function () {
     $this->withSession(['app_currency' => 'IDR'])
         ->from('/id')

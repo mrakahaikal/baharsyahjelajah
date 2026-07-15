@@ -10,6 +10,11 @@
     'showFloatingWhatsapp' => true,
     'themeClass' => '',
 ])
+
+@php
+    $general = app(\App\Settings\GeneralSettings::class);
+@endphp
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 <head>
@@ -60,6 +65,8 @@
     @else
         <link rel="icon" href="{{ asset('images/favicon.png') }}">
     @endif
+
+    {!! $general->head_snippets !!}
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
