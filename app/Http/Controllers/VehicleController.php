@@ -26,7 +26,7 @@ class VehicleController extends Controller
     {
         /** @var Vehicle $vehicle */
         $vehicle = $this->findByTranslatedSlug(Vehicle::class, $vehicle);
-        $canonicalSlug = $vehicle->slug ?: (string) $vehicle->getKey();
+        $canonicalSlug = $this->translatedSlug($vehicle, $locale);
 
         if (request()->route('vehicle') !== $canonicalSlug) {
             return redirect()->route('transport.show', [
@@ -81,7 +81,7 @@ class VehicleController extends Controller
     {
         /** @var Vehicle $vehicle */
         $vehicle = $this->findByTranslatedSlug(Vehicle::class, $vehicle);
-        $canonicalSlug = $vehicle->slug ?: (string) $vehicle->getKey();
+        $canonicalSlug = $this->translatedSlug($vehicle, $locale);
 
         if (request()->route('vehicle') !== $canonicalSlug) {
             return redirect()->route('transport.booking', [
@@ -135,11 +135,16 @@ class VehicleController extends Controller
             ->mapWithKeys(fn (string $locale): array => [
                 $locale => route($routeName, [
                     'locale' => $locale,
-                    'vehicle' => $vehicle->getTranslation('slug', $locale, false)
-                        ?: $vehicle->getTranslation('slug', 'id', false)
-                        ?: $vehicle->getKey(),
+                    'vehicle' => $this->translatedSlug($vehicle, $locale),
                 ]),
             ])
             ->all();
+    }
+
+    private function translatedSlug(Vehicle $vehicle, string $locale): string
+    {
+        return (string) ($vehicle->getTranslation('slug', $locale, false)
+            ?: $vehicle->getTranslation('slug', 'id', false)
+            ?: $vehicle->getKey());
     }
 }

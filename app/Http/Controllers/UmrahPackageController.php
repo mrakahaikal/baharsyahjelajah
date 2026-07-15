@@ -56,7 +56,7 @@ class UmrahPackageController extends Controller
     public function show(string $locale, string $umrah): View|RedirectResponse
     {
         $package = $this->findPackage($umrah);
-        $canonicalSlug = $package->slug ?: (string) $package->getKey();
+        $canonicalSlug = $this->translatedSlug($package, $locale);
 
         if ($umrah !== $canonicalSlug) {
             return redirect()->route('umroh.show', [
@@ -91,9 +91,7 @@ class UmrahPackageController extends Controller
             ->mapWithKeys(fn (string $supportedLocale): array => [
                 $supportedLocale => route('umroh.show', [
                     'locale' => $supportedLocale,
-                    'umrah' => $package->getTranslation('slug', $supportedLocale, false)
-                        ?: $package->getTranslation('slug', 'id', false)
-                        ?: $package->getKey(),
+                    'umrah' => $this->translatedSlug($package, $supportedLocale),
                 ]),
             ])
             ->all();
@@ -141,5 +139,12 @@ class UmrahPackageController extends Controller
                 }
             })
             ->firstOrFail();
+    }
+
+    private function translatedSlug(UmrahPackage $package, string $locale): string
+    {
+        return (string) ($package->getTranslation('slug', $locale, false)
+            ?: $package->getTranslation('slug', 'id', false)
+            ?: $package->getKey());
     }
 }

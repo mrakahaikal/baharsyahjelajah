@@ -383,6 +383,31 @@ it('renders a scoped package detail with itinerary, inclusions, and pax pricing'
         ->assertSee('Ajukan booking');
 });
 
+it('uses Indonesian slugs when localized package slugs are missing', function () {
+    $tour = createTourWithPackage(createTourCategory());
+    $package = $tour->packages->first();
+
+    $tour->forgetTranslations('slug')
+        ->setTranslation('slug', 'id', 'wisata-jakarta-bandung')
+        ->save();
+    $package->forgetTranslations('slug')
+        ->setTranslation('slug', 'id', 'jakarta-city-escape')
+        ->save();
+
+    get('/id/tour/wisata-jakarta-bandung/package/jakarta-city-escape')
+        ->assertSuccessful()
+        ->assertSee('<link rel="alternate" hreflang="ms" href="'.route('tour.package.show', [
+            'locale' => 'ms',
+            'tour' => 'wisata-jakarta-bandung',
+            'package' => 'jakarta-city-escape',
+        ]).'">', false)
+        ->assertSee('<link rel="alternate" hreflang="en" href="'.route('tour.package.show', [
+            'locale' => 'en',
+            'tour' => 'wisata-jakarta-bandung',
+            'package' => 'jakarta-city-escape',
+        ]).'">', false);
+});
+
 it('converts the starting package price using the selected currency', function () {
     CurrencyRate::updateRate('USD', 0.00006250);
     CurrencyRate::updateRate('MYR', 0.00029200);

@@ -66,6 +66,20 @@ it('renders a localized active package show and hides inactive packages', functi
         ->assertNotFound();
 });
 
+it('uses the Indonesian umrah slug when localized slugs are missing', function () {
+    $package = UmrahPackage::factory()->create();
+    $package->forgetTranslations('slug')
+        ->setTranslation('slug', 'id', 'umrah-indonesia')
+        ->save();
+
+    get('/en/umroh/umrah-indonesia')
+        ->assertSuccessful()
+        ->assertSee('<link rel="alternate" hreflang="ms" href="'.route('umroh.show', [
+            'locale' => 'ms',
+            'umrah' => 'umrah-indonesia',
+        ]).'">', false);
+});
+
 it('redirects unlocalized umrah child paths and preserves their query string', function () {
     get('/umroh/paket-reguler?ref=campaign')
         ->assertRedirect('/id/umroh/paket-reguler?ref=campaign');

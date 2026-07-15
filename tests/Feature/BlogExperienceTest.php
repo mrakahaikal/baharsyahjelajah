@@ -162,6 +162,22 @@ it('redirects fallback slugs to the canonical localized article URL', function (
         ->assertStatus(301);
 });
 
+it('uses the Indonesian post slug when localized slugs are missing', function () {
+    $author = User::factory()->create();
+    $category = createBlogExperienceCategory('Destinasi', 'destinasi');
+    $post = createBlogExperiencePost($author, $category, 'Panduan Danau', 'panduan-danau');
+    $post->forgetTranslations('slug')
+        ->setTranslation('slug', 'id', 'panduan-danau')
+        ->save();
+
+    get('/en/blog/panduan-danau')
+        ->assertSuccessful()
+        ->assertSee('<link rel="alternate" hreflang="ms" href="'.route('blog.show', [
+            'locale' => 'ms',
+            'post' => 'panduan-danau',
+        ]).'">', false);
+});
+
 it('does not expose a future article through its direct URL', function () {
     $author = User::factory()->create();
     $category = createBlogExperienceCategory('Destinasi', 'destinasi');

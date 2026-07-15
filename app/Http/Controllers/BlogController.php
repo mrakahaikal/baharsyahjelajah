@@ -93,8 +93,7 @@ class BlogController extends Controller
         $requestedSlug = $post;
 
         $post = $this->findPublishedPostByTranslatedSlug($requestedSlug);
-        $localizedSlug = $post->getTranslation('slug', $locale, false)
-            ?: $post->getTranslation('slug', 'id');
+        $localizedSlug = $this->translatedSlug($post, $locale);
 
         if ($requestedSlug !== $localizedSlug) {
             return redirect()->route('blog.show', [
@@ -168,16 +167,19 @@ class BlogController extends Controller
     {
         return collect(['id', 'ms', 'en'])
             ->mapWithKeys(function (string $locale) use ($post): array {
-                $slug = $post->getTranslation('slug', $locale, false)
-                    ?: $post->getTranslation('slug', 'id');
-
                 return [
                     $locale => route('blog.show', [
                         'locale' => $locale,
-                        'post' => $slug,
+                        'post' => $this->translatedSlug($post, $locale),
                     ]),
                 ];
             })
             ->all();
+    }
+
+    private function translatedSlug(Post $post, string $locale): string
+    {
+        return (string) ($post->getTranslation('slug', $locale, false)
+            ?: $post->getTranslation('slug', 'id', false));
     }
 }

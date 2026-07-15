@@ -50,10 +50,10 @@ class TourController extends Controller
         $requestedSlug = $tour;
         $tour = $this->findActiveTourByTranslatedSlug($requestedSlug);
 
-        if ($requestedSlug !== $tour->getTranslation('slug', $locale)) {
+        if ($requestedSlug !== $this->translatedSlug($tour, $locale)) {
             return redirect()->route('tour.show', [
                 'locale' => $locale,
-                'tour' => $tour->getTranslation('slug', $locale),
+                'tour' => $this->translatedSlug($tour, $locale),
             ], 301);
         }
 
@@ -111,13 +111,13 @@ class TourController extends Controller
         $package = $this->findPackageByTranslatedSlug($tour, $requestedPackageSlug);
 
         if (
-            $requestedTourSlug !== $tour->getTranslation('slug', $locale)
-            || $requestedPackageSlug !== $package->getTranslation('slug', $locale)
+            $requestedTourSlug !== $this->translatedSlug($tour, $locale)
+            || $requestedPackageSlug !== $this->translatedSlug($package, $locale)
         ) {
             return redirect()->route('tour.package.show', [
                 'locale' => $locale,
-                'tour' => $tour->getTranslation('slug', $locale),
-                'package' => $package->getTranslation('slug', $locale),
+                'tour' => $this->translatedSlug($tour, $locale),
+                'package' => $this->translatedSlug($package, $locale),
             ], 301);
         }
         $package->load([
@@ -153,13 +153,13 @@ class TourController extends Controller
             ?->id ?? $package->tiers->first()?->id;
 
         if (
-            $requestedTourSlug !== $tour->getTranslation('slug', $locale)
-            || $requestedPackageSlug !== $package->getTranslation('slug', $locale)
+            $requestedTourSlug !== $this->translatedSlug($tour, $locale)
+            || $requestedPackageSlug !== $this->translatedSlug($package, $locale)
         ) {
             return redirect()->route('tour.package.booking', array_filter([
                 'locale' => $locale,
-                'tour' => $tour->getTranslation('slug', $locale),
-                'package' => $package->getTranslation('slug', $locale),
+                'tour' => $this->translatedSlug($tour, $locale),
+                'package' => $this->translatedSlug($package, $locale),
                 'tier' => $initialTierId,
                 'pax' => $initialPax,
             ]), 301);
@@ -208,7 +208,7 @@ class TourController extends Controller
             ->mapWithKeys(fn (string $locale): array => [
                 $locale => route('tour.show', [
                     'locale' => $locale,
-                    'tour' => $tour->getTranslation('slug', $locale),
+                    'tour' => $this->translatedSlug($tour, $locale),
                 ]),
             ])
             ->all();
@@ -221,8 +221,8 @@ class TourController extends Controller
             ->mapWithKeys(fn (string $locale): array => [
                 $locale => route('tour.package.show', [
                     'locale' => $locale,
-                    'tour' => $tour->getTranslation('slug', $locale),
-                    'package' => $package->getTranslation('slug', $locale),
+                    'tour' => $this->translatedSlug($tour, $locale),
+                    'package' => $this->translatedSlug($package, $locale),
                 ]),
             ])
             ->all();
@@ -235,10 +235,16 @@ class TourController extends Controller
             ->mapWithKeys(fn (string $locale): array => [
                 $locale => route('tour.package.booking', [
                     'locale' => $locale,
-                    'tour' => $tour->getTranslation('slug', $locale),
-                    'package' => $package->getTranslation('slug', $locale),
+                    'tour' => $this->translatedSlug($tour, $locale),
+                    'package' => $this->translatedSlug($package, $locale),
                 ]),
             ])
             ->all();
+    }
+
+    private function translatedSlug(Tour|TourPackage $model, string $locale): string
+    {
+        return (string) ($model->getTranslation('slug', $locale, false)
+            ?: $model->getTranslation('slug', 'id', false));
     }
 }

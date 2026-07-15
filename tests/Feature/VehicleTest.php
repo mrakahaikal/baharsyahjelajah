@@ -65,6 +65,22 @@ it('renders localized details and normalizes legacy slugs', function () {
     get('/id/transport/toyota-alphard')->assertNotFound();
 });
 
+it('uses the Indonesian vehicle slug when localized slugs are missing', function () {
+    $vehicle = Vehicle::factory()->create();
+    $vehicle->forgetTranslations('slug')
+        ->setTranslation('slug', 'id', 'hiace-indonesia')
+        ->save();
+
+    get('/ms/transport/hiace-indonesia')
+        ->assertSuccessful()
+        ->assertSee('<link rel="alternate" hreflang="en" href="'.route('transport.show', [
+            'locale' => 'en',
+            'vehicle' => 'hiace-indonesia',
+        ]).'">', false);
+
+    get('/en/transport/hiace-indonesia/booking')->assertSuccessful();
+});
+
 it('redirects unlocalized transport paths and preserves their query strings', function () {
     get('/transport')->assertRedirect('/id/transport');
     get('/transport/hiace/booking?rate=daily&pax=8')
