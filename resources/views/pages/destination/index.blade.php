@@ -4,6 +4,7 @@
 @endphp
 
 <x-layouts::app
+    seo-page="destination_index"
     :title="__('destination.seo.index_title')"
     :meta-description="__('destination.seo.index_description')"
     :$schemaJson

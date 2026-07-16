@@ -132,6 +132,7 @@ it('renders article metadata, reading utilities, resilient media, and relevant p
         ->assertSuccessful()
         ->assertSee('<title>Panduan Pedalaman Kalimantan |', false)
         ->assertSee('og:type" content="article"', false)
+        ->assertSee('og:title" content="Panduan Pedalaman Kalimantan |', false)
         ->assertSee('twitter:card" content="summary"', false)
         ->assertSee('"@type":"Article"', false)
         ->assertSee('1 menit baca')
@@ -145,7 +146,8 @@ it('renders article metadata, reading utilities, resilient media, and relevant p
 
     $html = $response->getContent();
 
-    expect(strpos($html, 'Panduan Satu Kategori'))
+    expect(substr_count($html, 'property="og:title"'))->toBe(1)
+        ->and(strpos($html, 'Panduan Satu Kategori'))
         ->toBeLessThan(strpos($html, 'Berita Sebagai Cadangan'));
 });
 

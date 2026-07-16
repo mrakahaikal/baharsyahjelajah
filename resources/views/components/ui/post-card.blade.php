@@ -16,7 +16,7 @@
     $cardClass .= $isHorizontal ? ' md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]' : ' grid-rows-[auto_minmax(0,1fr)]';
     $cardClass = $stretch ? $cardClass.' h-full' : $cardClass;
     $resolvedImageHeight = $isHorizontal ? 'h-64 sm:h-80 md:h-full md:min-h-96' : $imageHeight;
-    $postUrl = route('blog.show', ['locale' => $locale, 'post' => $post->slug]);
+    $postUrl = route('blog.show', ['locale' => $locale, 'post' => $post->localizedSlug($locale)]);
 @endphp
 
 <article {{ $attributes->merge([

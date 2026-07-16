@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasLocalizedSlug;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,7 +11,7 @@ use Spatie\Translatable\HasTranslations;
 #[Fillable(['name', 'slug', 'icon', 'sort_order'])]
 class TourCategory extends Model
 {
-    use HasTranslations;
+    use HasLocalizedSlug, HasTranslations;
 
     public array $translatable = ['name', 'slug'];
 

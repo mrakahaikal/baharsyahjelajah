@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\TourType;
+use App\Models\Concerns\HasLocalizedSlug;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +18,7 @@ use Spatie\Translatable\HasTranslations;
 ])]
 class Tour extends Model
 {
-    use HasTranslations;
+    use HasLocalizedSlug, HasTranslations;
 
     protected function casts(): array
     {

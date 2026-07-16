@@ -67,8 +67,8 @@
                         @php
                             $packageUrl = route('tour.package.show', [
                                 'locale' => $locale,
-                                'tour' => $package->tour->slug,
-                                'package' => $package->slug,
+                                'tour' => $package->tour->localizedSlug($locale),
+                                'package' => $package->localizedSlug($locale),
                             ]);
                         @endphp
                         <article class="group grid overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-[border-color,box-shadow] hover:border-blue-200 hover:shadow-md sm:grid-cols-[11rem_minmax(0,1fr)]">
@@ -114,7 +114,7 @@
                     <div class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                         @foreach($posts as $post)
                             @php
-                                $postUrl = route('blog.show', ['locale' => $locale, 'post' => $post->slug]);
+                                $postUrl = route('blog.show', ['locale' => $locale, 'post' => $post->localizedSlug($locale)]);
                                 $excerpt = $post->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($post->content ?? ''), 130);
                             @endphp
                             <article class="group flex h-full flex-col border-t-2 border-slate-900 bg-white p-5 shadow-sm transition-[border-color,box-shadow] hover:border-blue-600 hover:shadow-md sm:p-6">

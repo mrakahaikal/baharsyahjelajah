@@ -3,9 +3,10 @@
 @php
     $previewPackage = $tour->packages->first();
     $description = trim(strip_tags((string) ($tour->short_description ?: $tour->description)));
+    $tourSlug = $tour->localizedSlug($locale);
 @endphp
 
-<a href="{{ route('tour.show', ['locale' => $locale, 'tour' => $tour->slug]) }}" class="group relative block aspect-3/4 overflow-hidden rounded-lg bg-slate-900 shadow-md">
+<a href="{{ route('tour.show', ['locale' => $locale, 'tour' => $tourSlug]) }}" class="group relative block aspect-3/4 overflow-hidden rounded-lg bg-slate-900 shadow-md">
     @if($previewPackage?->cover_url)
         <img src="{{ $previewPackage->cover_url }}" alt="{{ $tour->name }}" width="480" height="640" class="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
     @else

@@ -180,24 +180,16 @@ class TourController extends Controller
 
     private function findActiveTourByTranslatedSlug(string $slug): Tour
     {
-        $locale = app()->getLocale();
-
         return Tour::query()
             ->active()
-            ->where(fn (Builder $query): Builder => $query
-                ->where("slug->{$locale}", $slug)
-                ->orWhere('slug->id', $slug))
+            ->whereLocalizedSlug($slug)
             ->firstOrFail();
     }
 
     private function findPackageByTranslatedSlug(Tour $tour, string $slug): TourPackage
     {
-        $locale = app()->getLocale();
-
         return $tour->packages()
-            ->where(fn (Builder $query): Builder => $query
-                ->where("slug->{$locale}", $slug)
-                ->orWhere('slug->id', $slug))
+            ->whereLocalizedSlug($slug)
             ->firstOrFail();
     }
 
@@ -244,7 +236,6 @@ class TourController extends Controller
 
     private function translatedSlug(Tour|TourPackage $model, string $locale): string
     {
-        return (string) ($model->getTranslation('slug', $locale, false)
-            ?: $model->getTranslation('slug', 'id', false));
+        return $model->localizedSlug($locale);
     }
 }

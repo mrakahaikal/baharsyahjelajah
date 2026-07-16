@@ -17,7 +17,11 @@
     $notes = $package->includes->where('type', 'note');
     $allPrices = $package->tiers->flatMap(fn ($tier) => $tier->priceTiers);
     $priceCurrencies = $allPrices->pluck('currency')->unique();
-    $packageUrl = route('tour.package.show', ['locale' => $locale, 'tour' => $tour->slug, 'package' => $package->slug]);
+    $packageUrl = route('tour.package.show', [
+        'locale' => $locale,
+        'tour' => $tour->localizedSlug($locale),
+        'package' => $package->localizedSlug($locale),
+    ]);
     $seoDescription = \Illuminate\Support\Str::limit(strip_tags((string) ($tour->short_description ?: $tour->description)), 155);
     $productSchema = [
         '@type' => 'Product',
@@ -48,7 +52,7 @@
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 @endphp
 
-<x-layouts::app :title="$package->name.' | '.$tour->name" :meta-description="$seoDescription" :schema-json="$schemaJson" :$canonicalUrl :$alternateUrls breadcrumb-name="tour.package.show" :breadcrumb-parameters="[$locale, $tour, $package]">
+<x-layouts::app :title="$package->name.' | '.$tour->name" :meta-description="$seoDescription" :og-image="$package->cover_url" :schema-json="$schemaJson" :$canonicalUrl :$alternateUrls breadcrumb-name="tour.package.show" :breadcrumb-parameters="[$locale, $tour, $package]">
     <article class="bg-white">
         <header class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <x-ui.breadcrumbs name="tour.package.show" :parameters="[$locale, $tour, $package]" class="mb-5" />

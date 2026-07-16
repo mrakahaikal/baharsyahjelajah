@@ -1,5 +1,5 @@
 @php
-    $activeCategory = $categories->first(fn ($item) => $item->slug === $category || $item->getTranslation('slug', 'id') === $category);
+    $activeCategory = $categories->first(fn ($item) => $item->localizedSlug($locale) === $category || $item->localizedSlug('id') === $category);
     $activeType = collect($tourTypes)->first(fn ($item) => $item->value === $type);
     $activeDestination = $destinations->firstWhere('slug', $destinationSlug);
     $loadingTargets = 'destination,destinationSlug,category,type,resetFilters,clearFilter,gotoPage,previousPage,nextPage';
@@ -112,8 +112,9 @@
                                     @if($category === '')<x-lucide-check class="h-4 w-4 shrink-0" aria-hidden="true" />@endif
                                 </button>
                                 @foreach($categories as $item)
-                                    @php($isCategoryActive = $category === $item->slug || $category === $item->getTranslation('slug', 'id'))
-                                    <button type="button" wire:key="desktop-category-{{ $item->id }}" wire:click="$set('category', '{{ $item->slug }}')" aria-pressed="{{ $isCategoryActive ? 'true' : 'false' }}" class="flex min-h-10 items-center justify-between gap-3 rounded-md px-3 text-left text-sm font-semibold transition-colors {{ $isCategoryActive ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
+                                    @php($categorySlug = $item->localizedSlug($locale))
+                                    @php($isCategoryActive = $category === $categorySlug || $category === $item->localizedSlug('id'))
+                                    <button type="button" wire:key="desktop-category-{{ $item->id }}" wire:click="$set('category', '{{ $categorySlug }}')" aria-pressed="{{ $isCategoryActive ? 'true' : 'false' }}" class="flex min-h-10 items-center justify-between gap-3 rounded-md px-3 text-left text-sm font-semibold transition-colors {{ $isCategoryActive ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                                         <span class="min-w-0 truncate">{{ $item->name }}</span>
                                         <span class="shrink-0 text-xs opacity-60">{{ $item->active_tours_count }}</span>
                                     </button>
@@ -238,8 +239,9 @@
                             @if($category === '')<x-lucide-check class="h-4 w-4" aria-hidden="true" />@endif
                         </button>
                         @foreach($categories as $item)
-                            @php($isCategoryActive = $category === $item->slug || $category === $item->getTranslation('slug', 'id'))
-                            <button type="button" wire:key="mobile-category-{{ $item->id }}" wire:click="$set('category', '{{ $item->slug }}')" aria-pressed="{{ $isCategoryActive ? 'true' : 'false' }}" class="flex min-h-12 items-center justify-between rounded-lg border px-4 text-left text-sm font-bold {{ $isCategoryActive ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-700' }}">
+                            @php($categorySlug = $item->localizedSlug($locale))
+                            @php($isCategoryActive = $category === $categorySlug || $category === $item->localizedSlug('id'))
+                            <button type="button" wire:key="mobile-category-{{ $item->id }}" wire:click="$set('category', '{{ $categorySlug }}')" aria-pressed="{{ $isCategoryActive ? 'true' : 'false' }}" class="flex min-h-12 items-center justify-between rounded-lg border px-4 text-left text-sm font-bold {{ $isCategoryActive ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-700' }}">
                                 <span>{{ $item->name }} <span class="ml-1 text-xs font-semibold opacity-60">{{ $item->active_tours_count }}</span></span>
                                 @if($isCategoryActive)<x-lucide-check class="h-4 w-4" aria-hidden="true" />@endif
                             </button>

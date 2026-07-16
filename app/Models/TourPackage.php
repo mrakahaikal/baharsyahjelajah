@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasLocalizedSlug;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,7 +16,7 @@ use Spatie\Translatable\HasTranslations;
 #[Fillable(['tour_id', 'name', 'slug', 'duration_days', 'duration_nights'])]
 class TourPackage extends Model implements HasMedia
 {
-    use HasTranslations, InteractsWithMedia;
+    use HasLocalizedSlug, HasTranslations, InteractsWithMedia;
 
     public const string MEDIA_COLLECTION_COVER = 'cover';
 

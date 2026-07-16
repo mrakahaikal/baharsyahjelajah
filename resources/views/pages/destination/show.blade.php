@@ -9,6 +9,7 @@
 <x-layouts::app
     :title="__('destination.seo.show_title', ['destination' => $destination->name])"
     :meta-description="$description"
+    :og-image="$destination->cover_url"
     :$schemaJson
     breadcrumb-name="destination.show"
     :breadcrumb-parameters="[$locale, $destination]"

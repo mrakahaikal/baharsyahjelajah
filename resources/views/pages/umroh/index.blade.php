@@ -3,6 +3,7 @@
 @endphp
 
 <x-layouts::app
+    seo-page="umroh_index"
     :title="__('umrah.seo.title')"
     :meta-description="__('umrah.seo.description')"
     :show-floating-whatsapp="false"

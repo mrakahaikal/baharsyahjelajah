@@ -11,6 +11,7 @@
     'themeClass' => '',
     'breadcrumbName' => null,
     'breadcrumbParameters' => [],
+    'seoPage' => null,
 ])
 
 @php
@@ -24,47 +25,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? config('app.name', 'Baharsyah Jelajah') }}</title>
-    @if($metaDescription)
-        <meta name="description" content="{{ $metaDescription }}">
-    @endif
-    @if($robots)
-        <meta name="robots" content="{{ $robots }}">
-    @endif
-    <link rel="canonical" href="{{ $canonicalUrl ?? url()->current() }}">
-    @foreach($alternateUrls as $alternateLocale => $alternateUrl)
-        <link rel="alternate" hreflang="{{ $alternateLocale }}" href="{{ $alternateUrl }}">
-    @endforeach
-    @if($alternateUrls)
-        <link rel="alternate" hreflang="x-default" href="{{ $alternateUrls['id'] ?? $canonicalUrl }}">
-    @endif
+    <x-seo-meta
+        :page="$seoPage"
+        :fallback-title="$title"
+        :fallback-description="$metaDescription"
+        :fallback-og-image="$ogImage"
+        :$ogType
+        :$canonicalUrl
+        :$alternateUrls
+        :$robots
+    />
     @if($schemaJson)
         <script type="application/ld+json">{!! $schemaJson !!}</script>
     @endif
     @if($breadcrumbName && \Diglactic\Breadcrumbs\Breadcrumbs::exists($breadcrumbName))
         {{ \Diglactic\Breadcrumbs\Breadcrumbs::view('breadcrumbs::json-ld', $breadcrumbName, ...$breadcrumbParameters) }}
     @endif
-    @if($ogType)
-        <meta property="og:type" content="{{ $ogType }}">
-        <meta property="og:locale" content="{{ str_replace('-', '_', app()->getLocale()) }}">
-        <meta property="og:title" content="{{ $title ?? config('app.name') }}">
-        @if($metaDescription)
-            <meta property="og:description" content="{{ $metaDescription }}">
-        @endif
-        <meta property="og:url" content="{{ $canonicalUrl ?? url()->current() }}">
-        @if($ogImage)
-            <meta property="og:image" content="{{ $ogImage }}">
-        @endif
-        <meta name="twitter:card" content="{{ $ogImage ? 'summary_large_image' : 'summary' }}">
-        <meta name="twitter:title" content="{{ $title ?? config('app.name') }}">
-        @if($metaDescription)
-            <meta name="twitter:description" content="{{ $metaDescription }}">
-        @endif
-        @if($ogImage)
-            <meta name="twitter:image" content="{{ $ogImage }}">
-        @endif
-    @endif
-
     @if(request()->routeIs('umroh.*'))
         <link rel="icon" href="{{ asset('images/favicon-umrah.png') }}">
     @else

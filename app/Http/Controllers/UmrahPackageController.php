@@ -130,21 +130,12 @@ class UmrahPackageController extends Controller
     {
         return UmrahPackage::query()
             ->active()
-            ->where(function ($query) use ($slug): void {
-                $query->where('slug->'.app()->getLocale(), $slug)
-                    ->orWhere('slug->id', $slug);
-
-                if (ctype_digit($slug)) {
-                    $query->orWhereKey((int) $slug);
-                }
-            })
+            ->whereLocalizedSlug($slug)
             ->firstOrFail();
     }
 
     private function translatedSlug(UmrahPackage $package, string $locale): string
     {
-        return (string) ($package->getTranslation('slug', $locale, false)
-            ?: $package->getTranslation('slug', 'id', false)
-            ?: $package->getKey());
+        return $package->localizedSlug($locale);
     }
 }

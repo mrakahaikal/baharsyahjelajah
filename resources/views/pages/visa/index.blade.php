@@ -1,6 +1,7 @@
 @php($locale = app()->getLocale())
 
 <x-layouts::app
+    seo-page="visa_index"
     :title="__('visa.seo.index_title')"
     :meta-description="__('visa.seo.index_description')"
     :$schemaJson

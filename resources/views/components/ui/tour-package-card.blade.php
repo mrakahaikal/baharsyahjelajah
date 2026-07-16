@@ -8,8 +8,8 @@
     $maximumHotelStars = $package->tiers->max('hotel_stars');
     $packageUrl = route('tour.package.show', [
         'locale' => $locale,
-        'tour' => $tour->slug,
-        'package' => $package->slug,
+        'tour' => $tour->localizedSlug($locale),
+        'package' => $package->localizedSlug($locale),
     ]);
 @endphp
 

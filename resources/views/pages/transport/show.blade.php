@@ -7,6 +7,7 @@
 <x-layouts::app
     :title="__('transport.seo.show_title', ['vehicle' => $vehicle->name])"
     :meta-description="str($vehicle->description)->stripTags()->limit(155)"
+    :og-image="$vehicle->thumbnail_url"
     :$schemaJson
     breadcrumb-name="transport.show"
     :breadcrumb-parameters="[$locale, $vehicle]"

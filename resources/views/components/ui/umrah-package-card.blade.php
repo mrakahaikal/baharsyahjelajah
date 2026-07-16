@@ -14,7 +14,7 @@
         : route('contact.index', ['locale' => $locale]);
     $detailUrl = route('umroh.show', [
         'locale' => $locale,
-        'umrah' => $package->slug ?: $package->getKey(),
+        'umrah' => $package->localizedSlug($locale),
     ]);
 @endphp
 

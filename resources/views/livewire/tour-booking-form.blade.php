@@ -122,7 +122,7 @@
             </dl>
         </div>
 
-        <a href="{{ route('tour.package.show', ['locale' => app()->getLocale(), 'tour' => $this->package->tour->slug, 'package' => $this->package->slug]) }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+        <a href="{{ route('tour.package.show', ['locale' => app()->getLocale(), 'tour' => $this->package->tour->localizedSlug(), 'package' => $this->package->localizedSlug()]) }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
             <x-lucide-arrow-left class="h-4 w-4" aria-hidden="true" />
             {{ __('frontend.tour.booking.back_to_package') }}
         </a>

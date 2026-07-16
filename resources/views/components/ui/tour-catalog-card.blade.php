@@ -18,6 +18,7 @@
     $packageCount = $tour->packages_count ?? $tour->packages->count();
     $visiblePackages = $tour->packages->take(2);
     $remainingPackagesCount = max(0, $packageCount - $visiblePackages->count());
+    $tourSlug = $tour->localizedSlug($locale);
 @endphp
 
 <article {{ $attributes->class('group grid overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-sm transition-[border-color,box-shadow] duration-200 hover:border-blue-200 hover:shadow-md sm:grid-cols-[15rem_minmax(0,1fr)] xl:grid-cols-[17rem_minmax(0,1fr)_12rem]') }}>
@@ -47,7 +48,7 @@
         </div>
 
         <h3 class="mt-3 text-xl font-extrabold text-slate-900 transition-colors group-hover:text-blue-600 sm:text-2xl">
-            <a href="{{ route('tour.show', ['locale' => $locale, 'tour' => $tour->slug]) }}" class="rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600">
+            <a href="{{ route('tour.show', ['locale' => $locale, 'tour' => $tourSlug]) }}" class="rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600">
                 {{ $tour->name }}
             </a>
         </h3>
@@ -105,7 +106,7 @@
             @endif
         </div>
 
-        <x-ui::button tag="a" href="{{ route('tour.show', ['locale' => $locale, 'tour' => $tour->slug]) }}" class="w-full hover:bg-blue-600">
+        <x-ui::button tag="a" href="{{ route('tour.show', ['locale' => $locale, 'tour' => $tourSlug]) }}" class="w-full hover:bg-blue-600">
             {{ __('frontend.tour.catalog_card.view_tour') }}
             <x-slot:trailingIcon><x-lucide-arrow-right /></x-slot:trailingIcon>
         </x-ui::button>

@@ -22,7 +22,7 @@
                 ->map(fn ($post, $index) => [
                     '@type' => 'ListItem',
                     'position' => $index + 1,
-                    'url' => route('blog.show', ['locale' => $locale, 'post' => $post->slug]),
+                    'url' => route('blog.show', ['locale' => $locale, 'post' => $post->localizedSlug($locale)]),
                     'name' => $post->title,
                 ])
                 ->all(),
@@ -31,6 +31,7 @@
 @endphp
 
 <x-layouts::app
+    seo-page="blog_index"
     :title="$seoTitle"
     :meta-description="$seoDescription"
     :schema-json="$schemaJson"
@@ -98,7 +99,7 @@
                         @php($isCurrent = $activeCategory?->is($category) ?? false)
                         <x-ui::button
                             tag="a"
-                            href="{{ route('blog.index', array_filter(['locale' => $locale, 'category' => $category->slug, 'q' => $searchTerm])) }}"
+                            href="{{ route('blog.index', array_filter(['locale' => $locale, 'category' => $category->localizedSlug($locale), 'q' => $searchTerm])) }}"
                             variant="{{ $isCurrent ? 'soft' : 'outline' }}"
                             size="sm"
                             class="rounded-full"

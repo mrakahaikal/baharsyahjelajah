@@ -18,19 +18,20 @@
     $descriptionText = trim(strip_tags((string) $tour->description));
     $seoTitle = $tour->name.' | '.config('app.name');
     $seoDescription = \Illuminate\Support\Str::limit($tour->short_description ?: $descriptionText, 155);
-    $contactUrl = route('contact.index', ['locale' => $locale, 'tour' => $tour->slug]);
+    $tourSlug = $tour->localizedSlug($locale);
+    $contactUrl = route('contact.index', ['locale' => $locale, 'tour' => $tourSlug]);
     $schemaJson = json_encode([
         '@context' => 'https://schema.org',
         '@type' => 'CollectionPage',
         'name' => $tour->name,
         'description' => $seoDescription,
-        'url' => route('tour.show', ['locale' => $locale, 'tour' => $tour->slug]),
+        'url' => route('tour.show', ['locale' => $locale, 'tour' => $tourSlug]),
         'image' => $coverUrl,
         'numberOfItems' => $packageCount,
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 @endphp
 
-<x-layouts::app :title="$seoTitle" :meta-description="$seoDescription" :schema-json="$schemaJson" :$canonicalUrl :$alternateUrls breadcrumb-name="tour.show" :breadcrumb-parameters="[$locale, $tour]">
+<x-layouts::app :title="$seoTitle" :meta-description="$seoDescription" :og-image="$coverUrl" :schema-json="$schemaJson" :$canonicalUrl :$alternateUrls breadcrumb-name="tour.show" :breadcrumb-parameters="[$locale, $tour]">
     <article class="bg-white">
         <header class="relative isolate min-h-124 overflow-hidden bg-slate-950 text-white sm:min-h-[34rem]">
             @if($coverUrl)

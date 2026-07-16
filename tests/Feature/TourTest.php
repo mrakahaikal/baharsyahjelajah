@@ -389,9 +389,13 @@ it('uses Indonesian slugs when localized package slugs are missing', function ()
 
     $tour->forgetTranslations('slug')
         ->setTranslation('slug', 'id', 'wisata-jakarta-bandung')
+        ->forgetTranslations('name')
+        ->setTranslation('name', 'id', 'Wisata Jakarta Bandung')
         ->save();
     $package->forgetTranslations('slug')
         ->setTranslation('slug', 'id', 'jakarta-city-escape')
+        ->forgetTranslations('name')
+        ->setTranslation('name', 'id', 'Paket Jelajah Jakarta')
         ->save();
 
     get('/id/tour/wisata-jakarta-bandung/package/jakarta-city-escape')
@@ -406,6 +410,29 @@ it('uses Indonesian slugs when localized package slugs are missing', function ()
             'tour' => 'wisata-jakarta-bandung',
             'package' => 'jakarta-city-escape',
         ]).'">', false);
+
+    get('/en/tour')
+        ->assertSuccessful()
+        ->assertSee('Wisata Jakarta Bandung')
+        ->assertSee(route('tour.show', [
+            'locale' => 'en',
+            'tour' => 'wisata-jakarta-bandung',
+        ]), false);
+
+    get('/en/tour/wisata-jakarta-bandung')
+        ->assertSuccessful()
+        ->assertSee('Wisata Jakarta Bandung')
+        ->assertSee('Paket Jelajah Jakarta')
+        ->assertSee(route('tour.package.show', [
+            'locale' => 'en',
+            'tour' => 'wisata-jakarta-bandung',
+            'package' => 'jakarta-city-escape',
+        ]), false);
+
+    get('/en/tour/wisata-jakarta-bandung/package/jakarta-city-escape')
+        ->assertSuccessful()
+        ->assertSee('Wisata Jakarta Bandung')
+        ->assertSee('Paket Jelajah Jakarta');
 });
 
 it('converts the starting package price using the selected currency', function () {

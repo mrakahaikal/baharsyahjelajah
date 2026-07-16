@@ -68,8 +68,8 @@ class BlogController extends Controller
             ->withQueryString();
 
         $activeCategory = $categories->first(
-            fn (PostCategory $category): bool => $category->slug === $categorySlug
-                || $category->getTranslation('slug', 'id') === $categorySlug,
+            fn (PostCategory $category): bool => $category->localizedSlug($locale) === $categorySlug
+                || $category->localizedSlug('id') === $categorySlug,
         );
         $alternateUrls = $this->localizedBlogUrls();
         $canonicalUrl = $alternateUrls[$locale];
@@ -146,9 +146,7 @@ class BlogController extends Controller
     {
         return Post::query()
             ->published()
-            ->where(fn (Builder $query): Builder => $query
-                ->where('slug->'.app()->getLocale(), $slug)
-                ->orWhere('slug->id', $slug))
+            ->whereLocalizedSlug($slug)
             ->firstOrFail();
     }
 
@@ -179,7 +177,6 @@ class BlogController extends Controller
 
     private function translatedSlug(Post $post, string $locale): string
     {
-        return (string) ($post->getTranslation('slug', $locale, false)
-            ?: $post->getTranslation('slug', 'id', false));
+        return $post->localizedSlug($locale);
     }
 }

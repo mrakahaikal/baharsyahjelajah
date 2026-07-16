@@ -3,6 +3,7 @@
 @endphp
 
 <x-layouts::app
+    seo-page="home"
     :title="__('home.seo.title')"
     :meta-description="__('home.seo.description')"
     :show-floating-whatsapp="false"

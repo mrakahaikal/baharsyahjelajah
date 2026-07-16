@@ -66,8 +66,8 @@ class TourPackageCalculator extends Component
 
         return route('tour.package.booking', array_filter([
             'locale' => app()->getLocale(),
-            'tour' => $this->package->tour->slug,
-            'package' => $this->package->slug,
+            'tour' => $this->package->tour->localizedSlug(),
+            'package' => $this->package->localizedSlug(),
             'tier' => $this->selectedTier?->id,
             'pax' => (int) $this->pax,
         ], fn (mixed $value): bool => $value !== null));

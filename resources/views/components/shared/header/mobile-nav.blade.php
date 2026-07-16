@@ -31,7 +31,7 @@
                     <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Kategori Tour</span>
                     <div class="grid grid-cols-1 gap-2">
                         @foreach($menuCategories as $cat)
-                            <a href="{{ route('tour.index', ['locale' => $locale, 'category' => $cat->slug]) }}"
+                            <a href="{{ route('tour.index', ['locale' => $locale, 'category' => $cat->localizedSlug($locale)]) }}"
                                class="flex items-center justify-between rounded-xl bg-slate-50 px-3.5 py-3 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
                                 <span>{{ $cat->name }}</span>
                                 <span class="text-xs text-slate-400">{{ $cat->active_tours_count }}</span>

@@ -66,7 +66,7 @@
             </x-ui::button>
         @endif
 
-        <a href="{{ route('tour.show', ['locale' => app()->getLocale(), 'tour' => $this->package->tour->slug]) }}" class="mt-3 inline-flex w-full items-center justify-center text-sm font-semibold text-blue-600 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+        <a href="{{ route('tour.show', ['locale' => app()->getLocale(), 'tour' => $this->package->tour->localizedSlug()]) }}" class="mt-3 inline-flex w-full items-center justify-center text-sm font-semibold text-blue-600 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
             {{ __('frontend.tour.package.calculator.other_packages') }}
         </a>
     </div>

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\LocaleHelper;
+use App\Models\Concerns\HasLocalizedSlug;
 use App\Services\CurrencyService;
 use App\Settings\GeneralSettings;
 use Database\Factories\UmrahPackageFactory;
@@ -30,7 +31,7 @@ class UmrahPackage extends Model implements HasMedia
     /** @use HasFactory<UmrahPackageFactory> */
     use HasFactory;
 
-    use HasTranslations, InteractsWithMedia, SoftDeletes;
+    use HasLocalizedSlug, HasTranslations, InteractsWithMedia, SoftDeletes;
 
     public const string MEDIA_COLLECTION_COVER = 'cover';
 

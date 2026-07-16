@@ -23,6 +23,7 @@
 @endphp
 
 <x-layouts::app
+    seo-page="contact_index"
     :title="$seoTitle"
     :meta-description="$seoDescription"
     :show-floating-whatsapp="false"

@@ -117,14 +117,7 @@ class VehicleController extends Controller
     {
         return $model::query()
             ->active()
-            ->where(function ($query) use ($slug): void {
-                $query->where('slug->'.app()->getLocale(), $slug)
-                    ->orWhere('slug->id', $slug);
-
-                if (ctype_digit($slug)) {
-                    $query->orWhereKey((int) $slug);
-                }
-            })
+            ->whereLocalizedSlug($slug)
             ->firstOrFail();
     }
 
@@ -143,8 +136,6 @@ class VehicleController extends Controller
 
     private function translatedSlug(Vehicle $vehicle, string $locale): string
     {
-        return (string) ($vehicle->getTranslation('slug', $locale, false)
-            ?: $vehicle->getTranslation('slug', 'id', false)
-            ?: $vehicle->getKey());
+        return $vehicle->localizedSlug($locale);
     }
 }

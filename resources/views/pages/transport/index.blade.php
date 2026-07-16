@@ -1,4 +1,5 @@
 <x-layouts::app
+    seo-page="transport_index"
     :title="__('transport.seo.index_title')"
     :meta-description="__('transport.seo.index_description')"
     breadcrumb-name="transport.index"

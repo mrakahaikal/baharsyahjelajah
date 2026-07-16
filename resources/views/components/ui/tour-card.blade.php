@@ -16,6 +16,7 @@
         ->unique()
         ->values();
     $description = trim(strip_tags((string) ($tour->short_description ?: $tour->description)));
+    $tourSlug = $tour->localizedSlug($locale);
 @endphp
 
 <article class="group flex h-full flex-col overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-sm transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md">
@@ -70,7 +71,7 @@
             </div>
         @endif
 
-        <x-ui::button tag="a" href="{{ route('tour.show', ['locale' => $locale, 'tour' => $tour->slug]) }}" variant="outline" class="mt-auto w-full {{ $startingPrice ? 'mt-5' : 'mt-6' }}">
+        <x-ui::button tag="a" href="{{ route('tour.show', ['locale' => $locale, 'tour' => $tourSlug]) }}" variant="outline" class="mt-auto w-full {{ $startingPrice ? 'mt-5' : 'mt-6' }}">
             {{ $locale === 'en' ? 'View package options' : ($locale === 'ms' ? 'Lihat pilihan pakej' : 'Lihat pilihan paket') }}
             <x-slot:trailingIcon><x-lucide-arrow-right /></x-slot:trailingIcon>
         </x-ui::button>

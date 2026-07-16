@@ -18,7 +18,7 @@
                 <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">{{ __('frontend.header.tour-mega-menu.category-label') }}</h3>
                 <div class="space-y-1">
                     @foreach($menuCategories as $cat)
-                        <a href="{{ route('tour.index', ['locale' => $locale, 'category' => $cat->slug]) }}"
+                        <a href="{{ route('tour.index', ['locale' => $locale, 'category' => $cat->localizedSlug($locale)]) }}"
                            class="group flex items-center justify-between rounded-2xl p-3 hover:bg-slate-50 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600" role="menuitem">
                             <div>
                                 <h4 class="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{{ $cat->name }}</h4>

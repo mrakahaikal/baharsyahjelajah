@@ -20,6 +20,7 @@
 <x-layouts::app
     :title="__('umrah.show.seo_title', ['package' => $package->name, 'brand' => config('app.name')])"
     :meta-description="\Illuminate\Support\Str::limit(strip_tags($package->description ?? ''), 155)"
+    :og-image="$package->thumbnail_url"
     :show-floating-whatsapp="false"
     theme-class="theme-umrah"
     breadcrumb-name="umroh.show"

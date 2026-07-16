@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasLocalizedSlug;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +17,7 @@ use Spatie\Translatable\HasTranslations;
 ])]
 class Post extends Model
 {
-    use HasTranslations;
+    use HasLocalizedSlug, HasTranslations;
 
     public array $translatable = ['title', 'slug', 'excerpt', 'content'];
 
