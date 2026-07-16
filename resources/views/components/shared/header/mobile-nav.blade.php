@@ -1,6 +1,6 @@
 @props(['locale', 'localeUrls' => [], 'navLinks', 'menuCategories', 'contactUrl', 'languages', 'currencies', 'currentCurrency'])
 
-<div id="mobile-navigation" x-show="mobileMenuOpen" x-collapse x-cloak class="md:hidden bg-white/95 backdrop-blur-md border-t border-slate-200/50 shadow-lg rounded-b-2xl">
+<div id="mobile-navigation" x-show="mobileMenuOpen" x-collapse x-cloak class="md:hidden bg-white/95 backdrop-blur-md border-t border-slate-200/50 shadow-lg rounded-b-2xl max-h-[calc(100dvh-5rem)] overflow-y-auto">
     <div class="px-4 pt-2 pb-6 space-y-4">
         <nav class="grid grid-cols-2 gap-2" aria-label="Mobile Navigation">
             @foreach($navLinks as $link)

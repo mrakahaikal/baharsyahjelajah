@@ -36,21 +36,13 @@
     :schema-json="$schemaJson"
     :$canonicalUrl
     :$alternateUrls
+    breadcrumb-name="blog.index"
+    :breadcrumb-parameters="[$locale]"
     og-type="website"
 >
     <section class="border-b border-slate-200 bg-slate-50" aria-labelledby="blog-index-heading">
         <div class="mx-auto max-w-7xl px-4 pb-12 pt-5 sm:px-6 sm:pb-14 lg:px-8">
-            <nav class="text-sm text-slate-500" aria-label="{{ __('frontend.blog.breadcrumb.label') }}">
-                <ol class="flex items-center gap-2">
-                    <li>
-                        <a href="{{ route('home', ['locale' => $locale]) }}" class="rounded-sm transition-colors hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600">
-                            {{ __('frontend.blog.breadcrumb.home') }}
-                        </a>
-                    </li>
-                    <li aria-hidden="true"><x-lucide-chevron-right class="h-3.5 w-3.5" /></li>
-                    <li class="font-semibold text-slate-900" aria-current="page">{{ __('frontend.blog.breadcrumb.current') }}</li>
-                </ol>
-            </nav>
+            <x-ui.breadcrumbs name="blog.index" :parameters="[$locale]" />
 
             <div class="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,0.72fr)] lg:items-end lg:gap-16">
                 <div class="max-w-3xl">

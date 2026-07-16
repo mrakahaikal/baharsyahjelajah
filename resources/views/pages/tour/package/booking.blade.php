@@ -4,27 +4,11 @@
     $seoDescription = __('frontend.tour.booking.seo_description', ['package' => $package->name]);
 @endphp
 
-<x-layouts::app :title="$seoTitle" :meta-description="$seoDescription" robots="noindex, follow" :show-floating-whatsapp="false" :$canonicalUrl :$alternateUrls>
+<x-layouts::app :title="$seoTitle" :meta-description="$seoDescription" robots="noindex, follow" :show-floating-whatsapp="false" :$canonicalUrl :$alternateUrls breadcrumb-name="tour.package.booking" :breadcrumb-parameters="[$locale, $tour, $package]">
     <article class="bg-white">
         <header class="border-b border-slate-100 bg-slate-50">
             <div class="mx-auto max-w-7xl px-4 pb-10 sm:px-6 sm:pb-12 lg:px-8">
-                <nav class="mb-6 text-sm text-slate-500" aria-label="Breadcrumb">
-                    <ol class="flex min-w-0 items-center gap-2">
-                        <li>
-                            <a href="{{ route('tour.index', ['locale' => $locale]) }}" class="rounded-sm hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600">
-                                {{ __('frontend.tour.show.breadcrumb_tours') }}
-                            </a>
-                        </li>
-                        <li aria-hidden="true"><x-lucide-chevron-right class="h-3.5 w-3.5" /></li>
-                        <li>
-                            <a href="{{ route('tour.package.show', ['locale' => $locale, 'tour' => $tour->slug, 'package' => $package->slug]) }}" class="max-w-40 truncate rounded-sm hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600 sm:max-w-none">
-                                {{ $package->name }}
-                            </a>
-                        </li>
-                        <li aria-hidden="true"><x-lucide-chevron-right class="h-3.5 w-3.5" /></li>
-                        <li class="font-medium text-slate-900" aria-current="page">{{ __('frontend.tour.booking.breadcrumb') }}</li>
-                    </ol>
-                </nav>
+                <x-ui.breadcrumbs name="tour.package.booking" :parameters="[$locale, $tour, $package]" class="mb-6" />
 
                 <div class="max-w-3xl">
                     <p class="text-sm font-semibold uppercase text-blue-600">{{ __('frontend.tour.booking.eyebrow') }}</p>

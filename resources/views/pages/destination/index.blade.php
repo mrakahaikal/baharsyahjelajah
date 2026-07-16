@@ -7,6 +7,8 @@
     :title="__('destination.seo.index_title')"
     :meta-description="__('destination.seo.index_description')"
     :$schemaJson
+    breadcrumb-name="destination.index"
+    :breadcrumb-parameters="[$locale]"
     :$canonicalUrl
     :$alternateUrls>
     <section class="relative isolate overflow-hidden bg-slate-950 py-20 text-white sm:py-24" aria-labelledby="destination-index-heading">
@@ -15,6 +17,8 @@
             <div class="absolute inset-0 bg-linear-to-r from-slate-950 via-slate-950/90 to-slate-950/45"></div>
         @endif
         <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <x-ui.breadcrumbs name="destination.index" :parameters="[$locale]" variant="dark" class="mb-10" />
+
             <p class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-blue-300">
                 <x-lucide-compass class="h-4 w-4" aria-hidden="true" />
                 {{ __('destination.index.eyebrow') }}

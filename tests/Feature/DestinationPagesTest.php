@@ -112,7 +112,7 @@ it('renders deduplicated public packages and published articles for a destinatio
     ]);
     $draftPost->destinations()->attach($destination);
 
-    get('/en/destinasi/makkah-madinah')
+    $response = get('/en/destinasi/makkah-madinah')
         ->assertSuccessful()
         ->assertViewHas('tourPackages', fn ($packages): bool => $packages->total() === 1 && $packages->first()->is($sharedPackage))
         ->assertViewHas('umrahPackages', fn ($packages): bool => $packages->total() === 1 && $packages->first()->is($activeUmrah))
@@ -126,10 +126,14 @@ it('renders deduplicated public packages and published articles for a destinatio
         ->assertDontSee('Draft Article')
         ->assertSee('"@type":"TouristDestination"', false)
         ->assertSee('"@type":"BreadcrumbList"', false)
+        ->assertSee('data-breadcrumbs="destination.show"', false)
         ->assertSee('<link rel="alternate" hreflang="ms" href="'.route('destination.show', [
             'locale' => 'ms',
             'destination' => $destination,
         ]).'">', false);
+
+    expect(substr_count($response->getContent(), '"@type":"BreadcrumbList"'))->toBe(1)
+        ->and($response->getContent())->toMatch('/<head>.*"@type":"BreadcrumbList".*<\/head>/s');
 });
 
 it('returns not found for an inactive destination', function () {

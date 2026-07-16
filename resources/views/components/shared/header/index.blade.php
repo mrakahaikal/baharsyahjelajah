@@ -30,7 +30,7 @@
     $currentCurrency = \App\Helpers\LocaleHelper::currency();
 @endphp
 
-<header class="bg-white sticky top-0 z-50 border-b border-gray-100" x-data="{ mobileMenuOpen: false, tourMenuOpen: false }" @mouseleave="tourMenuOpen = false" @keydown.escape.window="tourMenuOpen = false; mobileMenuOpen = false">
+<header class="bg-white sticky top-0 z-50 border-b border-gray-100" x-data="{ mobileMenuOpen: false, tourMenuOpen: false }" x-init="$watch('mobileMenuOpen', value => document.body.classList.toggle('overflow-hidden', value))" @resize.window="if (window.innerWidth >= 768 && mobileMenuOpen) { mobileMenuOpen = false; document.body.classList.remove('overflow-hidden'); }" @mouseleave="tourMenuOpen = false" @keydown.escape.window="tourMenuOpen = false; mobileMenuOpen = false">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-20">
             <a href="{{ route('home', ['locale' => $locale]) }}" class="flex items-center gap-2" aria-label="Baharsyah Jelajah Home">

@@ -10,17 +10,15 @@
     :title="__('destination.seo.show_title', ['destination' => $destination->name])"
     :meta-description="$description"
     :$schemaJson
+    breadcrumb-name="destination.show"
+    :breadcrumb-parameters="[$locale, $destination]"
     :$canonicalUrl
     :$alternateUrls>
-    <nav class="border-b border-slate-200 bg-white" aria-label="{{ __('destination.breadcrumb.label') }}">
-        <ol class="mx-auto flex max-w-7xl items-center gap-2 overflow-x-auto px-4 py-4 text-sm sm:px-6 lg:px-8">
-            <li><a href="{{ route('home', ['locale' => $locale]) }}" class="text-slate-500 hover:text-blue-600">{{ __('destination.breadcrumb.home') }}</a></li>
-            <li class="text-slate-300" aria-hidden="true">/</li>
-            <li><a href="{{ route('destination.index', ['locale' => $locale]) }}" class="text-slate-500 hover:text-blue-600">{{ __('destination.breadcrumb.index') }}</a></li>
-            <li class="text-slate-300" aria-hidden="true">/</li>
-            <li class="truncate font-semibold text-slate-950" aria-current="page">{{ $destination->name }}</li>
-        </ol>
-    </nav>
+    <div class="border-b border-slate-200 bg-white">
+        <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+            <x-ui.breadcrumbs name="destination.show" :parameters="[$locale, $destination]" />
+        </div>
+    </div>
 
     <section class="relative isolate overflow-hidden bg-slate-950 text-white" aria-labelledby="destination-heading">
         @if($destination->cover_url)

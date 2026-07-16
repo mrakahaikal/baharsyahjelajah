@@ -39,29 +39,6 @@
                     ],
                 ],
             ],
-            [
-                '@type' => 'BreadcrumbList',
-                'itemListElement' => [
-                    [
-                        '@type' => 'ListItem',
-                        'position' => 1,
-                        'name' => __('frontend.blog.breadcrumb.home'),
-                        'item' => route('home', ['locale' => $locale]),
-                    ],
-                    [
-                        '@type' => 'ListItem',
-                        'position' => 2,
-                        'name' => __('frontend.blog.breadcrumb.current'),
-                        'item' => route('blog.index', ['locale' => $locale]),
-                    ],
-                    [
-                        '@type' => 'ListItem',
-                        'position' => 3,
-                        'name' => $post->title,
-                        'item' => $canonicalUrl,
-                    ],
-                ],
-            ],
         ],
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 @endphp
@@ -72,29 +49,15 @@
     :schema-json="$schemaJson"
     :$canonicalUrl
     :$alternateUrls
+    breadcrumb-name="blog.show"
+    :breadcrumb-parameters="[$locale, $post]"
     og-type="article"
     :og-image="$coverUrl"
 >
     <article class="bg-white">
         <header class="border-b border-slate-200 bg-slate-50">
             <div class="mx-auto max-w-5xl px-4 pb-12 pt-5 sm:px-6 sm:pb-14 lg:px-8">
-                <nav class="text-sm text-slate-500" aria-label="{{ __('frontend.blog.breadcrumb.label') }}">
-                    <ol class="flex min-w-0 items-center gap-2">
-                        <li>
-                            <a href="{{ route('home', ['locale' => $locale]) }}" class="rounded-sm transition-colors hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600">
-                                {{ __('frontend.blog.breadcrumb.home') }}
-                            </a>
-                        </li>
-                        <li aria-hidden="true"><x-lucide-chevron-right class="h-3.5 w-3.5" /></li>
-                        <li>
-                            <a href="{{ route('blog.index', ['locale' => $locale]) }}" class="rounded-sm transition-colors hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600">
-                                {{ __('frontend.blog.breadcrumb.current') }}
-                            </a>
-                        </li>
-                        <li aria-hidden="true"><x-lucide-chevron-right class="h-3.5 w-3.5" /></li>
-                        <li class="min-w-0 truncate font-semibold text-slate-900" aria-current="page">{{ $post->title }}</li>
-                    </ol>
-                </nav>
+                <x-ui.breadcrumbs name="blog.show" :parameters="[$locale, $post]" />
 
                 <div class="mt-10 max-w-4xl">
                     @if($post->category)

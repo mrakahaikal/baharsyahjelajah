@@ -10,10 +10,10 @@
     :$canonicalUrl
     :$alternateUrls>
     <x-partials.home.hero-section :$locale :$heroBanner />
-    <x-partials.home.search-panel :$locale />
+    <livewire:partials.home.search-panel :$locale />
 
     <section class="border-b border-slate-200 bg-white pt-24 sm:pt-28" aria-label="{{ __('home.hero.eyebrow') }}">
-        <div class="mx-auto grid max-w-7xl gap-px bg-slate-200 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
+        <div class="mx-auto grid max-w-7xl gap-px px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
             @foreach(__('home.trust') as $item)
                 <div class="flex min-w-0 gap-3 bg-white py-6 sm:px-4 lg:px-5">
                     <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-blue-50 text-blue-600">

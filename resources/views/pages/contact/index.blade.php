@@ -26,21 +26,13 @@
     :title="$seoTitle"
     :meta-description="$seoDescription"
     :show-floating-whatsapp="false"
+    breadcrumb-name="contact.index"
+    :breadcrumb-parameters="[$locale]"
     :$canonicalUrl
     :$alternateUrls>
     <section class="bg-slate-950 text-white">
         <div class="mx-auto max-w-7xl px-4 pb-12 pt-5 sm:px-6 sm:pb-14 lg:px-8 lg:pb-16">
-            <nav class="mb-10 text-sm text-slate-400" aria-label="Breadcrumb">
-                <ol class="flex items-center gap-2">
-                    <li>
-                        <a href="{{ route('home', ['locale' => $locale]) }}" class="rounded-sm transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
-                            {{ __('frontend.contact_page.breadcrumb.home') }}
-                        </a>
-                    </li>
-                    <li aria-hidden="true">/</li>
-                    <li class="font-semibold text-white" aria-current="page">{{ __('frontend.contact_page.breadcrumb.current') }}</li>
-                </ol>
-            </nav>
+            <x-ui.breadcrumbs name="contact.index" :parameters="[$locale]" variant="dark" class="mb-10" />
 
             <div class="grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(20rem,0.8fr)] lg:items-end">
                 <div>

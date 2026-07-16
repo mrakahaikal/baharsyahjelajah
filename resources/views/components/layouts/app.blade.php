@@ -9,6 +9,8 @@
     'ogImage' => null,
     'showFloatingWhatsapp' => true,
     'themeClass' => '',
+    'breadcrumbName' => null,
+    'breadcrumbParameters' => [],
 ])
 
 @php
@@ -38,6 +40,9 @@
     @endif
     @if($schemaJson)
         <script type="application/ld+json">{!! $schemaJson !!}</script>
+    @endif
+    @if($breadcrumbName && \Diglactic\Breadcrumbs\Breadcrumbs::exists($breadcrumbName))
+        {{ \Diglactic\Breadcrumbs\Breadcrumbs::view('breadcrumbs::json-ld', $breadcrumbName, ...$breadcrumbParameters) }}
     @endif
     @if($ogType)
         <meta property="og:type" content="{{ $ogType }}">

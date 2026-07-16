@@ -7,6 +7,8 @@
     :meta-description="__('umrah.seo.description')"
     :show-floating-whatsapp="false"
     theme-class="theme-umrah"
+    breadcrumb-name="umroh.index"
+    :breadcrumb-parameters="[$locale]"
     :$canonicalUrl
     :$alternateUrls>
     <section class="relative isolate overflow-hidden bg-neutral-950 text-white" aria-labelledby="umrah-heading">
@@ -15,13 +17,7 @@
         <div class="absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-amber-300/80 to-transparent"></div>
 
         <div class="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8 lg:py-28">
-            <nav class="text-sm text-neutral-400" aria-label="Breadcrumb">
-                <ol class="flex items-center gap-2">
-                    <li><a href="{{ route('home', ['locale' => $locale]) }}" class="transition-colors hover:text-white">{{ __('frontend.contact_page.breadcrumb.home') }}</a></li>
-                    <li aria-hidden="true">/</li>
-                    <li class="text-amber-200" aria-current="page">Umrah</li>
-                </ol>
-            </nav>
+            <x-ui.breadcrumbs name="umroh.index" :parameters="[$locale]" variant="dark" />
 
             <div class="mt-12 max-w-3xl">
                 <p class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-amber-300">

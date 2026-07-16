@@ -18,20 +18,14 @@
     :$schemaJson
     :$canonicalUrl
     :$alternateUrls
+    breadcrumb-name="visa.show"
+    :breadcrumb-parameters="[$locale, $service]"
     og-type="website"
     :og-image="$service->cover_url"
     :show-floating-whatsapp="false">
     <section class="border-b border-emerald-900/20 bg-emerald-950 text-white">
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <nav class="text-sm text-emerald-100/70" aria-label="{{ __('visa.breadcrumb.label') }}">
-                <ol class="flex min-w-0 items-center gap-2">
-                    <li><a href="{{ route('home', ['locale' => $locale]) }}" class="hover:text-white">{{ __('visa.breadcrumb.home') }}</a></li>
-                    <li aria-hidden="true">/</li>
-                    <li><a href="{{ route('visa.index', ['locale' => $locale]) }}" class="hover:text-white">{{ __('visa.breadcrumb.index') }}</a></li>
-                    <li aria-hidden="true">/</li>
-                    <li class="min-w-0 truncate font-semibold text-lime-200" aria-current="page">{{ $service->name }}</li>
-                </ol>
-            </nav>
+            <x-ui.breadcrumbs name="visa.show" :parameters="[$locale, $service]" variant="emerald" />
         </div>
 
         <div class="mx-auto grid max-w-7xl gap-8 px-4 pb-12 sm:px-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(20rem,0.9fr)] lg:items-center lg:px-8 lg:pb-16">

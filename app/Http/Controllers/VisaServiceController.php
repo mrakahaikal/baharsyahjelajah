@@ -110,17 +110,7 @@ class VisaServiceController extends Controller
         ]);
         $schemaJson = json_encode([
             '@context' => 'https://schema.org',
-            '@graph' => [
-                $serviceSchema,
-                [
-                    '@type' => 'BreadcrumbList',
-                    'itemListElement' => [
-                        ['@type' => 'ListItem', 'position' => 1, 'name' => __('visa.breadcrumb.home'), 'item' => route('home', ['locale' => $locale])],
-                        ['@type' => 'ListItem', 'position' => 2, 'name' => __('visa.breadcrumb.index'), 'item' => route('visa.index', ['locale' => $locale])],
-                        ['@type' => 'ListItem', 'position' => 3, 'name' => $service->name, 'item' => $canonicalUrl],
-                    ],
-                ],
-            ],
+            '@graph' => [$serviceSchema],
         ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
         return view('pages.visa.show', compact(

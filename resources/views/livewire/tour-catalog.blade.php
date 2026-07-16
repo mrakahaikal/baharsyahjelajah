@@ -97,7 +97,7 @@
                                 </button>
                                 @foreach($destinations as $item)
                                     <button type="button" wire:key="desktop-destination-{{ $item->id }}" wire:click="$set('destinationSlug', '{{ $item->slug }}')" aria-pressed="{{ $item->slug === $destinationSlug ? 'true' : 'false' }}" class="flex min-h-10 items-center justify-between gap-3 rounded-md px-3 text-left text-sm font-semibold transition-colors {{ $item->slug === $destinationSlug ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
-                                        <span class="min-w-0 truncate">{{ $item->name }}</span>
+                                        <span class="min-w-0 truncate" title="{{ $item->name }}">{{ Str::limit($item->name, 20) }}</span>
                                         @if($item->slug === $destinationSlug)<x-lucide-check class="h-4 w-4 shrink-0" aria-hidden="true" />@endif
                                     </button>
                                 @endforeach

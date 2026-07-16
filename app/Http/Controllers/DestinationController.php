@@ -145,29 +145,6 @@ class DestinationController extends Controller
                     'image' => $images !== [] ? $images : null,
                     'address' => $destination->location,
                 ]),
-                [
-                    '@type' => 'BreadcrumbList',
-                    'itemListElement' => [
-                        [
-                            '@type' => 'ListItem',
-                            'position' => 1,
-                            'name' => __('destination.breadcrumb.home'),
-                            'item' => route('home', ['locale' => $locale]),
-                        ],
-                        [
-                            '@type' => 'ListItem',
-                            'position' => 2,
-                            'name' => __('destination.breadcrumb.index'),
-                            'item' => route('destination.index', ['locale' => $locale]),
-                        ],
-                        [
-                            '@type' => 'ListItem',
-                            'position' => 3,
-                            'name' => $destination->name,
-                            'item' => $canonicalUrl,
-                        ],
-                    ],
-                ],
             ],
         ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         $whatsappNumber = app(GeneralSettings::class)->whatsapp_number;

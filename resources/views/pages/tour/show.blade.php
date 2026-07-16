@@ -30,32 +30,16 @@
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 @endphp
 
-<x-layouts::app :title="$seoTitle" :meta-description="$seoDescription" :schema-json="$schemaJson" :$canonicalUrl :$alternateUrls>
+<x-layouts::app :title="$seoTitle" :meta-description="$seoDescription" :schema-json="$schemaJson" :$canonicalUrl :$alternateUrls breadcrumb-name="tour.show" :breadcrumb-parameters="[$locale, $tour]">
     <article class="bg-white">
-        <header class="relative isolate min-h-[31rem] overflow-hidden bg-slate-950 text-white sm:min-h-[34rem]">
+        <header class="relative isolate min-h-124 overflow-hidden bg-slate-950 text-white sm:min-h-[34rem]">
             @if($coverUrl)
                 <img src="{{ $coverUrl }}" alt="{{ $tour->name }}" class="absolute inset-0 -z-20 h-full w-full object-cover" width="1800" height="1000">
             @endif
             <div class="absolute inset-0 -z-10 bg-slate-950/65"></div>
 
-            <div class="mx-auto flex min-h-[31rem] max-w-7xl flex-col px-4 pb-10 pt-5 sm:min-h-[34rem] sm:px-6 sm:pb-14 lg:px-8">
-                <nav class="text-sm text-white/70" aria-label="Breadcrumb">
-                    <ol class="flex min-w-0 items-center gap-2">
-                        <li>
-                            <a href="{{ route('home', ['locale' => $locale]) }}" class="rounded-sm transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
-                                {{ __('frontend.tour.show.breadcrumb_home') }}
-                            </a>
-                        </li>
-                        <li aria-hidden="true"><x-lucide-chevron-right class="h-3.5 w-3.5" /></li>
-                        <li>
-                            <a href="{{ route('tour.index', ['locale' => $locale]) }}" class="rounded-sm transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
-                                {{ __('frontend.tour.show.breadcrumb_tours') }}
-                            </a>
-                        </li>
-                        <li aria-hidden="true"><x-lucide-chevron-right class="h-3.5 w-3.5" /></li>
-                        <li class="truncate font-medium text-white" aria-current="page">{{ $tour->name }}</li>
-                    </ol>
-                </nav>
+            <div class="mx-auto flex min-h-124 max-w-7xl flex-col px-4 pb-10 pt-5 sm:min-h-136 sm:px-6 sm:pb-14 lg:px-8">
+                <x-ui.breadcrumbs name="tour.show" :parameters="[$locale, $tour]" variant="dark" />
 
                 <div class="mt-auto max-w-4xl pt-16">
                     <p class="text-xs font-semibold uppercase text-blue-200">{{ __('frontend.tour.show.hero_eyebrow') }}</p>

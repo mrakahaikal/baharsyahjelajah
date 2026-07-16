@@ -8,10 +8,14 @@
     :title="__('transport.seo.show_title', ['vehicle' => $vehicle->name])"
     :meta-description="str($vehicle->description)->stripTags()->limit(155)"
     :$schemaJson
+    breadcrumb-name="transport.show"
+    :breadcrumb-parameters="[$locale, $vehicle]"
     :$canonicalUrl
     :$alternateUrls>
     <section class="bg-slate-950 text-white">
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <x-ui.breadcrumbs name="transport.show" :parameters="[$locale, $vehicle]" variant="dark" class="mb-5" />
+
             <a href="{{ route('transport.index', ['locale' => $locale]) }}" class="inline-flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-white">
                 <x-lucide-arrow-left class="h-4 w-4" />{{ __('transport.show.back') }}
             </a>

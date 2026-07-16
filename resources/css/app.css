@@ -20,46 +20,7 @@
     --color-umrah-gold-light: #f4d675;
     --color-umrah-ink: #171717;
     --color-umrah-paper: #fafaf9;
-
-    /* Functional Colors mapping to CSS Variables */
-    /*--color-primary: var(--brand-primary);*/
-    /*--color-secondary: var(--brand-secondary);*/
-    /*--color-deep-contrast: var(--brand-deep-contrast);*/
-    /*--color-bg-main: var(--brand-bg-main);*/
-    /*--color-text-main: var(--brand-text-main);*/
-    /*--color-border-main: var(--brand-border-main);*/
-    /*--color-umrah-primary: var(--brand-umrah-primary);*/
-    /*--color-umrah-secondary: var(--brand-umrah-secondary);*/
-    /*--color-umrah-soft-accent: var(--brand-umrah-soft-accent);*/
-    /*--color-umrah-deep-contrast: var(--brand-umrah-deep-contrast);*/
-    /*--color-umrah-bg-main: var(--brand-umrah-bg-main);*/
-    /*--color-umrah-text-main: var(--brand-umrah-text-main);*/
-    /*--color-umrah-border-main: var(--brand-umrah-border-main);*/
 }
-
-/*:root {*/
-/*    !* Modern OTA: Ocean, Sky, & Sunset *!*/
-/*    --brand-primary: #2563EB;       !* Ocean Blue: Profesional, aman, standar industri travel *!*/
-/*    --brand-secondary: #89D4CF;     !* Teal aslimu: Sangat bagus untuk aksen pantai/alam *!*/
-/*    --brand-accent-cta: #F97316;    !* Sunset Orange: Warna kontras TINGGI untuk tombol Booking! *!*/
-/*    --brand-deep-contrast: #1E3A8A; !* Navy/Dark Blue: Pengganti #2C10E4 yang lebih kalem dan elegan *!*/
-
-/*    !* Base - Tetap dipertahankan *!*/
-/*    --brand-bg-main: #F8FAFC;*/
-/*    --brand-text-main: #1E293B;*/
-/*    --brand-border-main: #E2E8F0;*/
-
-/*    !* Nuansa Ka'bah: Emas Elegan & Charcoal *!*/
-/*    --brand-umrah-primary: #D4AF37;       !* Metallic Gold yang lebih kalem dan premium *!*/
-/*    --brand-umrah-secondary: #FFC000;     !* Warna aslimu digeser ke secondary untuk aksen/hover *!*/
-/*    --brand-umrah-soft-accent: #FEF3C7;   !* Kuning pastel tipis (amber-100) untuk background badge/ikon *!*/
-/*    --brand-umrah-deep-contrast: #171717; !* Charcoal (neutral-900) pengganti pure black *!*/
-
-/*    !* Base - Disesuaikan agar tone-nya seirama (Warm tone) *!*/
-/*    --brand-umrah-bg-main: #FAFAF9;       !* Warm white (stone-50) *!*/
-/*    --brand-umrah-text-main: #272727;     !* Warna soft-accent aslimu kita jadikan teks utama. Jauh lebih nyaman dibaca! *!*/
-/*    --brand-umrah-border-main: #E7E5E4;   !* Warm grey (stone-200) biar matching sama background *!*/
-/*}*/
 
 
 body {
@@ -72,12 +33,6 @@ body {
 
 [x-cloak] {
     display: none !important;
-}
-
-:focus-visible {
-    outline: 3px solid var(--color-brand-secondary);
-    outline-offset: 2px;
-    border-radius: 8px;
 }
 
 .theme-umrah :focus-visible {

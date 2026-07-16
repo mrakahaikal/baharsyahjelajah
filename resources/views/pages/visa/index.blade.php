@@ -6,19 +6,15 @@
     :$schemaJson
     :$canonicalUrl
     :$alternateUrls
+    breadcrumb-name="visa.index"
+    :breadcrumb-parameters="[$locale]"
     og-type="website"
     :og-image="asset(\App\Models\VisaService::DEFAULT_IMAGE)">
     <section class="relative isolate overflow-hidden bg-emerald-950 text-white" aria-labelledby="visa-index-heading">
         <img src="{{ asset(\App\Models\VisaService::DEFAULT_IMAGE) }}" alt="" width="1800" height="1000" fetchpriority="high" class="absolute inset-0 h-full w-full object-cover opacity-45">
         <div class="absolute inset-0 bg-linear-to-r from-emerald-950 via-emerald-950/92 to-emerald-950/35"></div>
         <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
-            <nav class="text-sm text-emerald-100/70" aria-label="{{ __('visa.breadcrumb.label') }}">
-                <ol class="flex items-center gap-2">
-                    <li><a href="{{ route('home', ['locale' => $locale]) }}" class="transition-colors hover:text-white">{{ __('visa.breadcrumb.home') }}</a></li>
-                    <li aria-hidden="true">/</li>
-                    <li class="font-semibold text-lime-200" aria-current="page">{{ __('visa.breadcrumb.index') }}</li>
-                </ol>
-            </nav>
+            <x-ui.breadcrumbs name="visa.index" :parameters="[$locale]" variant="emerald" />
 
             <div class="mt-12 max-w-3xl">
                 <p class="inline-flex items-center gap-2 text-xs font-bold uppercase text-lime-300">

@@ -22,6 +22,8 @@
     :meta-description="\Illuminate\Support\Str::limit(strip_tags($package->description ?? ''), 155)"
     :show-floating-whatsapp="false"
     theme-class="theme-umrah"
+    breadcrumb-name="umroh.show"
+    :breadcrumb-parameters="[$locale, $package]"
     :$schemaJson
     :$canonicalUrl
     :$alternateUrls>
@@ -29,15 +31,7 @@
         <img src="{{ $package->thumbnail_url }}" alt="" width="1800" height="900" fetchpriority="high" class="absolute inset-0 h-full w-full object-cover opacity-35">
         <div class="absolute inset-0 bg-linear-to-r from-neutral-950 via-neutral-950/90 to-neutral-950/45"></div>
         <div class="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-18 lg:px-8 lg:py-22">
-            <nav class="text-sm text-neutral-400" aria-label="Breadcrumb">
-                <ol class="flex flex-wrap items-center gap-2">
-                    <li><a href="{{ route('home', ['locale' => $locale]) }}" class="hover:text-white">{{ __('umrah.show.home') }}</a></li>
-                    <li aria-hidden="true">/</li>
-                    <li><a href="{{ route('umroh.index', ['locale' => $locale]) }}" class="hover:text-white">Umrah</a></li>
-                    <li aria-hidden="true">/</li>
-                    <li class="max-w-52 truncate text-amber-200" aria-current="page">{{ $package->name }}</li>
-                </ol>
-            </nav>
+            <x-ui.breadcrumbs name="umroh.show" :parameters="[$locale, $package]" variant="dark" />
 
             <div class="mt-10 max-w-4xl">
                 <div class="flex flex-wrap items-center gap-3 text-xs font-bold uppercase text-amber-300">

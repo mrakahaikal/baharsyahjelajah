@@ -44,32 +44,14 @@
 
     $schemaJson = json_encode([
         '@context' => 'https://schema.org',
-        '@graph' => [
-            $productSchema,
-            [
-                '@type' => 'BreadcrumbList',
-                'itemListElement' => [
-                    ['@type' => 'ListItem', 'position' => 1, 'name' => 'Tour', 'item' => route('tour.index', ['locale' => $locale])],
-                    ['@type' => 'ListItem', 'position' => 2, 'name' => $tour->name, 'item' => route('tour.show', ['locale' => $locale, 'tour' => $tour->slug])],
-                    ['@type' => 'ListItem', 'position' => 3, 'name' => $package->name, 'item' => $packageUrl],
-                ],
-            ],
-        ],
+        '@graph' => [$productSchema],
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 @endphp
 
-<x-layouts::app :title="$package->name.' | '.$tour->name" :meta-description="$seoDescription" :schema-json="$schemaJson" :$canonicalUrl :$alternateUrls>
+<x-layouts::app :title="$package->name.' | '.$tour->name" :meta-description="$seoDescription" :schema-json="$schemaJson" :$canonicalUrl :$alternateUrls breadcrumb-name="tour.package.show" :breadcrumb-parameters="[$locale, $tour, $package]">
     <article class="bg-white">
         <header class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <nav class="mb-5 text-sm text-slate-500" aria-label="Breadcrumb">
-                <ol class="flex min-w-0 items-center gap-2">
-                    <li><a href="{{ route('tour.index', ['locale' => $locale]) }}" class="hover:text-slate-900">{{ __('frontend.tour.show.breadcrumb_tours') }}</a></li>
-                    <li aria-hidden="true">/</li>
-                    <li><a href="{{ route('tour.show', ['locale' => $locale, 'tour' => $tour->slug]) }}" class="hover:text-slate-900">{{ $tour->name }}</a></li>
-                    <li aria-hidden="true">/</li>
-                    <li class="truncate font-medium text-slate-900" aria-current="page">{{ $package->name }}</li>
-                </ol>
-            </nav>
+            <x-ui.breadcrumbs name="tour.package.show" :parameters="[$locale, $tour, $package]" class="mb-5" />
         </header>
 
         @if($galleryImages->isNotEmpty())
