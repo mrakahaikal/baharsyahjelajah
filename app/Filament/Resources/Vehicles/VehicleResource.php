@@ -6,6 +6,7 @@ use App\Filament\Resources\Vehicles\Pages\CreateVehicle;
 use App\Filament\Resources\Vehicles\Pages\EditVehicle;
 use App\Filament\Resources\Vehicles\Pages\ListVehicles;
 use App\Filament\Resources\Vehicles\Pages\ViewVehicle;
+use App\Filament\Resources\Vehicles\RelationManagers\RentalRatesRelationManager;
 use App\Filament\Resources\Vehicles\Schemas\VehicleForm;
 use App\Filament\Resources\Vehicles\Schemas\VehicleInfolist;
 use App\Filament\Resources\Vehicles\Tables\VehiclesTable;
@@ -50,7 +51,16 @@ class VehicleResource extends Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [RentalRatesRelationManager::class];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withCount(['rentalRates as rates_count' => fn (Builder $query) => $query->active()])
+            ->withMin([
+                'rentalRates as current_min_rate' => fn (Builder $query) => $query->active()->effectiveOn(today()),
+            ], 'price_per_day_idr');
     }
 
     public static function getPages(): array

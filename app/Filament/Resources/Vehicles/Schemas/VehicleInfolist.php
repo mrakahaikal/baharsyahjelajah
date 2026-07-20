@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Vehicles\Schemas;
 
 use App\Models\Vehicle;
 use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
@@ -84,10 +85,10 @@ class VehicleInfolist
                                         TextEntry::make('transmission')
                                             ->label('Tipe Transmisi')
                                             ->badge()
-                                            ->formatStateUsing(fn (string $state): string => match ($state) {
+                                            ->formatStateUsing(fn (?string $state): string => match ($state) {
                                                 'automatic' => 'Otomatis',
                                                 'manual' => 'Manual',
-                                                default => $state,
+                                                default => $state ?: 'Tidak ditentukan',
                                             })
                                             ->color('info'),
                                     ]),
@@ -105,15 +106,22 @@ class VehicleInfolist
                                                     ->label('WiFi')
                                                     ->boolean(),
                                             ]),
-                                        TextEntry::make('price_per_day_idr')
-                                            ->label('Sewa per Hari')
+                                        TextEntry::make('overtime_rate_idr')
+                                            ->label('Lembur per Jam')
                                             ->money('IDR', locale: 'id')
                                             ->weight(FontWeight::Bold)
                                             ->size(TextSize::Large)
                                             ->color('success'),
-                                        TextEntry::make('price_per_trip_idr')
-                                            ->label('Sewa per Trip')
-                                            ->money('IDR', locale: 'id'),
+                                        RepeatableEntry::make('rentalRates')
+                                            ->label('Tarif per Wilayah')
+                                            ->schema([
+                                                TextEntry::make('area.name')->label('Wilayah')->weight(FontWeight::Bold),
+                                                TextEntry::make('price_per_day_idr')->label('Per Hari')->money('IDR', locale: 'id'),
+                                                TextEntry::make('valid_from')->label('Mulai')->date('d M Y'),
+                                                TextEntry::make('valid_until')->label('Sampai')->date('d M Y')->placeholder('Tanpa batas'),
+                                            ])
+                                            ->columns(2)
+                                            ->columnSpanFull(),
                                     ]),
 
                                 Section::make('Status Unit')

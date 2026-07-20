@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\VehicleCategory;
 use App\Models\Vehicle;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -31,8 +32,10 @@ class VehicleFactory extends Factory
             ],
             'brand' => 'Toyota',
             'model' => 'HiAce',
+            'category' => VehicleCategory::Minibus,
             'year' => fake()->numberBetween(2021, 2026),
             'capacity_pax' => fake()->numberBetween(6, 16),
+            'capacity_label' => null,
             'capacity_luggage' => fake()->numberBetween(2, 8),
             'transmission' => fake()->randomElement(['automatic', 'manual']),
             'has_ac' => true,
@@ -41,6 +44,8 @@ class VehicleFactory extends Factory
             'is_featured' => false,
             'price_per_day_idr' => fake()->numberBetween(5, 20) * 100000,
             'price_per_trip_idr' => fake()->numberBetween(8, 30) * 100000,
+            'overtime_rate_idr' => 172500,
+            'sort_order' => fake()->numberBetween(1, 20),
             'features' => [
                 'id' => ['Sopir profesional', 'Air mineral'],
                 'en' => ['Professional driver', 'Mineral water'],

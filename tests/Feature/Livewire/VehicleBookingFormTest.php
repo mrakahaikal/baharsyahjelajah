@@ -2,6 +2,8 @@
 
 use App\Livewire\VehicleBookingForm;
 use App\Models\Vehicle;
+use App\Models\VehicleRentalArea;
+use App\Models\VehicleRentalRate;
 use App\Settings\GeneralSettings;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
@@ -14,17 +16,35 @@ beforeEach(function () {
     $settings->save();
 });
 
+function createVehicleRentalRate(Vehicle $vehicle, int $price = 750000, int $minimumDays = 1, string $slug = 'jakarta'): VehicleRentalRate
+{
+    $area = VehicleRentalArea::factory()->create([
+        'slug' => $slug,
+        'minimum_rental_days' => $minimumDays,
+    ]);
+
+    return VehicleRentalRate::factory()
+        ->for($vehicle)
+        ->for($area, 'area')
+        ->create([
+            'price_per_day_idr' => $price,
+            'valid_from' => today()->startOfYear(),
+            'valid_until' => today()->endOfYear(),
+        ]);
+}
+
 it('calculates daily rental on the server and redirects a valid request to whatsapp', function () {
     $vehicle = Vehicle::factory()->create([
         'capacity_pax' => 8,
         'price_per_day_idr' => 750000,
         'price_per_trip_idr' => 1200000,
     ]);
+    createVehicleRentalRate($vehicle);
     $pickupDate = today()->addMonth();
 
     Livewire::test(VehicleBookingForm::class, [
         'vehicle' => $vehicle,
-        'initialRate' => 'daily',
+        'initialArea' => 'jakarta',
         'initialPax' => 4,
     ])
         ->set('customerName', 'Raka Haikal')
@@ -32,7 +52,7 @@ it('calculates daily rental on the server and redirects a valid request to whats
         ->set('email', 'raka@example.com')
         ->set('pickupDate', $pickupDate->toDateString())
         ->set('pickupTime', '08:30')
-        ->set('returnDate', $pickupDate->copy()->addDays(3)->toDateString())
+        ->set('rentalDays', '3')
         ->set('pickupLocation', 'Bandara Soekarno-Hatta')
         ->set('destination', 'Bandung')
         ->set('notes', 'Membawa empat koper')
@@ -46,23 +66,27 @@ it('calculates daily rental on the server and redirects a valid request to whats
     expect(Vehicle::query()->count())->toBe(1);
 });
 
-it('treats the trip price as a starting estimate', function () {
+it('enforces the regional minimum rental duration', function () {
     $vehicle = Vehicle::factory()->create([
-        'price_per_day_idr' => 750000,
-        'price_per_trip_idr' => 1200000,
+        'capacity_pax' => 8,
     ]);
+    createVehicleRentalRate($vehicle, minimumDays: 5, slug: 'malang');
+    $pickupDate = today()->addMonth();
 
     Livewire::test(VehicleBookingForm::class, [
         'vehicle' => $vehicle,
-        'initialRate' => 'trip',
+        'initialArea' => 'malang',
     ])
-        ->assertSet('rate', 'trip')
-        ->assertSee('Harga mulai')
-        ->assertSee('Rp 1.200.000');
+        ->assertSet('rentalDays', '5')
+        ->set('pickupDate', $pickupDate->toDateString())
+        ->set('rentalDays', '4')
+        ->call('submit')
+        ->assertHasErrors(['rentalDays' => 'min']);
 });
 
 it('validates dates, route, contact details, and passenger capacity', function () {
     $vehicle = Vehicle::factory()->create(['capacity_pax' => 6]);
+    createVehicleRentalRate($vehicle, minimumDays: 5, slug: 'malang');
 
     Livewire::test(VehicleBookingForm::class, ['vehicle' => $vehicle])
         ->set('customerName', '')
@@ -70,7 +94,8 @@ it('validates dates, route, contact details, and passenger capacity', function (
         ->set('email', 'invalid-email')
         ->set('pickupDate', today()->subDay()->toDateString())
         ->set('pickupTime', 'invalid')
-        ->set('returnDate', today()->subDays(2)->toDateString())
+        ->set('area', 'malang')
+        ->set('rentalDays', '2')
         ->set('pickupLocation', '')
         ->set('destination', '')
         ->set('pax', '7')
@@ -81,7 +106,7 @@ it('validates dates, route, contact details, and passenger capacity', function (
             'email' => 'email',
             'pickupDate' => 'after_or_equal',
             'pickupTime' => 'date_format',
-            'returnDate' => 'after_or_equal',
+            'rentalDays' => 'min',
             'pickupLocation' => 'required',
             'destination' => 'required',
             'pax' => 'max',
@@ -90,6 +115,7 @@ it('validates dates, route, contact details, and passenger capacity', function (
 
 it('keeps the request form open when whatsapp is unavailable', function () {
     $vehicle = Vehicle::factory()->create();
+    createVehicleRentalRate($vehicle);
     $settings = app(GeneralSettings::class);
     $settings->whatsapp_number = '';
     $settings->save();
@@ -100,7 +126,7 @@ it('keeps the request form open when whatsapp is unavailable', function () {
         ->set('whatsappNumber', '081234567890')
         ->set('pickupDate', $pickupDate->toDateString())
         ->set('pickupTime', '08:30')
-        ->set('returnDate', $pickupDate->copy()->addDay()->toDateString())
+        ->set('rentalDays', '2')
         ->set('pickupLocation', 'Bandara')
         ->set('destination', 'Hotel')
         ->call('submit')

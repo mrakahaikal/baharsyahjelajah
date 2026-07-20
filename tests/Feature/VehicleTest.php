@@ -4,6 +4,8 @@ use App\Filament\Resources\Vehicles\VehicleResource;
 use App\Livewire\VehicleCatalog;
 use App\Models\User;
 use App\Models\Vehicle;
+use App\Models\VehicleRentalArea;
+use App\Models\VehicleRentalRate;
 use App\Settings\GeneralSettings;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
@@ -30,8 +32,11 @@ it('renders the active vehicle catalog and filters it interactively', function (
         'name' => ['id' => 'Armada Nonaktif', 'en' => 'Inactive Vehicle', 'ms' => 'Armada Tidak Aktif'],
         'is_active' => false,
     ]);
+    $area = VehicleRentalArea::factory()->create(['slug' => 'jakarta']);
+    VehicleRentalRate::factory()->for($smallVehicle)->for($area, 'area')->create();
+    VehicleRentalRate::factory()->for($largeVehicle)->for($area, 'area')->create();
 
-    get('/id/transport')
+    get('/id/transport?area=jakarta')
         ->assertSuccessful()
         ->assertSee('Armada yang tepat untuk setiap perjalanan')
         ->assertSee($smallVehicle->name)
@@ -39,10 +44,11 @@ it('renders the active vehicle catalog and filters it interactively', function (
         ->assertDontSee('Armada Nonaktif');
 
     Livewire::test(VehicleCatalog::class)
+        ->set('area', 'jakarta')
         ->set('capacity', '10')
         ->assertSee($largeVehicle->name)
         ->assertDontSee($smallVehicle->name)
-        ->set('transmission', 'automatic')
+        ->set('category', 'car')
         ->assertSee('Belum ada armada yang sesuai');
 });
 
@@ -96,6 +102,8 @@ it('shows the vehicle resource in the admin panel', function () {
 
 it('renders a dedicated booking page', function () {
     $vehicle = Vehicle::factory()->create();
+    $area = VehicleRentalArea::factory()->create(['slug' => 'jakarta']);
+    VehicleRentalRate::factory()->for($vehicle)->for($area, 'area')->create();
     $settings = app(GeneralSettings::class);
     $settings->whatsapp_number = '+6281234567890';
     $settings->save();
@@ -103,7 +111,7 @@ it('renders a dedicated booking page', function () {
     get(route('transport.booking', [
         'locale' => 'id',
         'vehicle' => $vehicle->slug,
-        'rate' => 'daily',
+        'area' => 'jakarta',
         'pax' => 4,
     ]))
         ->assertSuccessful()

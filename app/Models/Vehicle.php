@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\VehicleCategory;
 use App\Helpers\LocaleHelper;
 use App\Models\Concerns\HasLocalizedSlug;
 use App\Services\CurrencyService;
@@ -20,9 +21,10 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
 
 #[Fillable([
-    'name', 'slug', 'description', 'brand', 'model', 'year', 'capacity_pax',
+    'catalog_code', 'name', 'slug', 'description', 'brand', 'model', 'year', 'capacity_pax',
     'capacity_luggage', 'transmission', 'has_ac', 'has_wifi', 'is_active',
     'is_featured', 'price_per_day_idr', 'price_per_trip_idr', 'features', 'thumbnail',
+    'category', 'capacity_label', 'overtime_rate_idr', 'sort_order',
 ])]
 class Vehicle extends Model implements HasMedia
 {
@@ -36,8 +38,13 @@ class Vehicle extends Model implements HasMedia
     public const string MEDIA_COLLECTION_GALLERY = 'gallery';
 
     protected $attributes = [
+        'capacity_luggage' => 0,
+        'transmission' => 'automatic',
+        'has_ac' => true,
+        'has_wifi' => false,
         'is_active' => true,
         'is_featured' => false,
+        'sort_order' => 0,
     ];
 
     protected function casts(): array
@@ -50,12 +57,15 @@ class Vehicle extends Model implements HasMedia
             'has_wifi' => 'boolean',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
+            'category' => VehicleCategory::class,
             'price_per_day_idr' => 'integer',
             'price_per_trip_idr' => 'integer',
+            'overtime_rate_idr' => 'integer',
+            'sort_order' => 'integer',
         ];
     }
 
-    public array $translatable = ['name', 'slug', 'description', 'features'];
+    public array $translatable = ['name', 'slug', 'description', 'features', 'capacity_label'];
 
     public function registerMediaCollections(): void
     {
@@ -75,6 +85,11 @@ class Vehicle extends Model implements HasMedia
             ->orderByDesc('created_at');
     }
 
+    public function rentalRates(): HasMany
+    {
+        return $this->hasMany(VehicleRentalRate::class);
+    }
+
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
@@ -82,7 +97,7 @@ class Vehicle extends Model implements HasMedia
 
     public function scopeByCapacity(Builder $query, int $minimumPassengers): Builder
     {
-        return $query->where('capacity_pax', '>=', $minimumPassengers);
+        return $query->whereNotNull('capacity_pax')->where('capacity_pax', '>=', $minimumPassengers);
     }
 
     /**
@@ -150,6 +165,22 @@ class Vehicle extends Model implements HasMedia
         return app(CurrencyService::class)->convert($this->price_per_trip_idr, $currency);
     }
 
+    public function getFormattedOvertimeRateAttribute(): ?string
+    {
+        if (! $this->overtime_rate_idr) {
+            return null;
+        }
+
+        return app(CurrencyService::class)->convert($this->overtime_rate_idr, LocaleHelper::currency());
+    }
+
+    public function getCapacityDisplayAttribute(): string
+    {
+        return $this->capacity_label ?: ($this->capacity_pax
+            ? __('transport.capacity.pax', ['count' => $this->capacity_pax])
+            : __('transport.capacity.on_request'));
+    }
+
     /**
      * Badge fitur utama kendaraan untuk ditampilkan di card.
      * Contoh: ['AC', 'WiFi', 'Automatic', '7 Penumpang']
@@ -166,8 +197,11 @@ class Vehicle extends Model implements HasMedia
             $badges[] = 'WiFi';
         }
 
-        $badges[] = __('transport.transmission.'.$this->transmission);
-        $badges[] = __('transport.capacity.pax', ['count' => $this->capacity_pax]);
+        if ($this->transmission) {
+            $badges[] = __('transport.transmission.'.$this->transmission);
+        }
+
+        $badges[] = $this->capacity_display;
 
         return $badges;
     }

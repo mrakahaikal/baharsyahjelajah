@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Vehicles\Tables;
 
+use App\Enums\VehicleCategory;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
@@ -32,28 +33,17 @@ class VehiclesTable
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
-                TextColumn::make('brand')
-                    ->label('Merek')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(),
+                TextColumn::make('category')->label('Kategori')->badge()->sortable(),
                 TextColumn::make('capacity_pax')
                     ->label('Kapasitas Penumpang')
-                    ->formatStateUsing(fn (int $state): string => "{$state} Penumpang")
+                    ->formatStateUsing(fn (?int $state): string => $state ? "{$state} Penumpang" : 'Konfirmasi')
                     ->sortable(),
-                TextColumn::make('transmission')
-                    ->label('Transmisi')
-                    ->badge()
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'automatic' => 'Otomatis',
-                        'manual' => 'Manual',
-                        default => $state,
-                    })
-                    ->color('info'),
-                TextColumn::make('price_per_day_idr')
-                    ->label('Tarif Sewa / Hari')
+                TextColumn::make('current_min_rate')
+                    ->label('Tarif Aktif Mulai')
                     ->money('IDR', locale: 'id')
+                    ->placeholder('Belum ada tarif')
                     ->sortable(),
+                TextColumn::make('rates_count')->label('Tarif Aktif')->suffix(' wilayah')->sortable(),
                 IconColumn::make('is_featured')
                     ->label('Unggulan')
                     ->boolean()
@@ -69,13 +59,7 @@ class VehiclesTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('transmission')
-                    ->label('Transmisi')
-                    ->options([
-                        'automatic' => 'Otomatis',
-                        'manual' => 'Manual',
-                    ])
-                    ->native(false),
+                SelectFilter::make('category')->label('Kategori')->options(VehicleCategory::class)->native(false),
                 SelectFilter::make('is_active')
                     ->label('Status Katalog')
                     ->options([

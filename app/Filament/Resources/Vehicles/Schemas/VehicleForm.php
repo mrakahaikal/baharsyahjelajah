@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Vehicles\Schemas;
 
+use App\Enums\VehicleCategory;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TagsInput;
@@ -59,18 +60,30 @@ class VehicleForm
                                     ->placeholder('Ketik fitur (misal: Airbags, JBL Audio) lalu tekan enter')
                                     ->helperText('Daftar kelengkapan fitur opsional kendaraan.')
                                     ->columnSpanFull(),
+                                TextInput::make('capacity_label')
+                                    ->label('Label Kapasitas')
+                                    ->placeholder('Contoh: 14+1 seat')
+                                    ->helperText('Opsional, digunakan bila format kapasitas perlu penjelasan khusus.'),
                             ]),
-                        Grid::make(3)->schema([
+                        Grid::make(4)->schema([
+                            TextInput::make('catalog_code')
+                                ->label('Kode Katalog')
+                                ->required()
+                                ->unique(ignoreRecord: true)
+                                ->maxLength(100),
+                            Select::make('category')
+                                ->label('Kategori')
+                                ->options(VehicleCategory::class)
+                                ->required()
+                                ->native(false),
                             TextInput::make('brand')
                                 ->label('Merek')
                                 ->placeholder('Contoh: Toyota')
-                                ->required()
                                 ->maxLength(100)
                                 ->prefixIcon('lucide-tag'),
                             TextInput::make('model')
                                 ->label('Model / Seri')
                                 ->placeholder('Contoh: Alphard G')
-                                ->required()
                                 ->maxLength(100)
                                 ->prefixIcon('lucide-settings'),
                             TextInput::make('year')
@@ -95,7 +108,6 @@ class VehicleForm
                                 ->placeholder('Contoh: 7')
                                 ->numeric()
                                 ->suffix('Orang')
-                                ->required()
                                 ->prefixIcon('lucide-users')
                                 ->helperText('Maksimal jumlah penumpang.'),
                             TextInput::make('capacity_luggage')
@@ -112,8 +124,7 @@ class VehicleForm
                                     'automatic' => 'Otomatis',
                                     'manual' => 'Manual',
                                 ])
-                                ->default('automatic')
-                                ->required()
+                                ->placeholder('Tidak ditentukan')
                                 ->prefixIcon('lucide-activity')
                                 ->native(false)
                                 ->helperText('Pilih sistem transmisi kendaraan.'),
@@ -130,31 +141,17 @@ class VehicleForm
                         ]),
                     ]),
 
-                Section::make('Harga & Media')
-                    ->description('Atur tarif sewa per hari, per trip, foto utama, dan status penampilan katalog.')
+                Section::make('Tarif, Media & Status')
+                    ->description('Tarif utama dikelola per wilayah melalui tab Tarif Sewa setelah kendaraan disimpan.')
                     ->icon('lucide-banknote')
                     ->columnSpanFull()
                     ->schema([
-                        Grid::make(2)->schema([
-                            TextInput::make('price_per_day_idr')
-                                ->label('Harga Sewa per Hari')
-                                ->placeholder('Contoh: 1500000')
-                                ->numeric()
-                                ->minValue(0)
-                                ->requiredWithout('price_per_trip_idr')
-                                ->prefix('Rp')
-                                ->prefixIcon('lucide-banknote')
-                                ->helperText('Biaya sewa untuk penggunaan harian.'),
-                            TextInput::make('price_per_trip_idr')
-                                ->label('Harga Sewa per Trip')
-                                ->placeholder('Contoh: 800000')
-                                ->numeric()
-                                ->minValue(0)
-                                ->requiredWithout('price_per_day_idr')
-                                ->prefix('Rp')
-                                ->prefixIcon('lucide-banknote')
-                                ->helperText('Biaya sewa untuk satu kali perjalanan.'),
-                        ]),
+                        TextInput::make('overtime_rate_idr')
+                            ->label('Tarif Lembur per Jam')
+                            ->numeric()
+                            ->minValue(0)
+                            ->prefix('Rp')
+                            ->helperText('Kosongkan bila lembur harus dikonfirmasi kepada admin.'),
                         SpatieMediaLibraryFileUpload::make('cover')
                             ->label('Foto Utama Kendaraan')
                             ->collection('cover')
@@ -173,7 +170,7 @@ class VehicleForm
                             ->imageEditor()
                             ->helperText('Kumpulan foto interior & eksterior kendaraan (JPG, PNG, WebP rasio 4:3 maks 5MB).')
                             ->columnSpanFull(),
-                        Grid::make(2)->schema([
+                        Grid::make(3)->schema([
                             Toggle::make('is_active')
                                 ->label('Tampilkan di Katalog')
                                 ->default(true)
@@ -182,6 +179,11 @@ class VehicleForm
                                 ->label('Armada Unggulan')
                                 ->default(false)
                                 ->inline(false),
+                            TextInput::make('sort_order')
+                                ->label('Urutan Katalog')
+                                ->numeric()
+                                ->minValue(0)
+                                ->default(0),
                         ]),
                     ]),
             ]);

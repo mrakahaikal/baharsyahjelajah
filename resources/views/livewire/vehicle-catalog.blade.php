@@ -15,7 +15,13 @@
         </details>
 
         <div class="mb-5 flex flex-col gap-3 border-b border-slate-200 pb-4 sm:flex-row sm:items-center sm:justify-between">
-            <p class="text-sm font-semibold text-slate-600">{{ __('transport.index.results', ['count' => $vehicles->total()]) }}</p>
+            <p class="text-sm font-semibold text-slate-600">
+                @if($this->selectedArea)
+                    {{ __('transport.index.results_in_area', ['count' => $vehicles->total(), 'area' => $this->selectedArea->name]) }}
+                @else
+                    {{ __('transport.index.choose_area_hint') }}
+                @endif
+            </p>
             <label class="flex items-center gap-2 text-xs font-bold uppercase text-slate-500">
                 {{ __('transport.index.sort') }}
                 <select wire:model.live="sort" class="min-h-10 rounded-lg border border-slate-200 bg-white px-3 text-sm font-semibold normal-case text-slate-800 outline-none focus:border-blue-600">
@@ -26,10 +32,16 @@
         </div>
 
         <div wire:loading.class="opacity-50" class="transition-opacity">
-            @if($vehicles->isNotEmpty())
+            @if(! $this->selectedArea)
+                <div class="border-y border-slate-200 py-16 text-center">
+                    <x-lucide-map-pinned class="mx-auto h-9 w-9 text-blue-500" aria-hidden="true" />
+                    <h2 class="mt-4 font-extrabold text-slate-950">{{ __('transport.index.choose_area_title') }}</h2>
+                    <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">{{ __('transport.index.choose_area_text') }}</p>
+                </div>
+            @elseif($vehicles->isNotEmpty())
                 <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
                     @foreach($vehicles as $vehicle)
-                        <x-ui.vehicle-card :$vehicle :locale="app()->getLocale()" wire:key="vehicle-{{ $vehicle->id }}" />
+                        <x-ui.vehicle-card :$vehicle :locale="app()->getLocale()" :area="$this->selectedArea" wire:key="vehicle-{{ $vehicle->id }}" />
                     @endforeach
                 </div>
                 <div class="mt-8">{{ $vehicles->links() }}</div>
