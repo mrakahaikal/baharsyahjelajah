@@ -2,7 +2,7 @@
     <label class="block">
         <span class="text-xs font-bold uppercase text-slate-500">{{ __('transport.index.area') }}</span>
         <select wire:model.live="area" class="mt-2 min-h-11 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-800 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/15">
-            <option value="">{{ __('transport.index.area_placeholder') }}</option>
+            <option value="">{{ __('transport.index.all_areas') }}</option>
             @foreach($this->areas as $rentalArea)
                 <option value="{{ $rentalArea->slug }}">{{ $rentalArea->name }} · {{ trans_choice('transport.index.minimum_days', $rentalArea->minimum_rental_days, ['count' => $rentalArea->minimum_rental_days]) }}</option>
             @endforeach

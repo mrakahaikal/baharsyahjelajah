@@ -44,7 +44,7 @@ class ItemsRelationManager extends RelationManager
                                 ->options(VisaItemType::class)
                                 ->default(VisaItemType::Requirement->value)
                                 ->live()
-                                ->afterStateUpdated(fn (Set $set, ?string $state): mixed => $set('is_mandatory', $state === VisaItemType::Requirement->value))
+                                ->afterStateUpdated(fn (Set $set, $state): mixed => $set('is_mandatory', $state === VisaItemType::Requirement->value))
                                 ->native(false)
                                 ->required(),
                             Toggle::make('is_mandatory')

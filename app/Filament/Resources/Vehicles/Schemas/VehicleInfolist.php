@@ -145,6 +145,7 @@ class VehicleInfolist
                             ])
                             ->columnSpan(1),
                     ]),
-            ]);
+            ])
+            ->columns(1);
     }
 }

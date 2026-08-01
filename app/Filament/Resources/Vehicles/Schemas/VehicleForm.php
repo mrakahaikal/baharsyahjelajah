@@ -186,6 +186,7 @@ class VehicleForm
                                 ->default(0),
                         ]),
                     ]),
-            ]);
+            ])
+            ->columns(1);
     }
 }

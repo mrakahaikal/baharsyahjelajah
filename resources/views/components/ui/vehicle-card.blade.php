@@ -4,7 +4,8 @@
     $slug = $vehicle->getTranslation('slug', $locale, false) ?: $vehicle->getTranslation('slug', 'id', false) ?: $vehicle->getKey();
     $areaSlug = $area?->slug;
     $rate = $vehicle->relationLoaded('rentalRates') ? $vehicle->rentalRates->first() : null;
-    $showUrl = route('transport.show', ['locale' => $locale, 'vehicle' => $slug, 'area' => $areaSlug]);
+    $showUrl = route('transport.show', array_filter(['locale' => $locale, 'vehicle' => $slug, 'area' => $areaSlug]));
+    $price = $area ? $rate?->formatted_price : $vehicle->formatted_starting_price;
 @endphp
 
 <article {{ $attributes->merge(['class' => 'group flex h-full flex-col overflow-hidden rounded-lg border border-slate-200 bg-white transition duration-300 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-xl hover:shadow-slate-900/8']) }}>
@@ -19,22 +20,22 @@
     </a>
 
     <div class="flex flex-1 flex-col p-5">
-        <p class="text-xs font-bold uppercase text-blue-600">{{ $vehicle->category ? __('transport.category.'.$vehicle->category->value) : __('transport.card.select_area') }}@if($area) · {{ $area->name }}@endif</p>
+        <p class="text-xs font-bold uppercase text-blue-600">{{ $vehicle->category ? __('transport.category.'.$vehicle->category->value) : __('transport.index.all_categories') }}@if($area) · {{ $area->name }}@endif</p>
         <h3 class="mt-2 text-lg font-extrabold text-slate-950 transition-colors group-hover:text-blue-700"><a href="{{ $showUrl }}">{{ $vehicle->name }}</a></h3>
 
         <div class="mt-4 grid grid-cols-2 divide-x divide-slate-200 border-y border-slate-100 py-3 text-center text-xs text-slate-600">
             <span class="flex flex-col items-center gap-1"><x-lucide-users class="h-4 w-4 text-blue-600" />{{ $vehicle->capacity_display }}</span>
-            <span class="flex flex-col items-center gap-1"><x-lucide-clock-3 class="h-4 w-4 text-blue-600" />{{ $area ? trans_choice('transport.index.minimum_days', $area->minimum_rental_days, ['count' => $area->minimum_rental_days]) : __('transport.card.select_area') }}</span>
+            <span class="flex flex-col items-center gap-1"><x-lucide-clock-3 class="h-4 w-4 text-blue-600" />{{ $area ? trans_choice('transport.index.minimum_days', $area->minimum_rental_days, ['count' => $area->minimum_rental_days]) : trans_choice('transport.card.available_areas', $vehicle->available_area_count ?? 0, ['count' => $vehicle->available_area_count ?? 0]) }}</span>
         </div>
 
         <div class="mt-4 grid gap-2 text-sm">
-            <div class="flex items-baseline justify-between gap-3"><span class="text-slate-500">{{ __('transport.card.daily') }}</span><strong class="text-slate-950">{{ $rate?->formatted_price ?? __('transport.card.select_area') }}</strong></div>
+            <div class="flex items-baseline justify-between gap-3"><span class="text-slate-500">{{ $area ? __('transport.card.daily') : __('transport.card.starting_price') }}</span><strong class="text-slate-950">{{ $price ?? __('transport.booking.on_request') }}</strong></div>
         </div>
 
         <div class="mt-auto flex gap-2 pt-5">
             <x-ui::button tag="a" href="{{ $showUrl }}" variant="outline" class="flex-1 hover:border-blue-600 hover:text-blue-600">{{ __('transport.card.details') }}</x-ui::button>
             @unless($compact)
-                <x-ui::button tag="a" href="{{ route('transport.booking', ['locale' => $locale, 'vehicle' => $slug, 'area' => $areaSlug]) }}" class="flex-1 hover:bg-blue-600">{{ __('transport.card.book') }}</x-ui::button>
+                <x-ui::button tag="a" href="{{ route('transport.booking', array_filter(['locale' => $locale, 'vehicle' => $slug, 'area' => $areaSlug])) }}" class="flex-1 hover:bg-blue-600">{{ __('transport.card.book') }}</x-ui::button>
             @endunless
         </div>
     </div>

@@ -50,6 +50,8 @@ class HomeController extends Controller
         $featuredVehicles = Vehicle::query()
             ->active()
             ->with('media')
+            ->availableForRentalOn(today())
+            ->withEffectiveRentalSummary(today())
             ->orderByDesc('is_featured')
             ->orderBy('capacity_pax')
             ->limit(3)

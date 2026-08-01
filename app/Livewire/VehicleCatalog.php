@@ -40,7 +40,7 @@ class VehicleCatalog extends Component
 
     public function resetFilters(): void
     {
-        $this->reset('capacity', 'category');
+        $this->reset('area', 'capacity', 'category');
         $this->sort = 'featured';
         $this->resetPage();
         unset($this->vehicles);
@@ -63,16 +63,18 @@ class VehicleCatalog extends Component
     public function vehicles(): LengthAwarePaginator
     {
         $area = $this->selectedArea;
+        $date = today();
 
         return Vehicle::query()
             ->active()
             ->with('media')
+            ->availableForRentalOn($date)
             ->when(
                 $area,
                 fn (Builder $query) => $query
-                    ->whereHas('rentalRates', fn (Builder $query) => $query->active()->effectiveOn(today())->forArea($area))
-                    ->with(['rentalRates' => fn ($query) => $query->active()->effectiveOn(today())->forArea($area)->latest('valid_from')]),
-                fn (Builder $query) => $query->whereRaw('1 = 0'),
+                    ->whereHas('rentalRates', fn (Builder $rateQuery) => $rateQuery->active()->effectiveOn($date)->forArea($area))
+                    ->with(['rentalRates' => fn ($rateQuery) => $rateQuery->active()->effectiveOn($date)->forArea($area)->latest('valid_from')]),
+                fn (Builder $query) => $query->withEffectiveRentalSummary($date),
             )
             ->when(ctype_digit($this->capacity) && (int) $this->capacity > 0, fn (Builder $query) => $query->byCapacity((int) $this->capacity))
             ->when(in_array($this->category, array_column(VehicleCategory::cases(), 'value'), true), fn (Builder $query) => $query->where('category', $this->category))

@@ -15,6 +15,7 @@
                 <label class="block sm:col-span-2">
                     <span class="text-sm font-bold text-slate-700">{{ __('transport.booking.area') }}</span>
                     <select wire:model.live="area" class="mt-2 min-h-11 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/15">
+                        <option value="">{{ __('transport.booking.area_placeholder') }}</option>
                         @foreach($this->availableAreas as $rentalArea)<option value="{{ $rentalArea->slug }}">{{ $rentalArea->name }} · {{ trans_choice('transport.index.minimum_days', $rentalArea->minimum_rental_days, ['count' => $rentalArea->minimum_rental_days]) }}</option>@endforeach
                     </select>
                     @error('area')<span class="mt-1 block text-xs font-semibold text-red-600">{{ $message }}</span>@enderror

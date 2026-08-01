@@ -121,7 +121,7 @@ it('keeps the request form open when whatsapp is unavailable', function () {
     $settings->save();
     $pickupDate = today()->addMonth();
 
-    Livewire::test(VehicleBookingForm::class, ['vehicle' => $vehicle])
+    Livewire::test(VehicleBookingForm::class, ['vehicle' => $vehicle, 'initialArea' => 'jakarta'])
         ->set('customerName', 'Raka Haikal')
         ->set('whatsappNumber', '081234567890')
         ->set('pickupDate', $pickupDate->toDateString())
@@ -131,4 +131,18 @@ it('keeps the request form open when whatsapp is unavailable', function () {
         ->set('destination', 'Hotel')
         ->call('submit')
         ->assertHasErrors(['service']);
+});
+
+it('requires a valid available area before calculating a rental rate', function () {
+    $vehicle = Vehicle::factory()->create();
+    createVehicleRentalRate($vehicle, slug: 'jakarta');
+
+    Livewire::test(VehicleBookingForm::class, ['vehicle' => $vehicle])
+        ->assertSet('area', '')
+        ->assertSee(__('transport.booking.on_request'))
+        ->call('submit')
+        ->assertHasErrors(['area' => 'required'])
+        ->set('area', 'bandung')
+        ->call('submit')
+        ->assertHasErrors(['area' => 'in']);
 });

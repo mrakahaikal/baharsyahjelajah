@@ -52,6 +52,73 @@ it('renders the active vehicle catalog and filters it interactively', function (
         ->assertSee('Belum ada armada yang sesuai');
 });
 
+it('shows a single all-area catalog with the current starting price', function () {
+    $vehicle = Vehicle::factory()->create([
+        'name' => ['id' => 'HiAce Antar Kota', 'en' => 'Intercity HiAce', 'ms' => 'HiAce Antara Bandar'],
+        'slug' => ['id' => 'hiace-antar-kota', 'en' => 'intercity-hiace', 'ms' => 'hiace-antara-bandar'],
+        'capacity_pax' => 14,
+    ]);
+    $otherVehicle = Vehicle::factory()->create([
+        'name' => ['id' => 'Innova Jakarta', 'en' => 'Jakarta Innova', 'ms' => 'Innova Jakarta'],
+        'capacity_pax' => 6,
+    ]);
+    $expiredVehicle = Vehicle::factory()->create([
+        'name' => ['id' => 'Armada Kadaluarsa', 'en' => 'Expired Vehicle', 'ms' => 'Armada Tamat'],
+    ]);
+    $jakarta = VehicleRentalArea::factory()->create(['slug' => 'jakarta', 'minimum_rental_days' => 1]);
+    $bandung = VehicleRentalArea::factory()->create(['slug' => 'bandung', 'minimum_rental_days' => 3]);
+
+    VehicleRentalRate::factory()->for($vehicle)->for($jakarta, 'area')->create(['price_per_day_idr' => 900000]);
+    VehicleRentalRate::factory()->for($vehicle)->for($bandung, 'area')->create(['price_per_day_idr' => 700000]);
+    VehicleRentalRate::factory()->for($otherVehicle)->for($jakarta, 'area')->create(['price_per_day_idr' => 800000]);
+    VehicleRentalRate::factory()->for($expiredVehicle)->for($jakarta, 'area')->create([
+        'valid_from' => today()->subMonth(),
+        'valid_until' => today()->subDay(),
+    ]);
+
+    get('/id/transport')
+        ->assertSuccessful()
+        ->assertSee($vehicle->name)
+        ->assertSee($otherVehicle->name)
+        ->assertDontSee($expiredVehicle->name)
+        ->assertSee('Rp 700.000')
+        ->assertSee('Tersedia di 2 wilayah');
+
+    Livewire::test(VehicleCatalog::class)
+        ->set('area', 'bandung')
+        ->assertSee($vehicle->name)
+        ->assertDontSee($otherVehicle->name)
+        ->assertSee('Rp 700.000')
+        ->assertSee('Minimum 3 hari')
+        ->call('resetFilters')
+        ->assertSee($vehicle->name)
+        ->assertSee($otherVehicle->name);
+});
+
+it('shows every effective regional rate until an area is selected', function () {
+    $vehicle = Vehicle::factory()->create([
+        'name' => ['id' => 'HiAce Wisata', 'en' => 'Touring HiAce', 'ms' => 'HiAce Lawatan'],
+        'slug' => ['id' => 'hiace-wisata', 'en' => 'touring-hiace', 'ms' => 'hiace-lawatan'],
+    ]);
+    $jakarta = VehicleRentalArea::factory()->create(['slug' => 'jakarta', 'minimum_rental_days' => 1]);
+    $malang = VehicleRentalArea::factory()->create(['slug' => 'malang', 'minimum_rental_days' => 5]);
+    VehicleRentalRate::factory()->for($vehicle)->for($jakarta, 'area')->create(['price_per_day_idr' => 850000]);
+    VehicleRentalRate::factory()->for($vehicle)->for($malang, 'area')->create(['price_per_day_idr' => 1250000]);
+
+    get('/id/transport/hiace-wisata')
+        ->assertSuccessful()
+        ->assertSee($jakarta->name)
+        ->assertSee($malang->name)
+        ->assertSee('Rp 850.000')
+        ->assertSee('Rp 1.250.000')
+        ->assertSee(route('transport.booking', ['locale' => 'id', 'vehicle' => 'hiace-wisata']), false);
+
+    get('/id/transport/hiace-wisata?area=malang')
+        ->assertSuccessful()
+        ->assertSee('Minimum 5 hari')
+        ->assertSee(route('transport.booking', ['locale' => 'id', 'vehicle' => 'hiace-wisata', 'area' => 'malang']), false);
+});
+
 it('renders localized details and normalizes legacy slugs', function () {
     $vehicle = Vehicle::factory()->create([
         'name' => ['id' => 'Toyota Alphard', 'en' => 'Toyota Alphard', 'ms' => 'Toyota Alphard'],

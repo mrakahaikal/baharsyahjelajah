@@ -6,6 +6,7 @@ use App\Enums\VehicleCategory;
 use App\Helpers\LocaleHelper;
 use App\Models\Concerns\HasLocalizedSlug;
 use App\Services\CurrencyService;
+use Carbon\CarbonInterface;
 use Database\Factories\VehicleFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
@@ -100,6 +101,25 @@ class Vehicle extends Model implements HasMedia
         return $query->whereNotNull('capacity_pax')->where('capacity_pax', '>=', $minimumPassengers);
     }
 
+    public function scopeAvailableForRentalOn(Builder $query, CarbonInterface|string $date): Builder
+    {
+        return $query->whereHas(
+            'rentalRates',
+            fn (Builder $rateQuery) => $rateQuery->active()->effectiveOn($date),
+        );
+    }
+
+    public function scopeWithEffectiveRentalSummary(Builder $query, CarbonInterface|string $date): Builder
+    {
+        return $query
+            ->withMin([
+                'rentalRates as starting_price_idr' => fn (Builder $rateQuery) => $rateQuery->active()->effectiveOn($date),
+            ], 'price_per_day_idr')
+            ->withCount([
+                'rentalRates as available_area_count' => fn (Builder $rateQuery) => $rateQuery->active()->effectiveOn($date),
+            ]);
+    }
+
     /**
      * Nama lengkap kendaraan.
      * Contoh: "Toyota Alphard 2023"
@@ -152,6 +172,17 @@ class Vehicle extends Model implements HasMedia
         $currency = LocaleHelper::currency();
 
         return app(CurrencyService::class)->convert($this->price_per_day_idr, $currency);
+    }
+
+    public function getFormattedStartingPriceAttribute(): ?string
+    {
+        $startingPrice = $this->getAttribute('starting_price_idr');
+
+        if (! $startingPrice) {
+            return null;
+        }
+
+        return app(CurrencyService::class)->convert((int) $startingPrice, LocaleHelper::currency());
     }
 
     public function getFormattedPricePerTripAttribute(): ?string

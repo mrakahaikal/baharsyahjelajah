@@ -2,7 +2,7 @@
     $locale = app()->getLocale();
     $slug = $vehicle->getTranslation('slug', $locale, false) ?: $vehicle->getTranslation('slug', 'id', false) ?: $vehicle->getKey();
     $galleryUrls = collect([$vehicle->thumbnail_url])->merge($vehicle->galleryUrls())->unique()->values();
-    $selectedRate = $vehicle->rentalRates->first();
+    $selectedRate = $selectedArea ? $vehicle->rentalRates->firstWhere('vehicle_rental_area_id', $selectedArea->id) : null;
 @endphp
 
 <x-layouts::app
@@ -18,7 +18,7 @@
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <x-ui.breadcrumbs name="transport.show" :parameters="[$locale, $vehicle]" variant="dark" class="mb-5" />
 
-            <a href="{{ route('transport.index', ['locale' => $locale, 'area' => $selectedArea?->slug]) }}" class="inline-flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-white">
+            <a href="{{ route('transport.index', array_filter(['locale' => $locale, 'area' => $selectedArea?->slug])) }}" class="inline-flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-white">
                 <x-lucide-arrow-left class="h-4 w-4" />{{ __('transport.show.back') }}
             </a>
         </div>
@@ -110,13 +110,25 @@
                             <a href="{{ route('transport.show', ['locale' => $locale, 'vehicle' => $slug, 'area' => $area->slug]) }}" class="rounded-md border px-3 py-2 text-xs font-bold transition {{ $selectedArea?->is($area) ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-200 bg-white text-slate-600 hover:border-blue-300' }}">{{ $area->name }}</a>
                         @endforeach
                     </div>
-                    <div class="mt-5 divide-y divide-slate-200 border-y border-slate-200">
-                        <div class="flex items-end justify-between gap-4 py-4"><span class="text-sm text-slate-500">{{ __('transport.show.daily') }}</span><strong class="text-lg text-slate-950">{{ $selectedRate?->formatted_price ?? __('transport.booking.on_request') }}</strong></div>
-                        @if($selectedArea)<div class="flex items-end justify-between gap-4 py-4"><span class="text-sm text-slate-500">{{ __('transport.show.minimum') }}</span><strong class="text-slate-950">{{ trans_choice('transport.index.minimum_days', $selectedArea->minimum_rental_days, ['count' => $selectedArea->minimum_rental_days]) }}</strong></div>@endif
-                        @if($vehicle->formatted_overtime_rate)<div class="flex items-end justify-between gap-4 py-4"><span class="text-sm text-slate-500">{{ __('transport.show.overtime') }}</span><strong class="text-slate-950">{{ $vehicle->formatted_overtime_rate }}/{{ __('transport.show.hour') }}</strong></div>@endif
-                    </div>
+                    @if($selectedArea)
+                        <div class="mt-5 divide-y divide-slate-200 border-y border-slate-200">
+                            <div class="flex items-end justify-between gap-4 py-4"><span class="text-sm text-slate-500">{{ __('transport.show.daily') }}</span><strong class="text-lg text-slate-950">{{ $selectedRate?->formatted_price ?? __('transport.booking.on_request') }}</strong></div>
+                            <div class="flex items-end justify-between gap-4 py-4"><span class="text-sm text-slate-500">{{ __('transport.show.minimum') }}</span><strong class="text-slate-950">{{ trans_choice('transport.index.minimum_days', $selectedArea->minimum_rental_days, ['count' => $selectedArea->minimum_rental_days]) }}</strong></div>
+                            @if($vehicle->formatted_overtime_rate)<div class="flex items-end justify-between gap-4 py-4"><span class="text-sm text-slate-500">{{ __('transport.show.overtime') }}</span><strong class="text-slate-950">{{ $vehicle->formatted_overtime_rate }}/{{ __('transport.show.hour') }}</strong></div>@endif
+                        </div>
+                    @else
+                        <div class="mt-5 divide-y divide-slate-200 border-y border-slate-200">
+                            @foreach($vehicle->rentalRates as $rentalRate)
+                                <a href="{{ route('transport.show', ['locale' => $locale, 'vehicle' => $slug, 'area' => $rentalRate->area->slug]) }}" class="flex items-center justify-between gap-4 py-4 transition hover:text-blue-700">
+                                    <span><span class="block text-sm font-bold text-slate-800">{{ $rentalRate->area->name }}</span><span class="mt-1 block text-xs text-slate-500">{{ trans_choice('transport.index.minimum_days', $rentalRate->area->minimum_rental_days, ['count' => $rentalRate->area->minimum_rental_days]) }}</span></span>
+                                    <strong class="text-right text-sm text-slate-950">{{ $rentalRate->formatted_price }}</strong>
+                                </a>
+                            @endforeach
+                            @if($vehicle->formatted_overtime_rate)<div class="flex items-end justify-between gap-4 py-4"><span class="text-sm text-slate-500">{{ __('transport.show.overtime') }}</span><strong class="text-slate-950">{{ $vehicle->formatted_overtime_rate }}/{{ __('transport.show.hour') }}</strong></div>@endif
+                        </div>
+                    @endif
                     <p class="mt-4 text-xs leading-5 text-slate-500">{{ __('transport.show.pricing_note') }}</p>
-                    <x-ui::button tag="a" href="{{ route('transport.booking', ['locale' => $locale, 'vehicle' => $slug, 'area' => $selectedArea?->slug]) }}" size="lg" class="mt-6 w-full hover:bg-blue-600">{{ __('transport.show.book') }}<x-slot:trailingIcon><x-lucide-arrow-right /></x-slot:trailingIcon></x-ui::button>
+                    <x-ui::button tag="a" href="{{ route('transport.booking', array_filter(['locale' => $locale, 'vehicle' => $slug, 'area' => $selectedArea?->slug])) }}" size="lg" class="mt-6 w-full hover:bg-blue-600">{{ __('transport.show.book') }}<x-slot:trailingIcon><x-lucide-arrow-right /></x-slot:trailingIcon></x-ui::button>
                     <p class="mt-4 flex gap-2 text-xs leading-5 text-slate-500"><x-lucide-info class="mt-0.5 h-4 w-4 shrink-0 text-blue-600" />{{ __('transport.show.availability') }}</p>
                 </div>
             </aside>

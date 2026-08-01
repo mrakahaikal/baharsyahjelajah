@@ -39,18 +39,19 @@ class VehicleController extends Controller
             ], 301);
         }
 
+        $date = today();
         $availableAreas = VehicleRentalArea::query()
             ->active()
-            ->whereHas('rates', fn (Builder $query) => $query->active()->effectiveOn(today())->where('vehicle_id', $vehicle->id))
+            ->whereHas('rates', fn (Builder $query) => $query->active()->effectiveOn($date)->where('vehicle_id', $vehicle->id))
             ->orderBy('sort_order')
             ->get();
-        $selectedArea = $availableAreas->firstWhere('slug', request()->query('area')) ?? $availableAreas->first();
+        $selectedArea = $availableAreas->firstWhere('slug', request()->string('area')->toString());
 
         $vehicle->load([
             'media',
             'galleries',
             'testimonials',
-            'rentalRates' => fn ($query) => $query->active()->effectiveOn(today())->when($selectedArea, fn ($query) => $query->forArea($selectedArea))->latest('valid_from'),
+            'rentalRates' => fn ($rateQuery) => $rateQuery->active()->effectiveOn($date)->with('area')->orderBy('price_per_day_idr'),
         ]);
         $rentalTerms = VehicleRentalTerm::query()
             ->active()
@@ -61,11 +62,16 @@ class VehicleController extends Controller
         $relatedVehicles = Vehicle::query()
             ->active()
             ->whereKeyNot($vehicle->id)
-            ->when($selectedArea, fn (Builder $query) => $query->whereHas('rentalRates', fn (Builder $query) => $query->active()->effectiveOn(today())->forArea($selectedArea)))
+            ->availableForRentalOn($date)
             ->with([
                 'media',
-                'rentalRates' => fn ($query) => $query->active()->effectiveOn(today())->when($selectedArea, fn ($query) => $query->forArea($selectedArea)),
+                'rentalRates' => fn ($rateQuery) => $rateQuery->active()->effectiveOn($date)->when($selectedArea, fn ($areaRateQuery) => $areaRateQuery->forArea($selectedArea)),
             ])
+            ->when(
+                $selectedArea,
+                fn (Builder $query) => $query->whereHas('rentalRates', fn (Builder $rateQuery) => $rateQuery->active()->effectiveOn($date)->forArea($selectedArea)),
+                fn (Builder $query) => $query->withEffectiveRentalSummary($date),
+            )
             ->orderByDesc('is_featured')
             ->orderBy('capacity_pax')
             ->limit(3)
@@ -74,6 +80,7 @@ class VehicleController extends Controller
         $alternateUrls = $this->alternateUrls($vehicle, 'transport.show');
         $canonicalUrl = $alternateUrls[$locale];
         $startingPrice = $vehicle->rentalRates->min('price_per_day_idr') ?? 0;
+        $highestPrice = $vehicle->rentalRates->max('price_per_day_idr') ?? 0;
         $schemaJson = json_encode([
             '@context' => 'https://schema.org',
             '@type' => 'Product',
@@ -86,6 +93,8 @@ class VehicleController extends Controller
                 'url' => $canonicalUrl,
                 'priceCurrency' => 'IDR',
                 'lowPrice' => $startingPrice,
+                'highPrice' => $highestPrice,
+                'offerCount' => $vehicle->rentalRates->count(),
                 'availability' => 'https://schema.org/InStock',
             ],
         ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);

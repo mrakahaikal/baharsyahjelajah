@@ -50,7 +50,7 @@ class VehicleBookingForm extends Component
         $this->vehicleId = $vehicle->id;
         $this->area = $this->availableAreas->contains('slug', $initialArea)
             ? (string) $initialArea
-            : (string) ($this->availableAreas->first()?->slug ?? '');
+            : '';
         $maximumPax = $vehicle->capacity_pax ?: 100;
         $this->pax = (string) max(1, min($initialPax, $maximumPax));
         $this->rentalDays = (string) ($this->selectedArea?->minimum_rental_days ?? 1);
@@ -65,6 +65,15 @@ class VehicleBookingForm extends Component
         }
     }
 
+    public function updatedPickupDate(): void
+    {
+        unset($this->availableAreas, $this->selectedArea, $this->selectedRate);
+
+        if (! $this->availableAreas->contains('slug', $this->area)) {
+            $this->area = '';
+        }
+    }
+
     #[Computed]
     public function vehicle(): Vehicle
     {
@@ -75,9 +84,11 @@ class VehicleBookingForm extends Component
     #[Computed]
     public function availableAreas(): Collection
     {
+        $date = $this->validPickupDate() ?? today();
+
         return VehicleRentalArea::query()
             ->active()
-            ->whereHas('rates', fn (Builder $query) => $query->active()->where('vehicle_id', $this->vehicleId))
+            ->whereHas('rates', fn (Builder $query) => $query->active()->effectiveOn($date)->where('vehicle_id', $this->vehicleId))
             ->orderBy('sort_order')
             ->get();
     }
@@ -91,12 +102,16 @@ class VehicleBookingForm extends Component
     #[Computed]
     public function selectedRate(): ?VehicleRentalRate
     {
+        if (! $this->selectedArea) {
+            return null;
+        }
+
         $date = $this->validPickupDate() ?? today();
 
         return $this->vehicle->rentalRates()
             ->active()
             ->effectiveOn($date)
-            ->when($this->selectedArea, fn ($query) => $query->forArea($this->selectedArea))
+            ->forArea($this->selectedArea)
             ->latest('valid_from')
             ->first();
     }
@@ -191,7 +206,7 @@ class VehicleBookingForm extends Component
             'email' => ['nullable', 'email', 'max:150'],
             'area' => [
                 'required',
-                Rule::exists('vehicle_rental_areas', 'slug')->where(fn ($query) => $query->where('is_active', true)),
+                Rule::in($this->availableAreas->pluck('slug')->all()),
             ],
             'pickupDate' => ['required', 'date', 'after_or_equal:today'],
             'pickupTime' => ['required', 'date_format:H:i'],

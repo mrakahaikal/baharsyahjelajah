@@ -40,3 +40,16 @@ it('falls back missing log viewer translations to English only', function (): vo
         ]))->toBe('Logs from 1 July to 16 July')
         ->and(Lang::get('application.missing.translation'))->toBe('application.missing.translation');
 });
+
+it('provides the transport catalog labels in every supported locale', function (string $locale): void {
+    app()->setLocale($locale);
+
+    foreach ([
+        'transport.index.all_areas',
+        'transport.card.starting_price',
+        'transport.card.available_areas',
+        'transport.booking.area_placeholder',
+    ] as $key) {
+        expect(Lang::get($key))->not->toBe($key);
+    }
+})->with(['id', 'en', 'ms']);
