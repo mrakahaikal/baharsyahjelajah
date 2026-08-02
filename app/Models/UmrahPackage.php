@@ -134,9 +134,22 @@ class UmrahPackage extends Model implements HasMedia
             return $this->thumbnail;
         }
 
-        return $this->thumbnail
-            ? Storage::url($this->thumbnail)
-            : 'https://images.unsplash.com/photo-1564767609342-620cb19b2357?auto=format&fit=crop&q=80&w=800';
+        if ($this->thumbnail) {
+            return Storage::url($this->thumbnail);
+        }
+
+        $fallbacks = [
+            'https://images.unsplash.com/photo-1693590614566-1d3ea9ef32f7?auto=format&fit=crop&q=80&w=800', // Makkah Kaaba
+            'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&q=80&w=800', // Madinah
+            'https://images.unsplash.com/photo-1738987196288-f8245e601c42?auto=format&fit=crop&q=80&w=800', // Makkah Clock Tower
+            'https://images.unsplash.com/photo-1570206916435-745fc43bb9c1?auto=format&fit=crop&q=80&w=800', // Mosque praying
+            'https://images.unsplash.com/photo-1596125160970-6f02eeba00d3?auto=format&fit=crop&q=80&w=800', // Quran
+            'https://images.unsplash.com/photo-1589827577276-65d717348780?auto=format&fit=crop&q=80&w=800', // Masjidil Haram worshippers
+        ];
+
+        $index = ($this->id ?? 0) % count($fallbacks);
+
+        return $fallbacks[$index];
     }
 
     public function getFormattedPriceAttribute(): string

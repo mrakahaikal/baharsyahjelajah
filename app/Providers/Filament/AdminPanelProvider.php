@@ -33,6 +33,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo(asset('images/logo-baharsyah-jelajah.webp'))
             ->darkMode(false)
             ->login()
+            ->databaseNotifications()
             ->colors([
                 'primary' => Color::Violet,
             ])
