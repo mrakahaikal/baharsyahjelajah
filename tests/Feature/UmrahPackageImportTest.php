@@ -5,6 +5,8 @@ use App\Models\UmrahPackage;
 use App\Services\UmrahPackageImporter;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+use function Pest\Laravel\get;
+
 uses(RefreshDatabase::class);
 
 it('imports valid CSV data successfully and resolves destinations', function () {
@@ -77,4 +79,16 @@ it('rejects CSV with validation errors and rolls back database', function () {
 
     // Database should have 0 UmrahPackages because of transaction rollback
     expect(UmrahPackage::query()->count())->toBe(0);
+});
+
+it('allows downloading the CSV template file', function () {
+    $response = get(route('admin.umrah-packages.download-template'));
+
+    $response->assertSuccessful()
+        ->assertHeader('Content-Type', 'text/csv; charset=UTF-8')
+        ->assertHeader('Content-Disposition', 'attachment; filename="template-import-umroh.csv"');
+
+    expect($response->streamedContent())
+        ->toContain('name_id,name_en,name_ms')
+        ->toContain('Umrah Reguler Awal Musim');
 });
