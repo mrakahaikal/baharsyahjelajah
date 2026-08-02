@@ -16,9 +16,9 @@ it('imports valid CSV data successfully and resolves destinations', function () 
     ]);
 
     // 2. Prepare valid CSV content
-    $csvContent = "name_id,name_en,name_ms,package_type,duration_days,price_idr,airline,hotel_makkah,hotel_makkah_stars,hotel_madinah,hotel_madinah_stars,visa_included,handling_included,destinations,is_active,is_featured,description_id,description_en,description_ms\n";
-    $csvContent .= "\"Reguler Awal Musim\",\"Early Season Regular\",\"Reguler Awal Musim\",\"regular\",9,\"Rp 28.500.000\",\"Saudia\",\"Hilton\",5,\"Pullman\",5,1,1,\"Makkah\",1,0,\"Detail ID\",\"Detail EN\",\"Detail MS\"\n";
-    $csvContent .= "\"Istimewa Akhir Musim\",\"Bespoke Late Season\",\"Istimewa Akhir Musim\",\"istimewa\",12,\"Rp 35.000.000\",\"Garuda\",\"Fairmont\",5,\"Oberoi\",5,true,true,\"Makkah\",true,true,\"Detail 2 ID\",\"Detail 2 EN\",\"Detail 2 MS\"\n";
+    $csvContent = "name_id,name_en,name_ms,package_type,duration_days,price_idr,airline,hotel_makkah,hotel_makkah_stars,hotel_madinah,hotel_madinah_stars,visa_included,handling_included,destinations,is_active,is_featured,room_prices,private_prices,description_id,description_en,description_ms\n";
+    $csvContent .= "\"Reguler Awal Musim\",\"Early Season Regular\",\"Reguler Awal Musim\",\"regular\",9,\"Rp 28.500.000\",\"Saudia\",\"Hilton\",5,\"Pullman\",5,1,1,\"Makkah\",1,0,\"quad:28500000;triple:30000000;double:32000000\",\"\",\"Detail ID\",\"Detail EN\",\"Detail MS\"\n";
+    $csvContent .= "\"Istimewa Akhir Musim\",\"Bespoke Late Season\",\"Istimewa Akhir Musim\",\"istimewa\",12,\"Rp 35.000.000\",\"Garuda\",\"Fairmont\",5,\"Oberoi\",5,true,true,\"Makkah\",true,true,\"\",\"6:4:14000000;6:6:13000000;9:4:16000000\",\"Detail 2 ID\",\"Detail 2 EN\",\"Detail 2 MS\"\n";
 
     $tempFile = tempnam(sys_get_temp_dir(), 'csv_import_test');
     file_put_contents($tempFile, $csvContent);
@@ -46,12 +46,18 @@ it('imports valid CSV data successfully and resolves destinations', function () 
         ->and($package1->airline)->toBe('Saudia')
         ->and($package1->hotel_makkah_stars)->toBe(5)
         ->and($package1->visa_included)->toBeTrue()
-        ->and($package1->destinations->pluck('id'))->toContain($destination->id);
+        ->and($package1->destinations->pluck('id'))->toContain($destination->id)
+        ->and($package1->prices()->count())->toBe(3)
+        ->and($package1->prices()->where('room_type', 'quad')->value('price_idr'))->toBe(28500000)
+        ->and($package1->prices()->where('room_type', 'double')->value('price_idr'))->toBe(32000000);
 
     $package2 = UmrahPackage::query()->where('slug->id', 'istimewa-akhir-musim')->first();
     expect($package2)->not->toBeNull()
         ->and($package2->package_type)->toBe('private') // 'istimewa' mapped to 'private'
-        ->and($package2->is_featured)->toBeTrue();
+        ->and($package2->is_featured)->toBeTrue()
+        ->and($package2->privatePrices()->count())->toBe(3)
+        ->and($package2->privatePrices()->where('duration_nights', 6)->where('pax', 4)->value('price_idr'))->toBe(14000000)
+        ->and($package2->privatePrices()->where('duration_nights', 9)->where('pax', 4)->value('price_idr'))->toBe(16000000);
 });
 
 it('rejects CSV with validation errors and rolls back database', function () {

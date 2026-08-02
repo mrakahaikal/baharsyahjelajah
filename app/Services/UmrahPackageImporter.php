@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\Destination;
 use App\Models\UmrahPackage;
+use App\Models\UmrahPackagePrice;
+use App\Models\UmrahPackagePrivatePrice;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -167,6 +169,52 @@ class UmrahPackageImporter
                     $package->destinations()->sync($destinationIds);
                 }
 
+                // Hapus harga lama (idempotent)
+                $package->prices()->delete();
+                $package->privatePrices()->delete();
+
+                // Impor Room Prices (Untuk Paket Reguler/Plus/VIP)
+                $roomPricesStr = $rowData['room_prices'] ?? null;
+                if (! empty($roomPricesStr)) {
+                    $roomPrices = array_map('trim', explode(';', $roomPricesStr));
+                    foreach ($roomPrices as $item) {
+                        $parts = array_map('trim', explode(':', $item));
+                        if (count($parts) === 2) {
+                            $roomType = strtolower($parts[0]);
+                            $priceIdr = $this->parseInteger($parts[1]);
+                            if ($roomType && $priceIdr > 0) {
+                                UmrahPackagePrice::query()->create([
+                                    'umrah_package_id' => $package->id,
+                                    'room_type' => $roomType,
+                                    'price_idr' => $priceIdr,
+                                ]);
+                            }
+                        }
+                    }
+                }
+
+                // Impor Private Prices (Untuk Paket Istimewa)
+                $privatePricesStr = $rowData['private_prices'] ?? null;
+                if (! empty($privatePricesStr)) {
+                    $privatePrices = array_map('trim', explode(';', $privatePricesStr));
+                    foreach ($privatePrices as $item) {
+                        $parts = array_map('trim', explode(':', $item));
+                        if (count($parts) === 3) {
+                            $durationNights = $this->parseInteger($parts[0]);
+                            $pax = $this->parseInteger($parts[1]);
+                            $priceIdr = $this->parseInteger($parts[2]);
+                            if ($durationNights > 0 && $pax > 0 && $priceIdr > 0) {
+                                UmrahPackagePrivatePrice::query()->create([
+                                    'umrah_package_id' => $package->id,
+                                    'duration_nights' => $durationNights,
+                                    'pax' => $pax,
+                                    'price_idr' => $priceIdr,
+                                ]);
+                            }
+                        }
+                    }
+                }
+
                 $successCount++;
             }
 
@@ -231,6 +279,8 @@ class UmrahPackageImporter
             'is_active' => ['is_active', 'active', 'aktif'],
             'is_featured' => ['is_featured', 'featured', 'unggulan'],
             'destinations' => ['destinations', 'destinasi'],
+            'room_prices' => ['room_prices', 'room prices', 'harga kamar', 'harga_kamar'],
+            'private_prices' => ['private_prices', 'private prices', 'harga privat', 'harga_privat', 'harga_istimewa'],
         ];
 
         foreach ($headers as $index => $header) {

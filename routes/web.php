@@ -203,6 +203,7 @@ Route::get('/templates/umrah-package-csv', function () {
         'hotel_madinah', 'hotel_madinah_stars',
         'visa_included', 'handling_included',
         'destinations', 'is_active', 'is_featured',
+        'room_prices', 'private_prices',
         'description_id', 'description_en', 'description_ms',
     ];
 
@@ -213,6 +214,7 @@ Route::get('/templates/umrah-package-csv', function () {
         'Pullman Madinah', '5',
         '1', '1',
         'Makkah, Madinah', '1', '0',
+        'quad:28500000;triple:30000000;double:32000000', '6:4:14000000;6:6:13000000;9:4:16000000',
         'Deskripsi lengkap paket dalam bahasa Indonesia.', 'Complete description of the package in English.', 'Deskripsi lengkap pakej dalam bahasa Melayu.',
     ];
 
