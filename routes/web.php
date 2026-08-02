@@ -187,45 +187,4 @@ Route::group([
     })->name('contact.index');
 });
 
-Route::get('/templates/umrah-package-csv', function () {
-    $headers = [
-        'Content-Type' => 'text/csv',
-        'Content-Disposition' => 'attachment; filename="template-import-umroh.csv"',
-        'Pragma' => 'no-cache',
-        'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
-        'Expires' => '0',
-    ];
-
-    $columns = [
-        'name_id', 'name_en', 'name_ms',
-        'package_type', 'duration_days', 'price_idr',
-        'airline', 'hotel_makkah', 'hotel_makkah_stars',
-        'hotel_madinah', 'hotel_madinah_stars',
-        'visa_included', 'handling_included',
-        'destinations', 'is_active', 'is_featured',
-        'room_prices', 'private_prices',
-        'description_id', 'description_en', 'description_ms',
-    ];
-
-    $sampleRow = [
-        'Umrah Reguler Awal Musim', 'Early Season Regular Umrah', 'Umrah Reguler Awal Musim',
-        'regular', '9', '28500000',
-        'Saudia', 'Hilton Makkah', '5',
-        'Pullman Madinah', '5',
-        '1', '1',
-        'Makkah, Madinah', '1', '0',
-        'quad:28500000;triple:30000000;double:32000000', '6:4:14000000;6:6:13000000;9:4:16000000',
-        'Deskripsi lengkap paket dalam bahasa Indonesia.', 'Complete description of the package in English.', 'Deskripsi lengkap pakej dalam bahasa Melayu.',
-    ];
-
-    $callback = function () use ($columns, $sampleRow) {
-        $file = fopen('php://output', 'w');
-        fputcsv($file, $columns);
-        fputcsv($file, $sampleRow);
-        fclose($file);
-    };
-
-    return response()->stream($callback, 200, $headers);
-})->name('admin.umrah-packages.download-template');
-
 Route::view('/design-system', 'pages.design-system')->name('design-system.index');
