@@ -86,6 +86,40 @@
                         </dl>
                     </section>
 
+                    @if($package->package_type === 'private' && $package->privatePrices->isNotEmpty())
+                        <section aria-labelledby="private-prices-heading">
+                            <h2 id="private-prices-heading" class="text-2xl font-extrabold text-neutral-950">{{ __('umrah.show.private_prices_title') }}</h2>
+                            <p class="mt-1 text-sm text-stone-500">{{ __('umrah.show.private_prices_subtitle') }}</p>
+                            <div class="mt-5 overflow-x-auto rounded-lg border border-stone-200 bg-white">
+                                <table class="w-full border-collapse text-left text-sm">
+                                    <thead>
+                                        <tr class="border-b border-stone-200 bg-stone-50 text-xs font-bold uppercase text-stone-500">
+                                            <th class="px-6 py-3">{{ __('umrah.show.pax_count') }}</th>
+                                            @foreach($package->privatePrices->pluck('duration_nights')->unique()->sort() as $nights)
+                                                <th class="px-6 py-3 text-right">{{ __('umrah.show.nights', ['count' => $nights]) }}</th>
+                                            @endforeach
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-stone-200">
+                                        @foreach($package->privatePrices->pluck('pax')->unique()->sort() as $pax)
+                                            <tr>
+                                                <td class="px-6 py-4 font-semibold text-neutral-950">{{ __('umrah.show.pax_label', ['count' => $pax]) }}</td>
+                                                @foreach($package->privatePrices->pluck('duration_nights')->unique()->sort() as $nights)
+                                                    @php
+                                                        $price = $package->privatePrices->first(fn ($p) => $p->duration_nights === $nights && $p->pax === $pax);
+                                                    @endphp
+                                                    <td class="px-6 py-4 text-right text-amber-700 font-bold">
+                                                        {{ $price ? $price->formatted_price : '-' }}
+                                                    </td>
+                                                @endforeach
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    @endif
+
                     @if($package->prices->isNotEmpty())
                         <section aria-labelledby="room-prices-heading">
                             <h2 id="room-prices-heading" class="text-2xl font-extrabold text-neutral-950">{{ __('umrah.show.prices_title') }}</h2>

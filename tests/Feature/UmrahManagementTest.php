@@ -4,6 +4,7 @@ use App\Models\UmrahDeparturePrice;
 use App\Models\UmrahPackage;
 use App\Models\UmrahPackageItinerary;
 use App\Models\UmrahPackagePrice;
+use App\Models\UmrahPackagePrivatePrice;
 use Database\Seeders\UmrahPackageSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -89,7 +90,8 @@ it('seeds the umrah catalog idempotently', function () {
     $this->seed(UmrahPackageSeeder::class);
     $this->seed(UmrahPackageSeeder::class);
 
-    expect(UmrahPackage::query()->count())->toBe(3)
+    expect(UmrahPackage::query()->count())->toBe(4)
         ->and(UmrahPackagePrice::query()->count())->toBe(12)
-        ->and(UmrahPackageItinerary::query()->count())->toBe(12);
+        ->and(UmrahPackagePrivatePrice::query()->count())->toBe(8)
+        ->and(UmrahPackageItinerary::query()->count())->toBe(16);
 });

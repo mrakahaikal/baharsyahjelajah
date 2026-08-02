@@ -11,6 +11,7 @@ enum UmrahPackageType: string implements HasLabel
     case Plus = 'plus';
     case Vip = 'vip';
     case Ramadan = 'ramadan';
+    case Private = 'private';
 
     public function getLabel(): string|Htmlable|null
     {
@@ -19,6 +20,7 @@ enum UmrahPackageType: string implements HasLabel
             self::Plus => 'Plus',
             self::Vip => 'VIP',
             self::Ramadan => 'Ramadan',
+            self::Private => 'Private',
         };
     }
 }

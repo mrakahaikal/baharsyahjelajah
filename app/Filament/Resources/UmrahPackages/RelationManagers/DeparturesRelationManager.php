@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\UmrahPackages\RelationManagers;
 
 use App\Enums\UmrahDepartureStatus;
+use App\Enums\UmrahPackageType;
 use App\Enums\UmrahRoomType;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
@@ -21,12 +22,18 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class DeparturesRelationManager extends RelationManager
 {
     protected static string $relationship = 'departures';
 
     protected static ?string $title = 'Jadwal Keberangkatan';
+
+    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
+    {
+        return $ownerRecord->package_type !== UmrahPackageType::Private;
+    }
 
     public function form(Schema $schema): Schema
     {

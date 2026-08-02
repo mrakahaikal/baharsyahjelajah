@@ -89,6 +89,11 @@ class UmrahPackage extends Model implements HasMedia
         return $this->hasMany(UmrahPackagePrice::class)->orderBy('price_idr');
     }
 
+    public function privatePrices(): HasMany
+    {
+        return $this->hasMany(UmrahPackagePrivatePrice::class)->orderBy('price_idr');
+    }
+
     public function itineraries(): HasMany
     {
         return $this->hasMany(UmrahPackageItinerary::class)->orderBy('day_number');
@@ -143,6 +148,14 @@ class UmrahPackage extends Model implements HasMedia
 
     public function getStartingPriceIdrAttribute(): int
     {
+        if ($this->package_type === 'private') {
+            if ($this->relationLoaded('privatePrices')) {
+                return (int) ($this->privatePrices->min('price_idr') ?? $this->price_idr ?? 0);
+            }
+
+            return (int) ($this->privatePrices()->min('price_idr') ?? $this->price_idr ?? 0);
+        }
+
         if ($this->relationLoaded('prices')) {
             return (int) ($this->prices->min('price_idr') ?? $this->price_idr ?? 0);
         }

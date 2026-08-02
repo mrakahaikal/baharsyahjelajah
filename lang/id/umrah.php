@@ -21,6 +21,7 @@ return [
         'plus' => 'Plus',
         'vip' => 'VIP',
         'ramadan' => 'Ramadan',
+        'private' => 'Private',
     ],
     'catalog' => [
         'eyebrow' => 'Pilihan paket',
@@ -31,6 +32,7 @@ return [
     'card' => [
         'days' => ':count hari',
         'departure' => 'Keberangkatan terdekat',
+        'private_departure' => 'Private (Bebas pilih tanggal)',
         'no_departure' => 'Jadwal dikonfirmasi tim',
         'airline' => 'Maskapai',
         'hotel' => 'Hotel',
@@ -56,6 +58,11 @@ return [
         'makkah_hotel' => 'Hotel Makkah',
         'madinah_hotel' => 'Hotel Madinah',
         'prices_title' => 'Pilihan kamar dan harga',
+        'private_prices_title' => 'Daftar Harga Private (per Pax)',
+        'private_prices_subtitle' => 'Harga per pax | Kamar Quad (1 kamar = 4 pax)',
+        'pax_count' => 'Jumlah Peserta',
+        'nights' => ':count Malam',
+        'pax_label' => ':count Pax',
         'departures_title' => 'Jadwal keberangkatan',
         'return_date' => 'Kembali :date',
         'remaining_quota' => ':count kursi tersisa',
@@ -83,7 +90,10 @@ return [
         'cta' => 'Konsultasikan via WhatsApp',
         'schedule_confirmation' => 'Jadwal dikonfirmasi tim',
         'room_confirmation' => 'Kamar dikonfirmasi tim',
+        'duration_label' => 'Durasi perjalanan',
+        'pax_private_label' => 'Pilihan peserta',
         'whatsapp_message' => "Assalamu'alaikum, saya ingin berkonsultasi mengenai paket Umrah :package.\n\nJadwal: :departure\nKamar: :room\nJumlah jamaah: :pax\nHarga per jamaah: :price\nEstimasi total: :total\n\nMohon informasi ketersediaan dan prosedur pendaftarannya.",
+        'whatsapp_private_message' => "Assalamu'alaikum, saya ingin berkonsultasi mengenai paket Umrah Private :package.\n\nDurasi: :duration Malam\nJumlah peserta: :pax Pax\nHarga per pax: :price\nEstimasi total: :total\n\nMohon informasi ketersediaan dan prosedur pendaftarannya.",
     ],
     'empty' => [
         'title' => 'Paket belum tersedia',

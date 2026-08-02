@@ -43,7 +43,9 @@
                     {{ __('umrah.card.departure') }}
                 </dt>
                 <dd class="text-right font-semibold">
-                    @if($departure)
+                    @if($package->package_type === 'private')
+                        {{ __('umrah.card.private_departure') }}
+                    @elseif($departure)
                         <time datetime="{{ $departure->departure_date->toDateString() }}">{{ $departure->departure_date->translatedFormat('d M Y') }}</time>
                     @else
                         {{ __('umrah.card.no_departure') }}

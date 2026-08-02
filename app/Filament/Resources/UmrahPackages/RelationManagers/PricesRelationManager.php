@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\UmrahPackages\RelationManagers;
 
+use App\Enums\UmrahPackageType;
 use App\Enums\UmrahRoomType;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
@@ -15,6 +16,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rules\Unique;
 
 class PricesRelationManager extends RelationManager
@@ -22,6 +24,11 @@ class PricesRelationManager extends RelationManager
     protected static string $relationship = 'prices';
 
     protected static ?string $title = 'Harga Tipe Kamar';
+
+    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
+    {
+        return $ownerRecord->package_type !== UmrahPackageType::Private;
+    }
 
     public function form(Schema $schema): Schema
     {

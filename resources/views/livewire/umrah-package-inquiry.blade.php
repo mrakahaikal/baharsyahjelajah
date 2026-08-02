@@ -8,39 +8,63 @@
     </div>
 
     <div class="grid gap-5 p-5 sm:p-6">
-        <label class="grid gap-2 text-sm font-semibold text-neutral-800">
-            {{ __('umrah.inquiry.departure_label') }}
-            <select wire:model.live="selectedDepartureId" class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2.5 text-sm text-neutral-950 focus:border-amber-600 focus:outline-2 focus:outline-offset-2 focus:outline-amber-600">
-                <option value="">{{ __('umrah.inquiry.schedule_confirmation') }}</option>
-                @foreach($this->availableDepartures as $departure)
-                    <option value="{{ $departure->id }}">
-                        {{ $departure->departure_date->translatedFormat('d M Y') }} · {{ __('umrah.inquiry.remaining_quota', ['count' => $departure->quota_sisa]) }}
-                    </option>
-                @endforeach
-            </select>
-        </label>
+        @if($this->package->package_type === 'private')
+            @if($this->availableDurations->isNotEmpty())
+                <label class="grid gap-2 text-sm font-semibold text-neutral-800">
+                    {{ __('umrah.inquiry.duration_label') }}
+                    <select wire:model.live="selectedDurationNights" class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2.5 text-sm text-neutral-950 focus:border-amber-600 focus:outline-2 focus:outline-offset-2 focus:outline-amber-600">
+                        @foreach($this->availableDurations as $duration)
+                            <option value="{{ $duration }}">{{ __('umrah.show.nights', ['count' => $duration]) }}</option>
+                        @endforeach
+                    </select>
+                </label>
+            @endif
 
-        @if($this->package->prices->isNotEmpty())
+            @if($this->availablePaxOptions->isNotEmpty())
+                <label class="grid gap-2 text-sm font-semibold text-neutral-800">
+                    {{ __('umrah.inquiry.pax_private_label') }}
+                    <select wire:model.live="selectedPax" class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2.5 text-sm text-neutral-950 focus:border-amber-600 focus:outline-2 focus:outline-offset-2 focus:outline-amber-600">
+                        @foreach($this->availablePaxOptions as $option)
+                            <option value="{{ $option }}">{{ __('umrah.show.pax_label', ['count' => $option]) }}</option>
+                        @endforeach
+                    </select>
+                </label>
+            @endif
+        @else
             <label class="grid gap-2 text-sm font-semibold text-neutral-800">
-                {{ __('umrah.inquiry.room_label') }}
-                <select wire:model.live="selectedPackagePriceId" class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2.5 text-sm text-neutral-950 focus:border-amber-600 focus:outline-2 focus:outline-offset-2 focus:outline-amber-600">
-                    @foreach($this->package->prices as $price)
-                        <option value="{{ $price->id }}">{{ __('umrah.rooms.'.$price->room_type) }}</option>
+                {{ __('umrah.inquiry.departure_label') }}
+                <select wire:model.live="selectedDepartureId" class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2.5 text-sm text-neutral-950 focus:border-amber-600 focus:outline-2 focus:outline-offset-2 focus:outline-amber-600">
+                    <option value="">{{ __('umrah.inquiry.schedule_confirmation') }}</option>
+                    @foreach($this->availableDepartures as $departure)
+                        <option value="{{ $departure->id }}">
+                            {{ $departure->departure_date->translatedFormat('d M Y') }} · {{ __('umrah.inquiry.remaining_quota', ['count' => $departure->quota_sisa]) }}
+                        </option>
                     @endforeach
                 </select>
             </label>
-        @endif
 
-        <label class="grid gap-2 text-sm font-semibold text-neutral-800">
-            {{ __('umrah.inquiry.pax_label') }}
-            <div class="relative">
-                <x-lucide-users class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" aria-hidden="true" />
-                <input wire:model.live.debounce.400ms="pax" type="number" min="1" max="{{ $this->maximumPax }}" inputmode="numeric" class="w-full rounded-lg border bg-white py-2.5 pl-10 pr-3 text-sm text-neutral-950 focus:outline-2 focus:outline-offset-2 {{ $validPax ? 'border-stone-300 focus:border-amber-600 focus:outline-amber-600' : 'border-red-300 focus:border-red-600 focus:outline-red-600' }}">
-            </div>
-            @unless($validPax)
-                <span class="text-xs font-medium text-red-700">{{ __('umrah.inquiry.pax_error', ['max' => $this->maximumPax]) }}</span>
-            @endunless
-        </label>
+            @if($this->package->prices->isNotEmpty())
+                <label class="grid gap-2 text-sm font-semibold text-neutral-800">
+                    {{ __('umrah.inquiry.room_label') }}
+                    <select wire:model.live="selectedPackagePriceId" class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2.5 text-sm text-neutral-950 focus:border-amber-600 focus:outline-2 focus:outline-offset-2 focus:outline-amber-600">
+                        @foreach($this->package->prices as $price)
+                            <option value="{{ $price->id }}">{{ __('umrah.rooms.'.$price->room_type) }}</option>
+                        @endforeach
+                    </select>
+                </label>
+            @endif
+
+            <label class="grid gap-2 text-sm font-semibold text-neutral-800">
+                {{ __('umrah.inquiry.pax_label') }}
+                <div class="relative">
+                    <x-lucide-users class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" aria-hidden="true" />
+                    <input wire:model.live.debounce.400ms="pax" type="number" min="1" max="{{ $this->maximumPax }}" inputmode="numeric" class="w-full rounded-lg border bg-white py-2.5 pl-10 pr-3 text-sm text-neutral-950 focus:outline-2 focus:outline-offset-2 {{ $validPax ? 'border-stone-300 focus:border-amber-600 focus:outline-amber-600' : 'border-red-300 focus:border-red-600 focus:outline-red-600' }}">
+                </div>
+                @unless($validPax)
+                    <span class="text-xs font-medium text-red-700">{{ __('umrah.inquiry.pax_error', ['max' => $this->maximumPax]) }}</span>
+                @endunless
+            </label>
+        @endif
     </div>
 
     <div class="border-t border-stone-100 bg-stone-50 p-5 sm:p-6" wire:loading.class="opacity-60">

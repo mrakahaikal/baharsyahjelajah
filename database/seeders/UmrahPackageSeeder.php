@@ -7,6 +7,7 @@ use App\Models\UmrahInclude;
 use App\Models\UmrahPackage;
 use App\Models\UmrahPackageItinerary;
 use App\Models\UmrahPackagePrice;
+use App\Models\UmrahPackagePrivatePrice;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -45,7 +46,7 @@ class UmrahPackageSeeder extends Seeder
                     ['departure_date' => '2026-09-10', 'return_date' => '2026-09-18', 'quota_total' => 40, 'quota_booked' => 5, 'status' => 'open'],
                 ],
                 'includes' => [
-                    ['type' => 'include', 'item' => ['id' => 'Tiket pesawat PP Banjarmasin – Jeddah (Garuda Indonesia)', 'en' => 'Round-trip airfare Banjarmasin – Jeddah (Garuda Indonesia)', 'ms' => 'Tiket kapal terbang PP Banjarmasin – Jeddah (Garuda Indonesia)'], 'sort_order' => 1],
+                    ['type' => 'include', 'item' => ['id' => 'Tiket pesawat PP Pembimbing – Jeddah (Garuda Indonesia)', 'en' => 'Round-trip airfare Banjarmasin – Jeddah (Garuda Indonesia)', 'ms' => 'Tiket kapal terbang PP Banjarmasin – Jeddah (Garuda Indonesia)'], 'sort_order' => 1],
                     ['type' => 'include', 'item' => ['id' => 'Akomodasi hotel bintang 3 di Makkah & Madinah', 'en' => '3-star hotel accommodation in Makkah & Madinah', 'ms' => 'Penginapan hotel bintang 3 di Makkah & Madinah'], 'sort_order' => 2],
                     ['type' => 'include', 'item' => ['id' => 'Visa Umrah', 'en' => 'Umrah Visa', 'ms' => 'Visa Umrah'], 'sort_order' => 3],
                     ['type' => 'include', 'item' => ['id' => 'Transportasi darat selama di Arab Saudi', 'en' => 'Ground transportation in Saudi Arabia', 'ms' => 'Pengangkutan darat semasa di Arab Saudi'], 'sort_order' => 4],
@@ -138,26 +139,76 @@ class UmrahPackageSeeder extends Seeder
                     ['type' => 'exclude', 'item' => ['id' => 'Pengeluaran pribadi', 'en' => 'Personal expenses', 'ms' => 'Perbelanjaan peribadi'], 'sort_order' => 10],
                 ],
             ],
+            [
+                'name' => [
+                    'id' => 'Private Al Mukhtara Al Gharbi + Fajar Badea 4',
+                    'en' => 'Private Al Mukhtara Al Gharbi + Fajar Badea 4',
+                    'ms' => 'Private Al Mukhtara Al Gharbi + Fajar Badea 4',
+                ],
+                'description' => [
+                    'id' => 'Paket Umrah Private dengan kombinasi Hotel Al Mukhtara Al Gharbi di Madinah dan Hotel Fajar Badea 4 di Makkah. Paket ini hemat namun tetap memberikan fasilitas lengkap dan kenyamanan prima bagi jamaah.',
+                    'en' => 'Private Umrah package combining Al Mukhtara Al Gharbi Hotel in Madinah and Fajar Badea 4 Hotel in Makkah. A budget-friendly package offering complete facilities.',
+                    'ms' => 'Pakej Umrah Private menggabungkan Hotel Al Mukhtara Al Gharbi di Madinah dan Hotel Fajar Badea 4 di Makkah. Pakej bajet yang menawarkan kemudahan lengkap.',
+                ],
+                'package_type' => 'private',
+                'duration_days' => 9,
+                'price_idr' => 14007000,
+                'airline' => null,
+                'hotel_makkah' => 'Fajar Badea 4',
+                'hotel_makkah_stars' => 3,
+                'hotel_madinah' => 'Al Mukhtara Al Gharbi',
+                'hotel_madinah_stars' => 3,
+                'room_type' => null,
+                'visa_included' => true,
+                'handling_included' => true,
+                'is_active' => true,
+                'thumbnail' => 'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=800&q=80&fit=crop',
+                'departures' => [],
+                'includes' => [
+                    ['type' => 'include', 'item' => ['id' => 'Visa Umrah & Siskopatuh', 'en' => 'Umrah Visa & Siskopatuh', 'ms' => 'Visa Umrah & Siskopatuh'], 'sort_order' => 1],
+                    ['type' => 'include', 'item' => ['id' => 'Muthawif berpengalaman (5 kali)', 'en' => 'Experienced Muthawif (5 times)', 'ms' => 'Muthawif berpengalaman (5 kali)'], 'sort_order' => 2],
+                    ['type' => 'include', 'item' => ['id' => 'Handling bandara & hotel', 'en' => 'Airport & hotel handling', 'ms' => 'Pengurusan lapangan terbang & hotel'], 'sort_order' => 3],
+                    ['type' => 'include', 'item' => ['id' => 'Air Zam Zam 5 liter per pax', 'en' => 'Zam Zam water 5 liters per pax', 'ms' => 'Air Zam Zam 5 liter setiap pax'], 'sort_order' => 4],
+                    ['type' => 'include', 'item' => ['id' => 'Perlengkapan Umrah lengkap', 'en' => 'Complete Umrah equipment', 'ms' => 'Perlengkapan Umrah lengkap'], 'sort_order' => 5],
+                    ['type' => 'include', 'item' => ['id' => 'Transportasi AC: Staria (4 pax) / Hiace (8 pax)', 'en' => 'AC Transport: Staria (4 pax) / Hiace (8 pax)', 'ms' => 'Pengangkutan AC: Staria (4 pax) / Hiace (8 pax)'], 'sort_order' => 6],
+                    ['type' => 'exclude', 'item' => ['id' => 'Tiket pesawat', 'en' => 'Flight tickets', 'ms' => 'Tiket penerbangan'], 'sort_order' => 7],
+                    ['type' => 'exclude', 'item' => ['id' => 'Pembuatan paspor', 'en' => 'Passport issuance', 'ms' => 'Pembuatan pasport'], 'sort_order' => 8],
+                    ['type' => 'exclude', 'item' => ['id' => 'Vaksinasi meningitis', 'en' => 'Meningitis vaccination', 'ms' => 'Vaksinasi meningitis'], 'sort_order' => 9],
+                    ['type' => 'exclude', 'item' => ['id' => 'Pengeluaran pribadi', 'en' => 'Personal expenses', 'ms' => 'Perbelanjaan peribadi'], 'sort_order' => 10],
+                ],
+                'private_prices' => [
+                    ['duration_nights' => 6, 'pax' => 4, 'price_idr' => 14007000],
+                    ['duration_nights' => 6, 'pax' => 8, 'price_idr' => 11937000],
+                    ['duration_nights' => 7, 'pax' => 4, 'price_idr' => 14391000],
+                    ['duration_nights' => 7, 'pax' => 8, 'price_idr' => 12321000],
+                    ['duration_nights' => 10, 'pax' => 4, 'price_idr' => 15975000],
+                    ['duration_nights' => 10, 'pax' => 8, 'price_idr' => 13905000],
+                    ['duration_nights' => 12, 'pax' => 4, 'price_idr' => 16959000],
+                    ['duration_nights' => 12, 'pax' => 8, 'price_idr' => 14889000],
+                ],
+            ],
         ];
 
         foreach ($packages as $packageIndex => $data) {
-            $departures = $data['departures'];
-            $includes = $data['includes'];
-            unset($data['departures'], $data['includes']);
+            $departures = $data['departures'] ?? [];
+            $includes = $data['includes'] ?? [];
+            $privatePrices = $data['private_prices'] ?? [];
+            unset($data['departures'], $data['includes'], $data['private_prices']);
 
             $data['slug'] = collect($data['name'])
                 ->map(fn (string $name): string => Str::slug($name))
                 ->all();
-            $data['is_featured'] = $packageIndex < 2;
+            $data['is_featured'] = $packageIndex < 4;
 
-            $package = UmrahPackage::query()->updateOrCreate(
-                ['package_type' => $data['package_type']],
-                $data,
-            );
+            $slugId = Str::slug($data['name']['id']);
+            $package = UmrahPackage::query()->where('slug->id', $slugId)->firstOrNew();
+            $package->fill($data);
+            $package->save();
 
             $package->departures()->delete();
             $package->includes()->delete();
             $package->prices()->delete();
+            $package->privatePrices()->delete();
             $package->itineraries()->delete();
 
             foreach ($departures as $departureIndex => $departure) {
@@ -178,17 +229,26 @@ class UmrahPackageSeeder extends Seeder
                 ]);
             }
 
-            foreach ([
-                'quad' => 0,
-                'triple' => 2_000_000,
-                'double' => 5_000_000,
-                'single' => 11_000_000,
-            ] as $roomType => $surcharge) {
-                UmrahPackagePrice::query()->create([
-                    'umrah_package_id' => $package->id,
-                    'room_type' => $roomType,
-                    'price_idr' => $package->price_idr + $surcharge,
-                ]);
+            if ($package->package_type === 'private') {
+                foreach ($privatePrices as $privatePrice) {
+                    UmrahPackagePrivatePrice::create([
+                        'umrah_package_id' => $package->id,
+                        ...$privatePrice,
+                    ]);
+                }
+            } else {
+                foreach ([
+                    'quad' => 0,
+                    'triple' => 2_000_000,
+                    'double' => 5_000_000,
+                    'single' => 11_000_000,
+                ] as $roomType => $surcharge) {
+                    UmrahPackagePrice::query()->create([
+                        'umrah_package_id' => $package->id,
+                        'room_type' => $roomType,
+                        'price_idr' => $package->price_idr + $surcharge,
+                    ]);
+                }
             }
 
             foreach ($this->itineraries($package->duration_days) as $itinerary) {

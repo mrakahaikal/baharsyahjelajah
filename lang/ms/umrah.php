@@ -21,6 +21,7 @@ return [
         'plus' => 'Plus',
         'vip' => 'VIP',
         'ramadan' => 'Ramadan',
+        'private' => 'Private',
     ],
     'catalog' => [
         'eyebrow' => 'Pilihan pakej',
@@ -31,6 +32,7 @@ return [
     'card' => [
         'days' => ':count hari',
         'departure' => 'Tarikh berlepas terdekat',
+        'private_departure' => 'Private (Bebas pilih tarikh)',
         'no_departure' => 'Jadual disahkan oleh pasukan',
         'airline' => 'Syarikat penerbangan',
         'hotel' => 'Hotel',
@@ -56,6 +58,11 @@ return [
         'makkah_hotel' => 'Hotel Makkah',
         'madinah_hotel' => 'Hotel Madinah',
         'prices_title' => 'Pilihan bilik dan harga',
+        'private_prices_title' => 'Senarai Harga Private (setiap Pax)',
+        'private_prices_subtitle' => 'Harga setiap pax | Bilik Quad (1 bilik = 4 pax)',
+        'pax_count' => 'Jumlah Peserta',
+        'nights' => ':count Malam',
+        'pax_label' => ':count Pax',
         'departures_title' => 'Jadual berlepas',
         'return_date' => 'Kembali :date',
         'remaining_quota' => ':count tempat berbaki',
@@ -83,7 +90,10 @@ return [
         'cta' => 'Bincangkan melalui WhatsApp',
         'schedule_confirmation' => 'Jadual disahkan oleh pasukan',
         'room_confirmation' => 'Bilik disahkan oleh pasukan',
+        'duration_label' => 'Tempoh perjalanan',
+        'pax_private_label' => 'Pilihan peserta',
         'whatsapp_message' => "Assalamu'alaikum, saya ingin berbincang mengenai pakej Umrah :package.\n\nJadual: :departure\nBilik: :room\nJumlah jemaah: :pax\nHarga setiap jemaah: :price\nAnggaran jumlah: :total\n\nSila berikan maklumat ketersediaan dan pendaftaran.",
+        'whatsapp_private_message' => "Assalamu'alaikum, saya ingin berbincang mengenai pakej Umrah Private :package.\n\nTempoh: :duration Malam\nJumlah peserta: :pax Pax\nHarga setiap pax: :price\nAnggaran jumlah: :total\n\nSila berikan maklumat ketersediaan dan pendaftaran.",
     ],
     'empty' => [
         'title' => 'Pakej belum tersedia',

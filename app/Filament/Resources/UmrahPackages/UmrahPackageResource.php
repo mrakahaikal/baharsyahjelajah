@@ -53,6 +53,7 @@ class UmrahPackageResource extends Resource
     {
         return [
             RelationManagers\PricesRelationManager::class,
+            RelationManagers\PrivatePricesRelationManager::class,
             RelationManagers\DeparturesRelationManager::class,
             RelationManagers\ItinerariesRelationManager::class,
             RelationManagers\IncludesRelationManager::class,

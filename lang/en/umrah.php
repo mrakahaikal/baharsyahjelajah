@@ -21,6 +21,7 @@ return [
         'plus' => 'Plus',
         'vip' => 'VIP',
         'ramadan' => 'Ramadan',
+        'private' => 'Private',
     ],
     'catalog' => [
         'eyebrow' => 'Package selection',
@@ -31,6 +32,7 @@ return [
     'card' => [
         'days' => ':count days',
         'departure' => 'Nearest departure',
+        'private_departure' => 'Private (Choose your date)',
         'no_departure' => 'Schedule confirmed by our team',
         'airline' => 'Airline',
         'hotel' => 'Hotel',
@@ -56,6 +58,11 @@ return [
         'makkah_hotel' => 'Makkah hotel',
         'madinah_hotel' => 'Madinah hotel',
         'prices_title' => 'Room and pricing options',
+        'private_prices_title' => 'Private Price List (per Pax)',
+        'private_prices_subtitle' => 'Price per pax | Quad Room (1 room = 4 pax)',
+        'pax_count' => 'Number of Participants',
+        'nights' => ':count Nights',
+        'pax_label' => ':count Pax',
         'departures_title' => 'Departure schedules',
         'return_date' => 'Returns :date',
         'remaining_quota' => ':count seats remaining',
@@ -83,7 +90,10 @@ return [
         'cta' => 'Discuss via WhatsApp',
         'schedule_confirmation' => 'Schedule confirmed by our team',
         'room_confirmation' => 'Room confirmed by our team',
+        'duration_label' => 'Journey duration',
+        'pax_private_label' => 'Participant option',
         'whatsapp_message' => "Assalamu'alaikum, I would like to discuss the :package Umrah package.\n\nDeparture: :departure\nRoom: :room\nPilgrims: :pax\nPrice per pilgrim: :price\nEstimated total: :total\n\nPlease share availability and registration details.",
+        'whatsapp_private_message' => "Assalamu'alaikum, I would like to discuss the Private Umrah package :package.\n\nDuration: :duration Nights\nParticipants: :pax Pax\nPrice per pax: :price\nEstimated total: :total\n\nPlease share availability and registration details.",
     ],
     'empty' => [
         'title' => 'No packages available yet',

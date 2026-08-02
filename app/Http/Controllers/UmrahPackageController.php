@@ -25,6 +25,7 @@ class UmrahPackageController extends Controller
             ->with([
                 'media',
                 'prices',
+                'privatePrices',
                 'upcomingDepartures' => fn ($query) => $query->limit(3),
             ])
             ->when($activeType !== '', fn ($query) => $query->byType($activeType))
@@ -68,6 +69,7 @@ class UmrahPackageController extends Controller
         $package->load([
             'media',
             'prices',
+            'privatePrices',
             'upcomingDepartures.prices',
             'includes',
             'itineraries',
@@ -80,6 +82,7 @@ class UmrahPackageController extends Controller
             ->with([
                 'media',
                 'prices',
+                'privatePrices',
                 'upcomingDepartures' => fn ($query) => $query->limit(1),
             ])
             ->orderByDesc('is_featured')
