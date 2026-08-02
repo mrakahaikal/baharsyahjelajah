@@ -22,7 +22,7 @@ class PrivatePricesRelationManager extends RelationManager
 {
     protected static string $relationship = 'privatePrices';
 
-    protected static ?string $title = 'Harga Paket Private';
+    protected static ?string $title = 'Harga Paket Istimewa';
 
     public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
     {
@@ -33,7 +33,7 @@ class PrivatePricesRelationManager extends RelationManager
     {
         return $schema
             ->components([
-                Section::make('Kelola Harga Paket Private')
+                Section::make('Kelola Harga Paket Istimewa')
                     ->description('Tentukan tarif nominal per pax berdasarkan pilihan durasi malam dan jumlah peserta.')
                     ->icon('lucide-banknote')
                     ->schema([
@@ -44,7 +44,7 @@ class PrivatePricesRelationManager extends RelationManager
                             ->suffix('Malam')
                             ->required()
                             ->placeholder('Contoh: 6')
-                            ->helperText('Durasi malam perjalanan umrah private.')
+                            ->helperText('Durasi malam perjalanan umrah istimewa.')
                             ->prefixIcon('lucide-moon'),
                         TextInput::make('pax')
                             ->label('Jumlah Peserta (Pax)')

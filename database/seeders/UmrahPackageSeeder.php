@@ -141,14 +141,14 @@ class UmrahPackageSeeder extends Seeder
             ],
             [
                 'name' => [
-                    'id' => 'Private Al Mukhtara Al Gharbi + Fajar Badea 4',
-                    'en' => 'Private Al Mukhtara Al Gharbi + Fajar Badea 4',
-                    'ms' => 'Private Al Mukhtara Al Gharbi + Fajar Badea 4',
+                    'id' => 'Istimewa Al Mukhtara Al Gharbi + Fajar Badea 4',
+                    'en' => 'Bespoke Al Mukhtara Al Gharbi + Fajar Badea 4',
+                    'ms' => 'Istimewa Al Mukhtara Al Gharbi + Fajar Badea 4',
                 ],
                 'description' => [
-                    'id' => 'Paket Umrah Private dengan kombinasi Hotel Al Mukhtara Al Gharbi di Madinah dan Hotel Fajar Badea 4 di Makkah. Paket ini hemat namun tetap memberikan fasilitas lengkap dan kenyamanan prima bagi jamaah.',
-                    'en' => 'Private Umrah package combining Al Mukhtara Al Gharbi Hotel in Madinah and Fajar Badea 4 Hotel in Makkah. A budget-friendly package offering complete facilities.',
-                    'ms' => 'Pakej Umrah Private menggabungkan Hotel Al Mukhtara Al Gharbi di Madinah dan Hotel Fajar Badea 4 di Makkah. Pakej bajet yang menawarkan kemudahan lengkap.',
+                    'id' => 'Paket Umrah Istimewa dengan kombinasi Hotel Al Mukhtara Al Gharbi di Madinah dan Hotel Fajar Badea 4 di Makkah. Paket ini hemat namun tetap memberikan fasilitas lengkap dan kenyamanan prima bagi jamaah.',
+                    'en' => 'Bespoke Umrah package combining Al Mukhtara Al Gharbi Hotel in Madinah and Fajar Badea 4 Hotel in Makkah. A budget-friendly package offering complete facilities.',
+                    'ms' => 'Pakej Umrah Istimewa menggabungkan Hotel Al Mukhtara Al Gharbi di Madinah dan Hotel Fajar Badea 4 di Makkah. Pakej bajet yang menawarkan kemudahan lengkap.',
                 ],
                 'package_type' => 'private',
                 'duration_days' => 9,
