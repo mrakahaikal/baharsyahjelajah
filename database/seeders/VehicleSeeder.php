@@ -15,6 +15,8 @@ class VehicleSeeder extends Seeder
 {
     public function run(): void
     {
+        VehicleRentalRate::query()->delete();
+
         $areas = $this->seedAreas();
         $vehicles = $this->seedVehicles();
 
@@ -32,17 +34,100 @@ class VehicleSeeder extends Seeder
             ['slug' => 'yogyakarta', 'name' => 'Yogyakarta', 'minimum' => 1],
             ['slug' => 'malang', 'name' => 'Malang', 'minimum' => 5],
             ['slug' => 'bromo-banyuwangi', 'name' => 'Bromo / Banyuwangi', 'minimum' => 6],
+
+            // Arab Saudi Routes & Tours
+            [
+                'slug' => 'jeddah-airport-to-jeddah-city',
+                'name' => [
+                    'id' => 'Bandara Jeddah ↔ Kota Jeddah',
+                    'en' => 'Jeddah Airport ↔ Jeddah City',
+                    'ms' => 'Lapangan Terbang Jeddah ↔ Bandar Jeddah',
+                ],
+                'minimum' => 1,
+            ],
+            [
+                'slug' => 'jeddah-airport-to-makkah',
+                'name' => [
+                    'id' => 'Bandara Jeddah ↔ Makkah',
+                    'en' => 'Jeddah Airport ↔ Makkah',
+                    'ms' => 'Lapangan Terbang Jeddah ↔ Makkah',
+                ],
+                'minimum' => 1,
+            ],
+            [
+                'slug' => 'madinah-airport-to-hotel-madinah',
+                'name' => [
+                    'id' => 'Bandara Madinah ↔ Hotel Madinah',
+                    'en' => 'Madinah Airport ↔ Madinah Hotel',
+                    'ms' => 'Lapangan Terbang Madinah ↔ Hotel Madinah',
+                ],
+                'minimum' => 1,
+            ],
+            [
+                'slug' => 'jeddah-makkah-to-madinah',
+                'name' => [
+                    'id' => 'Jeddah / Makkah ↔ Madinah',
+                    'en' => 'Jeddah / Makkah ↔ Madinah',
+                    'ms' => 'Jeddah / Makkah ↔ Madinah',
+                ],
+                'minimum' => 1,
+            ],
+            [
+                'slug' => 'haramain-train-station',
+                'name' => [
+                    'id' => 'Stasiun Kereta Haramain (Makkah / Madinah)',
+                    'en' => 'Haramain Train Station (Makkah / Madinah)',
+                    'ms' => 'Stesen Kereta Haramain (Makkah / Madinah)',
+                ],
+                'minimum' => 1,
+            ],
+            [
+                'slug' => 'ziarah-mazarat-4-hours',
+                'name' => [
+                    'id' => 'Ziarah / Mazarat (Makkah / Madinah) - 4 Jam',
+                    'en' => 'Ziarah / Mazarat (Makkah / Madinah) - 4 Hours',
+                    'ms' => 'Ziarah / Mazarat (Makkah / Madinah) - 4 Jam',
+                ],
+                'minimum' => 1,
+            ],
+            [
+                'slug' => 'taif-tour-6-hours',
+                'name' => [
+                    'id' => 'Tur Taif - 6 Jam',
+                    'en' => 'Taif Tour - 6 Hours',
+                    'ms' => 'Lawatan Taif - 6 Jam',
+                ],
+                'minimum' => 1,
+            ],
+            [
+                'slug' => 'jeddah-tour-6-hours',
+                'name' => [
+                    'id' => 'Tur Jeddah - 6 Jam',
+                    'en' => 'Jeddah Tour - 6 Hours',
+                    'ms' => 'Lawatan Jeddah - 6 Jam',
+                ],
+                'minimum' => 1,
+            ],
+            [
+                'slug' => 'al-ula-tour-6-hours',
+                'name' => [
+                    'id' => 'Tur Al-Ula - 6 Jam',
+                    'en' => 'Al-Ula Tour - 6 Hours',
+                    'ms' => 'Lawatan Al-Ula - 6 Jam',
+                ],
+                'minimum' => 1,
+            ],
         ];
 
         return collect($areas)->mapWithKeys(function (array $area, int $index): array {
             $record = VehicleRentalArea::query()->updateOrCreate(
                 ['slug' => $area['slug']],
                 [
-                    'name' => $this->translations($area['name']),
+                    'name' => is_array($area['name']) ? $area['name'] : $this->translations($area['name']),
                     'description' => [
-                        'id' => 'Wilayah layanan sewa kendaraan '.$area['name'].'.',
-                        'en' => 'Vehicle rental service area for '.$area['name'].'.',
-                        'ms' => 'Kawasan perkhidmatan sewa kenderaan '.$area['name'].'.',
+                        'id' => 'Wilayah layanan sewa kendaraan '.(is_array($area['name']) ? $area['name']['id'] : $area['name']).'.',
+                        'en' => 'Vehicle rental service area for '.(is_array($area['name']) ? $area['name']['en'] : $area['name']).'.',
+                        'ms' => 'Kawasan perkhidmatan sewa kenderaan '.(is_array($area['name']) ? $area['name']['ms'] : $area['name']).'.',
                     ],
                     'minimum_rental_days' => $area['minimum'],
                     'is_active' => true,
@@ -76,6 +161,16 @@ class VehicleSeeder extends Seeder
             ['code' => 'medium-bus-2025', 'name' => 'Medium Bus 2025', 'brand' => null, 'model' => null, 'category' => VehicleCategory::Bus, 'capacity' => 35, 'year' => 2025, 'overtime' => 230000],
             ['code' => 'big-bus-2025', 'name' => 'Big Bus 2025', 'brand' => null, 'model' => null, 'category' => VehicleCategory::Bus, 'capacity' => 50, 'year' => 2025, 'overtime' => 230000],
             ['code' => 'big-bus-2017-2018', 'name' => 'Big Bus 2017 / 2018', 'brand' => null, 'model' => null, 'category' => VehicleCategory::Bus, 'capacity' => 59, 'overtime' => 230000],
+
+            // Arab Saudi Vehicles
+            ['code' => 'ford', 'name' => 'Ford (Taurus / Tourneo)', 'brand' => 'Ford', 'model' => 'Taurus / Tourneo', 'category' => VehicleCategory::Car, 'capacity' => 5],
+            ['code' => 'lexus', 'name' => 'Lexus (ES / RX)', 'brand' => 'Lexus', 'model' => 'ES / RX', 'category' => VehicleCategory::Car, 'capacity' => 4],
+            ['code' => 'traverse', 'name' => 'Chevrolet Traverse', 'brand' => 'Chevrolet', 'model' => 'Traverse', 'category' => VehicleCategory::Car, 'capacity' => 7],
+            ['code' => 'gmc', 'name' => 'GMC Yukon / Suburban', 'brand' => 'GMC', 'model' => 'Yukon', 'category' => VehicleCategory::Car, 'capacity' => 7],
+            ['code' => 'staria', 'name' => 'Hyundai Staria', 'brand' => 'Hyundai', 'model' => 'Staria', 'category' => VehicleCategory::Car, 'capacity' => 9],
+            ['code' => 'hiace', 'name' => 'Toyota HiAce', 'brand' => 'Toyota', 'model' => 'HiAce', 'category' => VehicleCategory::Minibus, 'capacity' => 14],
+            ['code' => 'coaster', 'name' => 'Toyota Coaster', 'brand' => 'Toyota', 'model' => 'Coaster', 'category' => VehicleCategory::Minibus, 'capacity' => 22],
+            ['code' => 'bus', 'name' => 'Bus Pariwisata (Saudi)', 'brand' => null, 'model' => 'Bus', 'category' => VehicleCategory::Bus, 'capacity' => 45],
         ];
 
         return collect($vehicles)->mapWithKeys(function (array $data, int $index): array {
@@ -154,6 +249,52 @@ class VehicleSeeder extends Seeder
                         'valid_from' => '2026-01-01',
                     ],
                     ['price_per_day_idr' => $price, 'valid_until' => '2026-12-31', 'is_active' => true],
+                );
+            }
+        }
+
+        // Seed Arab Saudi Rates
+        $saudiRates = [
+            'jeddah-airport-to-jeddah-city' => [
+                'ford' => 270, 'lexus' => 370, 'traverse' => 320, 'gmc' => 370, 'staria' => 370, 'hiace' => 420, 'coaster' => 520, 'bus' => 670,
+            ],
+            'jeddah-airport-to-makkah' => [
+                'ford' => 370, 'lexus' => 420, 'traverse' => 420, 'gmc' => 520, 'staria' => 420, 'hiace' => 470, 'coaster' => 570, 'bus' => 870,
+            ],
+            'madinah-airport-to-hotel-madinah' => [
+                'ford' => 270, 'lexus' => 370, 'traverse' => 320, 'gmc' => 420, 'staria' => 370, 'hiace' => 420, 'coaster' => 520, 'bus' => 670,
+            ],
+            'jeddah-makkah-to-madinah' => [
+                'ford' => 720, 'lexus' => 820, 'traverse' => 820, 'gmc' => 1020, 'staria' => 820, 'hiace' => 870, 'coaster' => 1070, 'bus' => 1170,
+            ],
+            'haramain-train-station' => [
+                'ford' => 270, 'lexus' => 320, 'traverse' => 320, 'gmc' => 420, 'staria' => 370, 'hiace' => 420, 'coaster' => 520, 'bus' => 520,
+            ],
+            'ziarah-mazarat-4-hours' => [
+                'ford' => 420, 'lexus' => 420, 'traverse' => 420, 'gmc' => 520, 'staria' => 470, 'hiace' => 470, 'coaster' => 570, 'bus' => 570,
+            ],
+            'taif-tour-6-hours' => [
+                'ford' => 670, 'lexus' => 770, 'traverse' => 770, 'gmc' => 970, 'staria' => 870, 'hiace' => 870, 'coaster' => 1070, 'bus' => 1270,
+            ],
+            'jeddah-tour-6-hours' => [
+                'ford' => 570, 'lexus' => 670, 'traverse' => 670, 'gmc' => 870, 'staria' => 970, 'hiace' => 970, 'coaster' => 970, 'bus' => 1170,
+            ],
+            'al-ula-tour-6-hours' => [
+                'ford' => 1370, 'lexus' => 1470, 'traverse' => 1470, 'gmc' => 1670, 'staria' => 1570, 'hiace' => 1670, 'coaster' => 1870, 'bus' => 1970,
+            ],
+        ];
+
+        foreach ($saudiRates as $areaSlug => $vehicleRates) {
+            foreach ($vehicleRates as $vehicleCode => $priceSar) {
+                $priceIdr = (int) round($priceSar / 0.000229);
+
+                VehicleRentalRate::query()->updateOrCreate(
+                    [
+                        'vehicle_id' => $vehicles[$vehicleCode]->id,
+                        'vehicle_rental_area_id' => $areas[$areaSlug]->id,
+                        'valid_from' => '2026-01-01',
+                    ],
+                    ['price_per_day_idr' => $priceIdr, 'valid_until' => '2026-12-31', 'is_active' => true],
                 );
             }
         }

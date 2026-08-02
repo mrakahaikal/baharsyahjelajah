@@ -22,9 +22,9 @@ it('seeds the client vehicle matrix and localized rental policies', function () 
     $this->seed(VehicleSeeder::class);
     $this->seed(FaqSeeder::class);
 
-    expect(Vehicle::query()->active()->whereNotNull('catalog_code')->count())->toBe(18)
-        ->and(VehicleRentalArea::query()->count())->toBe(5)
-        ->and(VehicleRentalRate::query()->count())->toBe(48)
+    expect(Vehicle::query()->active()->whereNotNull('catalog_code')->count())->toBe(26)
+        ->and(VehicleRentalArea::query()->count())->toBe(14)
+        ->and(VehicleRentalRate::query()->count())->toBe(120)
         ->and(VehicleRentalTerm::query()->count())->toBe(8);
 
     $bandung = VehicleRentalArea::query()->where('slug', 'bandung')->firstOrFail();
