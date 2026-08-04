@@ -14,7 +14,11 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
 
-#[Fillable(['name', 'slug', 'description', 'iso_alpha_2', 'iso_alpha_3', 'is_active', 'is_featured', 'sort_order'])]
+#[Fillable([
+    'name', 'slug', 'description', 'capital_city', 'currency_code',
+    'language', 'best_time_to_visit', 'travel_requirements_summary',
+    'iso_alpha_2', 'iso_alpha_3', 'is_active', 'is_featured', 'sort_order',
+])]
 class Country extends Model implements HasMedia
 {
     /** @use HasFactory<CountryFactory> */
@@ -26,7 +30,10 @@ class Country extends Model implements HasMedia
 
     public const string MEDIA_COLLECTION_COVER = 'cover';
 
-    public array $translatable = ['name', 'description'];
+    public array $translatable = [
+        'name', 'description', 'capital_city', 'language',
+        'best_time_to_visit', 'travel_requirements_summary',
+    ];
 
     protected $attributes = [
         'is_active' => true,

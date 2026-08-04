@@ -55,3 +55,23 @@ it('redirects unlocalized /negara requests to /id/negara', function () {
 
     $response->assertRedirect('/id/negara');
 });
+
+it('renders country metadata on show page', function () {
+    $country = Country::factory()->create([
+        'name' => ['id' => 'Mesir', 'en' => 'Egypt', 'ms' => 'Mesir'],
+        'slug' => 'mesir',
+        'capital_city' => ['id' => 'Kairo', 'en' => 'Cairo'],
+        'currency_code' => 'EGP',
+        'language' => ['id' => 'Bahasa Arab'],
+        'best_time_to_visit' => ['id' => 'Oktober - April'],
+        'is_active' => true,
+    ]);
+
+    $response = $this->get('/id/negara/mesir');
+
+    $response->assertStatus(200)
+        ->assertSee('Mesir')
+        ->assertSee('Kairo')
+        ->assertSee('EGP')
+        ->assertSee('Bahasa Arab');
+});

@@ -44,6 +44,7 @@
             <h3 class="text-balance text-2xl font-black text-white sm:text-3xl">
                 <a href="{{ $url }}" class="hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
                     {{ $country->name }}
+                    <span class="absolute inset-0 z-10"></span>
                 </a>
             </h3>
 

@@ -48,6 +48,66 @@
                     {{ str(strip_tags((string) $country->description)) }}
                 </p>
             @endif
+
+            @if(filled($country->capital_city) || filled($country->currency_code) || filled($country->language) || filled($country->best_time_to_visit) || filled($country->travel_requirements_summary))
+                <div class="mt-10 grid gap-4 rounded-xl border border-white/15 bg-white/10 p-6 backdrop-blur-md sm:grid-cols-2 lg:grid-cols-4">
+                    @if(filled($country->capital_city))
+                        <div class="flex items-start gap-3">
+                            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-blue-500/20 text-blue-300">
+                                <x-lucide-building-2 class="h-5 w-5" aria-hidden="true" />
+                            </span>
+                            <div>
+                                <p class="text-xs font-medium text-slate-300">Ibu Kota</p>
+                                <p class="mt-0.5 text-sm font-bold text-white">{{ $country->capital_city }}</p>
+                            </div>
+                        </div>
+                    @endif
+                    @if(filled($country->currency_code))
+                        <div class="flex items-start gap-3">
+                            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-emerald-500/20 text-emerald-300">
+                                <x-lucide-coins class="h-5 w-5" aria-hidden="true" />
+                            </span>
+                            <div>
+                                <p class="text-xs font-medium text-slate-300">Mata Uang</p>
+                                <p class="mt-0.5 text-sm font-bold text-white">{{ $country->currency_code }}</p>
+                            </div>
+                        </div>
+                    @endif
+                    @if(filled($country->language))
+                        <div class="flex items-start gap-3">
+                            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-purple-500/20 text-purple-300">
+                                <x-lucide-languages class="h-5 w-5" aria-hidden="true" />
+                            </span>
+                            <div>
+                                <p class="text-xs font-medium text-slate-300">Bahasa Resmi</p>
+                                <p class="mt-0.5 text-sm font-bold text-white">{{ $country->language }}</p>
+                            </div>
+                        </div>
+                    @endif
+                    @if(filled($country->best_time_to_visit))
+                        <div class="flex items-start gap-3">
+                            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-amber-500/20 text-amber-300">
+                                <x-lucide-sun-medium class="h-5 w-5" aria-hidden="true" />
+                            </span>
+                            <div>
+                                <p class="text-xs font-medium text-slate-300">Waktu Terbaik</p>
+                                <p class="mt-0.5 text-sm font-bold text-white">{{ $country->best_time_to_visit }}</p>
+                            </div>
+                        </div>
+                    @endif
+                    @if(filled($country->travel_requirements_summary))
+                        <div class="sm:col-span-2 lg:col-span-4 border-t border-white/10 pt-4 flex items-start gap-3">
+                            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-sky-500/20 text-sky-300">
+                                <x-lucide-file-text class="h-4 w-4" aria-hidden="true" />
+                            </span>
+                            <div class="min-w-0">
+                                <p class="text-xs font-medium text-slate-300">Persyaratan Perjalanan & Visa</p>
+                                <p class="mt-0.5 text-sm leading-6 text-slate-200">{{ $country->travel_requirements_summary }}</p>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            @endif
         </div>
     </section>
 

@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Countries\Schemas;
 
 use App\Models\Country;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
@@ -39,9 +40,37 @@ class CountryForm
                                     ->maxLength(255)
                                     ->placeholder('Contoh: Mesir')
                                     ->prefixIcon('lucide-type'),
+                                Textarea::make('description')
+                                    ->label('Deskripsi Negara')
+                                    ->rows(3)
+                                    ->maxLength(1000)
+                                    ->placeholder('Tuliskan ringkasan pesona wisata atau informasi penting negara ini...')
+                                    ->helperText('Ringkasan informasi negara yang ditampilkan pada halaman web.')
+                                    ->columnSpanFull(),
+                                TextInput::make('capital_city')
+                                    ->label('Ibu Kota')
+                                    ->maxLength(255)
+                                    ->placeholder('Contoh: Kairo / Riyadh')
+                                    ->prefixIcon('lucide-building-2'),
+                                TextInput::make('language')
+                                    ->label('Bahasa Resmi')
+                                    ->maxLength(255)
+                                    ->placeholder('Contoh: Bahasa Arab')
+                                    ->prefixIcon('lucide-languages'),
+                                TextInput::make('best_time_to_visit')
+                                    ->label('Waktu Terbaik Berkunjung')
+                                    ->maxLength(255)
+                                    ->placeholder('Contoh: Oktober - April')
+                                    ->prefixIcon('lucide-sun-medium'),
+                                Textarea::make('travel_requirements_summary')
+                                    ->label('Ringkasan Syarat Perjalanan & Visa')
+                                    ->rows(2)
+                                    ->maxLength(500)
+                                    ->placeholder('Contoh: Paspor berlaku min 6 bulan. E-Visa / Visa On Arrival tersedia.')
+                                    ->columnSpanFull(),
                             ])
                             ->columnSpanFull(),
-                        Grid::make(3)->schema([
+                        Grid::make(4)->schema([
                             TextInput::make('slug')
                                 ->label('Slug URL')
                                 ->required()
@@ -64,6 +93,12 @@ class CountryForm
                                 ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? Str::upper($state) : null)
                                 ->placeholder('EGY')
                                 ->prefixIcon('lucide-hash'),
+                            TextInput::make('currency_code')
+                                ->label('Mata Uang (Kode ISO)')
+                                ->maxLength(10)
+                                ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? Str::upper($state) : null)
+                                ->placeholder('EGP / SAR / IDR')
+                                ->prefixIcon('lucide-coins'),
                         ]),
                     ])
                     ->columnSpanFull(),
