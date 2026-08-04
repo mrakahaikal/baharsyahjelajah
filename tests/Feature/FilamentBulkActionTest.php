@@ -83,24 +83,31 @@ it('allows bulk attaching vehicles to umrah packages in Filament table', functio
     expect($umrah2->fresh()->vehicles)->toHaveCount(1);
 });
 
-it('allows bulk attaching tours and umrah packages to vehicles in Filament table', function () {
+it('allows bulk attaching tour packages and umrah packages to vehicles in Filament table', function () {
     $vehicle1 = Vehicle::factory()->create(['catalog_code' => 'VHC-V1']);
     $vehicle2 = Vehicle::factory()->create(['catalog_code' => 'VHC-V2']);
 
     $tour = createBulkTestTour('Tour Wisata');
+    $tourPackage = $tour->packages()->create([
+        'name' => ['id' => 'Paket Tour Wisata 4D3N', 'en' => 'Tour Package 4D3N'],
+        'slug' => ['id' => 'paket-tour-wisata-4d3n', 'en' => 'tour-package-4d3n'],
+        'duration_days' => 4,
+        'duration_nights' => 3,
+    ]);
+
     $umrah = UmrahPackage::factory()->create();
 
     Livewire::test(ListVehicles::class)
-        ->callTableBulkAction('attachTours', [$vehicle1, $vehicle2], [
-            'tours' => [$tour->id],
+        ->callTableBulkAction('attachTourPackages', [$vehicle1, $vehicle2], [
+            'tourPackages' => [$tourPackage->id],
         ])
         ->callTableBulkAction('attachUmrahPackages', [$vehicle1, $vehicle2], [
             'umrahPackages' => [$umrah->id],
         ])
         ->assertHasNoTableBulkActionErrors();
 
-    expect($vehicle1->fresh()->tours)->toHaveCount(1);
-    expect($vehicle2->fresh()->tours)->toHaveCount(1);
+    expect($vehicle1->fresh()->tourPackages)->toHaveCount(1);
+    expect($vehicle2->fresh()->tourPackages)->toHaveCount(1);
     expect($vehicle1->fresh()->umrahPackages)->toHaveCount(1);
     expect($vehicle2->fresh()->umrahPackages)->toHaveCount(1);
 });

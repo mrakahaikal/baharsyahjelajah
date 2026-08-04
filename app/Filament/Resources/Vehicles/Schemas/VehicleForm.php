@@ -270,13 +270,13 @@ class VehicleForm
                                     ->description('Pilih paket-paket tour dan umrah yang menggunakan atau menyediakan armada kendaraan ini.')
                                     ->icon('lucide-layers')
                                     ->schema([
-                                        Select::make('tours')
+                                        Select::make('tourPackages')
                                             ->label('Paket Tour Terkait')
-                                            ->relationship('tours', 'name')
+                                            ->relationship('tourPackages', 'name')
                                             ->multiple()
                                             ->searchable()
                                             ->preload()
-                                            ->placeholder('Pilih tur yang menggunakan armada ini')
+                                            ->placeholder('Pilih paket tur yang menggunakan armada ini')
                                             ->helperText('Pilih paket tour yang menggunakan unit kendaraan ini.')
                                             ->prefixIcon('lucide-map'),
                                         Select::make('umrahPackages')

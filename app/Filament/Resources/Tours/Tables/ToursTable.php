@@ -8,7 +8,6 @@ use App\Models\PackageTier;
 use App\Models\Tour;
 use App\Models\TourPackage;
 use App\Models\TourPriceTier;
-use App\Models\Vehicle;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
@@ -164,32 +163,6 @@ class ToursTable
                             Notification::make()
                                 ->title('Berhasil Mengaitkan Negara Destinasi')
                                 ->body(count($records).' tur berhasil dikaitkan dengan negara pilihan.')
-                                ->success()
-                                ->send();
-                        }),
-                    BulkAction::make('attachVehicles')
-                        ->label('Kaitkan Armada Kendaraan')
-                        ->icon('lucide-bus')
-                        ->modalHeading('Kaitkan Armada Kendaraan Ke Tur Terpilih')
-                        ->modalDescription('Pilih satu atau beberapa armada kendaraan yang ingin dikaitkan secara massal ke tur yang dipilih.')
-                        ->form([
-                            Select::make('vehicles')
-                                ->label('Pilih Armada Kendaraan')
-                                ->options(fn () => Vehicle::query()->pluck('name', 'id'))
-                                ->multiple()
-                                ->searchable()
-                                ->preload()
-                                ->required(),
-                        ])
-                        ->action(function (Collection $records, array $data): void {
-                            $vehicleIds = $data['vehicles'] ?? [];
-                            foreach ($records as $record) {
-                                $record->vehicles()->syncWithoutDetaching($vehicleIds);
-                            }
-
-                            Notification::make()
-                                ->title('Berhasil Mengaitkan Armada Kendaraan')
-                                ->body(count($records).' tur berhasil dikaitkan dengan armada kendaraan pilihan.')
                                 ->success()
                                 ->send();
                         }),

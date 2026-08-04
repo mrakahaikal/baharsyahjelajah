@@ -14,7 +14,7 @@ function createTestCategory(): TourCategory
         'name' => ['en' => 'Nature Tour', 'id' => 'Wisata Alam', 'ms' => 'Pelancongan Alam'],
         'slug' => ['en' => 'nature-tour-'.rand(), 'id' => 'wisata-alam-'.rand(), 'ms' => 'pelancongan-alam-'.rand()],
         'icon' => 'heroicon-o-sparkles',
-        'sort_order' => 1,
+        'sort_order' => rand(1, 999999),
     ]);
 }
 
@@ -34,7 +34,7 @@ function createTestTour(): Tour
     ]);
 }
 
-it('can attach vehicles to tour, tour package, and umrah package', function () {
+it('can attach vehicles to tour package and umrah package', function () {
     $vehicle = Vehicle::factory()->create([
         'name' => ['id' => 'Toyota HiAce Commuter'],
         'slug' => 'toyota-hiace-commuter',
@@ -50,12 +50,8 @@ it('can attach vehicles to tour, tour package, and umrah package', function () {
     ]);
     $umrahPackage = UmrahPackage::factory()->create();
 
-    $tour->vehicles()->attach($vehicle);
     $tourPackage->vehicles()->attach($vehicle);
     $umrahPackage->vehicles()->attach($vehicle);
-
-    expect($tour->fresh()->vehicles)->toHaveCount(1)
-        ->and($tour->fresh()->vehicles->first()->id)->toBe($vehicle->id);
 
     expect($tourPackage->fresh()->vehicles)->toHaveCount(1)
         ->and($tourPackage->fresh()->vehicles->first()->id)->toBe($vehicle->id);
@@ -63,12 +59,11 @@ it('can attach vehicles to tour, tour package, and umrah package', function () {
     expect($umrahPackage->fresh()->vehicles)->toHaveCount(1)
         ->and($umrahPackage->fresh()->vehicles->first()->id)->toBe($vehicle->id);
 
-    expect($vehicle->fresh()->tours)->toHaveCount(1);
     expect($vehicle->fresh()->tourPackages)->toHaveCount(1);
     expect($vehicle->fresh()->umrahPackages)->toHaveCount(1);
 });
 
-it('detaches vehicles when tour, tour package, or umrah package is deleted', function () {
+it('detaches vehicles when tour package or umrah package is deleted', function () {
     $vehicle = Vehicle::factory()->create([
         'catalog_code' => 'VHC-ALPHARD-01',
     ]);
@@ -82,15 +77,11 @@ it('detaches vehicles when tour, tour package, or umrah package is deleted', fun
     ]);
     $umrahPackage = UmrahPackage::factory()->create();
 
-    $tour->vehicles()->attach($vehicle);
     $tourPackage->vehicles()->attach($vehicle);
     $umrahPackage->vehicles()->attach($vehicle);
 
     $tourPackage->delete();
     expect($vehicle->fresh()->tourPackages)->toHaveCount(0);
-
-    $tour->delete();
-    expect($vehicle->fresh()->tours)->toHaveCount(0);
 
     $umrahPackage->forceDelete();
     expect($vehicle->fresh()->umrahPackages)->toHaveCount(0);

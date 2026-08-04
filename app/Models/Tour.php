@@ -46,19 +46,12 @@ class Tour extends Model
     {
         static::deleting(function (Tour $tour): void {
             $tour->countries()->detach();
-            $tour->vehicles()->detach();
         });
     }
 
     public function countries(): MorphToMany
     {
         return $this->morphToMany(Country::class, 'countryable')
-            ->withTimestamps();
-    }
-
-    public function vehicles(): MorphToMany
-    {
-        return $this->morphToMany(Vehicle::class, 'vehicleable')
             ->withTimestamps();
     }
 

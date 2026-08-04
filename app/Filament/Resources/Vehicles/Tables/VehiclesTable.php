@@ -4,7 +4,7 @@ namespace App\Filament\Resources\Vehicles\Tables;
 
 use App\Enums\VehicleCategory;
 use App\Models\Country;
-use App\Models\Tour;
+use App\Models\TourPackage;
 use App\Models\UmrahPackage;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
@@ -115,29 +115,29 @@ class VehiclesTable
                                 ->success()
                                 ->send();
                         }),
-                    BulkAction::make('attachTours')
+                    BulkAction::make('attachTourPackages')
                         ->label('Kaitkan Paket Tour')
                         ->icon('lucide-map')
                         ->modalHeading('Kaitkan Paket Tour Ke Armada Terpilih')
                         ->modalDescription('Pilih satu atau beberapa paket tur yang ingin dikaitkan secara massal ke armada kendaraan terpilih.')
                         ->form([
-                            Select::make('tours')
+                            Select::make('tourPackages')
                                 ->label('Pilih Paket Tour')
-                                ->options(fn () => Tour::query()->pluck('name', 'id'))
+                                ->options(fn () => TourPackage::query()->pluck('name', 'id'))
                                 ->multiple()
                                 ->searchable()
                                 ->preload()
                                 ->required(),
                         ])
                         ->action(function (Collection $records, array $data): void {
-                            $tourIds = $data['tours'] ?? [];
+                            $packageIds = $data['tourPackages'] ?? [];
                             foreach ($records as $record) {
-                                $record->tours()->syncWithoutDetaching($tourIds);
+                                $record->tourPackages()->syncWithoutDetaching($packageIds);
                             }
 
                             Notification::make()
                                 ->title('Berhasil Mengaitkan Paket Tour')
-                                ->body(count($records).' armada kendaraan berhasil dikaitkan dengan tur pilihan.')
+                                ->body(count($records).' armada kendaraan berhasil dikaitkan dengan paket tur pilihan.')
                                 ->success()
                                 ->send();
                         }),
