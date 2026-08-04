@@ -56,6 +56,16 @@ class VehicleForm
                                                                 ->native(false)
                                                                 ->prefixIcon('lucide-tag')
                                                                 ->helperText('Pilih kategori armada.'),
+                                                            Select::make('countries')
+                                                                ->label('Negara Operasional')
+                                                                ->relationship('countries', 'name')
+                                                                ->getOptionLabelFromRecordUsing(fn (Country $record): string => $record->name)
+                                                                ->multiple()
+                                                                ->searchable()
+                                                                ->preload()
+                                                                ->native(false)
+                                                                ->helperText('Pilih satu atau lebih negara operasional kendaraan.')
+                                                                ->prefixIcon('lucide-flag'),
                                                             TextInput::make('brand')
                                                                 ->label('Merek Kendaraan')
                                                                 ->placeholder('Contoh: Toyota')

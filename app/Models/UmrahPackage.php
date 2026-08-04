@@ -39,7 +39,10 @@ class UmrahPackage extends Model implements HasMedia
 
     protected static function booted(): void
     {
-        static::forceDeleted(fn (UmrahPackage $package) => $package->destinations()->detach());
+        static::forceDeleted(function (UmrahPackage $package) {
+            $package->destinations()->detach();
+            $package->countries()->detach();
+        });
     }
 
     protected function casts(): array
@@ -102,6 +105,12 @@ class UmrahPackage extends Model implements HasMedia
     public function destinations(): MorphToMany
     {
         return $this->morphToMany(Destination::class, 'destinationable')
+            ->withTimestamps();
+    }
+
+    public function countries(): MorphToMany
+    {
+        return $this->morphToMany(Country::class, 'countryable')
             ->withTimestamps();
     }
 

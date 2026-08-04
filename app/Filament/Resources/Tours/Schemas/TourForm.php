@@ -65,6 +65,16 @@ class TourForm
                                                                 ->helperText('Destinasi domestik atau internasional.')
                                                                 ->prefixIcon('lucide-globe')
                                                                 ->native(false),
+                                                            Select::make('countries')
+                                                                ->label('Negara Destinasi')
+                                                                ->relationship('countries', 'name')
+                                                                ->getOptionLabelFromRecordUsing(fn (Country $record): string => $record->name)
+                                                                ->multiple()
+                                                                ->searchable()
+                                                                ->preload()
+                                                                ->native(false)
+                                                                ->helperText('Pilih satu atau lebih negara tujuan tur ini.')
+                                                                ->prefixIcon('lucide-flag'),
                                                             Select::make('currency')
                                                                 ->label('Mata Uang Utama')
                                                                 ->options(self::currencyOptions())

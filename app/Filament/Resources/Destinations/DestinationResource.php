@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Destinations;
 
 use App\Filament\Resources\Destinations\Pages\ManageDestinations;
+use App\Models\Country;
 use App\Models\Destination;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -10,6 +11,7 @@ use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -93,6 +95,16 @@ class DestinationResource extends Resource
                                     ->maxLength(255)
                                     ->helperText('Wilayah administratif destinasi.')
                                     ->prefixIcon('lucide-globe'),
+                                Select::make('countries')
+                                    ->label('Negara Lokasi')
+                                    ->relationship('countries', 'name')
+                                    ->getOptionLabelFromRecordUsing(fn (Country $record): string => $record->name)
+                                    ->multiple()
+                                    ->searchable()
+                                    ->preload()
+                                    ->native(false)
+                                    ->helperText('Pilih satu atau lebih negara lokasi destinasi ini.')
+                                    ->prefixIcon('lucide-flag'),
                                 TextInput::make('map_url')
                                     ->label('URL Google Maps')
                                     ->rules(['nullable', 'url:http,https'])

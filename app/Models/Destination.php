@@ -78,6 +78,12 @@ class Destination extends Model implements HasMedia
             ->withTimestamps();
     }
 
+    public function countries(): MorphToMany
+    {
+        return $this->morphToMany(Country::class, 'countryable')
+            ->withTimestamps();
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection(self::MEDIA_COLLECTION_GALLERY)

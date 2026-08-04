@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['vehicle_id', 'image_path', 'sort_order',])]
+#[Fillable(['vehicle_id', 'image_path', 'sort_order'])]
 class VehicleGallery extends Model
 {
     protected function casts(): array

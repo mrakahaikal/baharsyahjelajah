@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -53,6 +54,42 @@ class Country extends Model implements HasMedia
     public function visaServices(): HasMany
     {
         return $this->hasMany(VisaService::class);
+    }
+
+    public function tours(): MorphToMany
+    {
+        return $this->morphedByMany(Tour::class, 'countryable')
+            ->withTimestamps();
+    }
+
+    public function tourPackages(): MorphToMany
+    {
+        return $this->morphedByMany(TourPackage::class, 'countryable')
+            ->withTimestamps();
+    }
+
+    public function umrahPackages(): MorphToMany
+    {
+        return $this->morphedByMany(UmrahPackage::class, 'countryable')
+            ->withTimestamps();
+    }
+
+    public function destinations(): MorphToMany
+    {
+        return $this->morphedByMany(Destination::class, 'countryable')
+            ->withTimestamps();
+    }
+
+    public function vehicles(): MorphToMany
+    {
+        return $this->morphedByMany(Vehicle::class, 'countryable')
+            ->withTimestamps();
+    }
+
+    public function posts(): MorphToMany
+    {
+        return $this->morphedByMany(Post::class, 'countryable')
+            ->withTimestamps();
     }
 
     public function scopeActive(Builder $query): Builder

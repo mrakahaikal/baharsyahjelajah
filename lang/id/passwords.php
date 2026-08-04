@@ -17,6 +17,6 @@ return [
     'sent' => 'Kami telah mengirimkan surel berisi tautan atur ulang kata sandi Anda.',
     'throttled' => 'Silakan tunggu sebelum mencoba lagi.',
     'token' => 'Token atur ulang kata sandi ini tidak valid.',
-    'user' => "Kami tidak dapat menemukan pengguna dengan alamat surel tersebut.",
+    'user' => 'Kami tidak dapat menemukan pengguna dengan alamat surel tersebut.',
 
 ];

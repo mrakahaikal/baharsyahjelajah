@@ -18,9 +18,9 @@ class Testimonial extends Model
     protected function casts(): array
     {
         return [
-            'rating'      => 'integer',
+            'rating' => 'integer',
             'is_featured' => 'boolean',
-            'is_active'   => 'boolean',
+            'is_active' => 'boolean',
         ];
     }
 
@@ -55,7 +55,7 @@ class Testimonial extends Model
      */
     public function getStarsAttribute(): string
     {
-        return str_repeat('★', $this->rating) . str_repeat('☆', 5 - $this->rating);
+        return str_repeat('★', $this->rating).str_repeat('☆', 5 - $this->rating);
     }
 
     /**
@@ -64,10 +64,10 @@ class Testimonial extends Model
     public function getProductTypeLabelAttribute(): string
     {
         return match ($this->product_type) {
-            'App\Models\Tour'         => 'Tour',
-            'App\Models\Vehicle'      => 'Sewa Mobil',
+            'App\Models\Tour' => 'Tour',
+            'App\Models\Vehicle' => 'Sewa Mobil',
             'App\Models\UmrahPackage' => 'Umrah',
-            default                   => $this->product_type,
+            default => $this->product_type,
         };
     }
 }

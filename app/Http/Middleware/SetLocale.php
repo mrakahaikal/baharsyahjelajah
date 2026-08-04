@@ -20,7 +20,7 @@ class SetLocale
         if (in_array($locale, ['id', 'ms', 'en'])) {
             app()->setLocale($locale);
         } else {
-            // Optional: fallback if accessed without prefix, 
+            // Optional: fallback if accessed without prefix,
             // but usually handled by root redirect.
             app()->setLocale(config('app.fallback_locale', 'id'));
         }

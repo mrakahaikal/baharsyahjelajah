@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\Translatable\HasTranslations;
 
 #[Fillable([
@@ -39,6 +40,12 @@ class Tour extends Model
     public function packages(): HasMany
     {
         return $this->hasMany(TourPackage::class);
+    }
+
+    public function countries(): MorphToMany
+    {
+        return $this->morphToMany(Country::class, 'countryable')
+            ->withTimestamps();
     }
 
     public function testimonials(): MorphMany

@@ -49,8 +49,8 @@ class TourPackageInclude extends Model
         return match ($this->type) {
             'include' => '✓',
             'exclude' => '✗',
-            'note'    => 'ℹ',
-            default   => '•',
+            'note' => 'ℹ',
+            default => '•',
         };
     }
 }

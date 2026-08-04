@@ -31,7 +31,10 @@ class Post extends Model
 
     protected static function booted(): void
     {
-        static::deleting(fn (Post $post) => $post->destinations()->detach());
+        static::deleting(function (Post $post): void {
+            $post->destinations()->detach();
+            $post->countries()->detach();
+        });
     }
 
     public function scopePublished(Builder $query): Builder
@@ -83,6 +86,12 @@ class Post extends Model
     public function destinations(): MorphToMany
     {
         return $this->morphToMany(Destination::class, 'destinationable')
+            ->withTimestamps();
+    }
+
+    public function countries(): MorphToMany
+    {
+        return $this->morphToMany(Country::class, 'countryable')
             ->withTimestamps();
     }
 }

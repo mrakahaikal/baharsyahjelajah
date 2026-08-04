@@ -95,6 +95,17 @@ class UmrahPackageForm
                                                                 ->helperText('Deskripsi lengkap paket umrah.'),
                                                         ])
                                                         ->columnSpanFull(),
+                                                    Select::make('countries')
+                                                        ->label('Negara Tujuan')
+                                                        ->relationship('countries', 'name')
+                                                        ->getOptionLabelFromRecordUsing(fn (Country $record): string => $record->name)
+                                                        ->multiple()
+                                                        ->searchable()
+                                                        ->preload()
+                                                        ->native(false)
+                                                        ->helperText('Pilih satu atau lebih negara tujuan paket umrah.')
+                                                        ->prefixIcon('lucide-globe')
+                                                        ->columnSpanFull(),
                                                     Select::make('destinations')
                                                         ->label('Destinasi & Ziarah Terkait')
                                                         ->relationship('destinations', 'name')

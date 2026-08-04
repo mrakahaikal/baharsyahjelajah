@@ -17,6 +17,6 @@ return [
     'sent' => 'Kami telah menghantar emel pautan tetapan semula kata laluan anda.',
     'throttled' => 'Sila tunggu sebelum mencuba lagi.',
     'token' => 'Token tetapan semula kata laluan ini tidak sah.',
-    'user' => "Kami tidak dapat menemui pengguna dengan alamat emel tersebut.",
+    'user' => 'Kami tidak dapat menemui pengguna dengan alamat emel tersebut.',
 
 ];

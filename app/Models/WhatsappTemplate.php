@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['product_type', 'locale', 'template', 'variables',])]
+#[Fillable(['product_type', 'locale', 'template', 'variables'])]
 class WhatsappTemplate extends Model
 {
     protected function casts(): array
