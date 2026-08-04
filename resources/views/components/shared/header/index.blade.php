@@ -4,6 +4,7 @@
     $navLinks = [
         ['route' => 'transport.index', 'match' => 'transport.*', 'label' => __('frontend.nav.transport'), 'icon' => 'car'],
         ['route' => 'tour.index', 'match' => 'tour.*', 'label' => __('frontend.nav.tour'), 'icon' => 'map'],
+        ['route' => 'country.index', 'match' => 'country.*', 'label' => __('frontend.nav.country'), 'icon' => 'globe'],
         ['route' => 'umroh.index', 'match' => 'umroh.*', 'label' => __('frontend.nav.umroh'), 'icon' => 'moon'],
         ['route' => 'visa.index', 'match' => 'visa.*', 'label' => __('frontend.nav.visa'), 'icon' => 'badge'],
         ['route' => 'blog.index', 'match' => 'blog.*', 'label' => __('frontend.nav.blog'), 'icon' => 'file'],
@@ -30,7 +31,7 @@
     $currentCurrency = \App\Helpers\LocaleHelper::currency();
 @endphp
 
-<header class="bg-white sticky top-0 z-50 border-b border-gray-100" x-data="{ mobileMenuOpen: false, tourMenuOpen: false }" x-init="$watch('mobileMenuOpen', value => document.body.classList.toggle('overflow-hidden', value))" @resize.window="if (window.innerWidth >= 768 && mobileMenuOpen) { mobileMenuOpen = false; document.body.classList.remove('overflow-hidden'); }" @mouseleave="tourMenuOpen = false" @keydown.escape.window="tourMenuOpen = false; mobileMenuOpen = false">
+<header class="bg-white sticky top-0 z-50 border-b border-gray-100" x-data="{ mobileMenuOpen: false, tourMenuOpen: false, countryMenuOpen: false }" x-init="$watch('mobileMenuOpen', value => document.body.classList.toggle('overflow-hidden', value))" @resize.window="if (window.innerWidth >= 768 && mobileMenuOpen) { mobileMenuOpen = false; document.body.classList.remove('overflow-hidden'); }" @mouseleave="tourMenuOpen = false; countryMenuOpen = false" @keydown.escape.window="tourMenuOpen = false; countryMenuOpen = false; mobileMenuOpen = false">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-20">
             <a href="{{ route('home', ['locale' => $locale]) }}" class="flex items-center gap-2" aria-label="Baharsyah Jelajah Home">
@@ -41,10 +42,17 @@
                 @foreach($navLinks as $link)
                     @php $isActive = request()->routeIs($link['match']); @endphp
                     @if($link['route'] === 'tour.index')
-                        <div class="relative inline-flex items-center" @mouseenter="tourMenuOpen = true" @focusin="tourMenuOpen = true">
+                        <div class="relative inline-flex items-center" @mouseenter="tourMenuOpen = true; countryMenuOpen = false" @focusin="tourMenuOpen = true; countryMenuOpen = false">
                             <a href="{{ route($link['route'], ['locale' => $locale]) }}" class="text-sm font-medium inline-flex items-center gap-1 rounded-md py-6 -my-6 transition-colors {{ $isActive ? 'text-slate-900' : 'text-slate-500' }} hover:text-blue-600 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600" aria-haspopup="true" aria-controls="tour-mega-menu" x-bind:aria-expanded="tourMenuOpen.toString()" @if($isActive) aria-current="page" @endif>
                                 <span>{{ $link['label'] }}</span>
                                 <x-lucide-chevron-down class="h-3.5 w-3.5 text-slate-400 transition-transform duration-200" x-bind:class="{ 'rotate-180': tourMenuOpen }" aria-hidden="true" />
+                            </a>
+                        </div>
+                    @elseif($link['route'] === 'country.index')
+                        <div class="relative inline-flex items-center" @mouseenter="countryMenuOpen = true; tourMenuOpen = false" @focusin="countryMenuOpen = true; tourMenuOpen = false">
+                            <a href="{{ route($link['route'], ['locale' => $locale]) }}" class="text-sm font-medium inline-flex items-center gap-1 rounded-md py-6 -my-6 transition-colors {{ $isActive ? 'text-slate-900' : 'text-slate-500' }} hover:text-blue-600 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600" aria-haspopup="true" aria-controls="country-mega-menu" x-bind:aria-expanded="countryMenuOpen.toString()" @if($isActive) aria-current="page" @endif>
+                                <span>{{ $link['label'] }}</span>
+                                <x-lucide-chevron-down class="h-3.5 w-3.5 text-slate-400 transition-transform duration-200" x-bind:class="{ 'rotate-180': countryMenuOpen }" aria-hidden="true" />
                             </a>
                         </div>
                     @else
@@ -117,6 +125,7 @@
         </div>
 
         <x-shared.header.tour-mega-menu :$locale :$menuCategories :$menuFeaturedTours />
+        <x-shared.header.country-mega-menu :$locale :$menuCountries :$menuDestinations />
     </div>
 
     <x-shared::header.mobile-nav :$locale :$localeUrls :$navLinks :$menuCategories :$contactUrl :$languages :$currencies :$currentCurrency />

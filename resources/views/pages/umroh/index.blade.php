@@ -34,7 +34,7 @@
     <section class="border-b border-neutral-800 bg-neutral-950 py-6 text-white" aria-label="{{ __('umrah.filter.label') }}">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <form method="GET" action="{{ route('umroh.index', ['locale' => $locale]) }}" class="flex flex-col gap-3 sm:flex-row sm:items-end">
-                <label class="min-w-0 flex-1 sm:max-w-sm">
+                <label class="min-w-0 flex-1 sm:max-w-xs">
                     <span class="mb-2 block text-xs font-bold uppercase tracking-wide text-neutral-400">{{ __('umrah.filter.label') }}</span>
                     <span class="relative block">
                         <select name="type" class="min-h-12 w-full appearance-none rounded-lg border border-white/15 bg-white/8 px-4 pr-10 text-sm font-semibold text-white outline-none transition-colors hover:border-amber-300/50 focus:border-amber-300">
@@ -46,11 +46,27 @@
                         <x-lucide-chevron-down class="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-amber-300" aria-hidden="true" />
                     </span>
                 </label>
+
+                @if($countries->isNotEmpty())
+                    <label class="min-w-0 flex-1 sm:max-w-xs">
+                        <span class="mb-2 block text-xs font-bold uppercase tracking-wide text-neutral-400">Negara Destinasi</span>
+                        <span class="relative block">
+                            <select name="country" class="min-h-12 w-full appearance-none rounded-lg border border-white/15 bg-white/8 px-4 pr-10 text-sm font-semibold text-white outline-none transition-colors hover:border-amber-300/50 focus:border-amber-300">
+                                <option value="" class="bg-neutral-900 text-white">Semua Negara</option>
+                                @foreach($countries as $c)
+                                    <option value="{{ $c->slug }}" @selected($activeCountry === $c->slug) class="bg-neutral-900 text-white">{{ $c->name }}</option>
+                                @endforeach
+                            </select>
+                            <x-lucide-chevron-down class="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-amber-300" aria-hidden="true" />
+                        </span>
+                    </label>
+                @endif
+
                 <button type="submit" class="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-amber-400 px-5 text-sm font-bold text-neutral-950 transition-colors hover:bg-amber-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300">
                     <x-lucide-sliders-horizontal class="h-4 w-4" aria-hidden="true" />
                     {{ __('umrah.filter.apply') }}
                 </button>
-                @if($activeType !== '')
+                @if($activeType !== '' || $activeCountry !== '')
                     <a href="{{ route('umroh.index', ['locale' => $locale]) }}" class="inline-flex min-h-12 items-center justify-center px-3 text-sm font-bold text-neutral-300 transition-colors hover:text-white focus-visible:rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300">
                         {{ __('umrah.filter.clear') }}
                     </a>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UmrahPackageType;
+use App\Models\Country;
 use App\Models\UmrahPackage;
 use App\Settings\GeneralSettings;
 use Illuminate\Http\RedirectResponse;
@@ -20,6 +21,14 @@ class UmrahPackageController extends Controller
         $requestedType = $request->string('type')->toString();
         $activeType = in_array($requestedType, $packageTypes, true) ? $requestedType : '';
 
+        $requestedCountry = $request->string('country')->toString();
+        $activeCountry = filled($requestedCountry) ? $requestedCountry : '';
+
+        $countries = Country::query()
+            ->active()
+            ->whereHas('umrahPackages', fn ($query) => $query->active())
+            ->get();
+
         $packages = UmrahPackage::query()
             ->active()
             ->with([
@@ -29,6 +38,7 @@ class UmrahPackageController extends Controller
                 'upcomingDepartures' => fn ($query) => $query->limit(3),
             ])
             ->when($activeType !== '', fn ($query) => $query->byType($activeType))
+            ->when($activeCountry !== '', fn ($query) => $query->whereHas('countries', fn ($q) => $q->where('slug', $activeCountry)))
             ->latest()
             ->paginate(9)
             ->withQueryString();
@@ -38,6 +48,7 @@ class UmrahPackageController extends Controller
                 $locale => route('umroh.index', array_filter([
                     'locale' => $locale,
                     'type' => $activeType,
+                    'country' => $activeCountry,
                 ])),
             ])
             ->all();
@@ -45,9 +56,11 @@ class UmrahPackageController extends Controller
         $whatsappNumber = app(GeneralSettings::class)->whatsapp_number;
 
         return view('pages.umroh.index', compact(
+            'activeCountry',
             'activeType',
             'alternateUrls',
             'canonicalUrl',
+            'countries',
             'packages',
             'packageTypes',
             'whatsappNumber',

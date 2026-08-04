@@ -4,6 +4,7 @@ return [
     'nav' => [
         'transport' => 'Transport',
         'tour' => 'Tour',
+        'country' => 'Negara',
         'umroh' => 'Umroh',
         'visa' => 'Visa',
         'shop' => 'Shop',
@@ -39,6 +40,10 @@ return [
             'category-label' => 'Kategori & Destinasi',
             'recommendation-label' => 'Rekomendasi Wisata Utama',
             'trailing-link' => 'Lihat Semua Tour',
+        ],
+        'country-mega-menu' => [
+            'featured-label' => 'Negara Destinasi Pilihan',
+            'trailing-link' => 'Lihat Semua Negara',
         ],
     ],
     'hero' => [

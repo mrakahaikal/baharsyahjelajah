@@ -4,6 +4,7 @@ return [
     'nav' => [
         'transport' => 'Pengangkutan',
         'tour' => 'Lawatan',
+        'country' => 'Negara',
         'umroh' => 'Umrah',
         'visa' => 'Visa',
         'shop' => 'Kedai',
@@ -39,6 +40,10 @@ return [
             'category-label' => 'Kategori & Destinasi',
             'recommendation-label' => 'Lawatan Pilihan',
             'trailing-link' => 'Lihat Semua Lawatan',
+        ],
+        'country-mega-menu' => [
+            'featured-label' => 'Negara Destinasi Pilihan',
+            'trailing-link' => 'Lihat Semua Negara',
         ],
     ],
     'hero' => [

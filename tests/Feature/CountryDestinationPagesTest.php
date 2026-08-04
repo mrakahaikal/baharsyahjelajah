@@ -75,3 +75,19 @@ it('renders country metadata on show page', function () {
         ->assertSee('EGP')
         ->assertSee('Bahasa Arab');
 });
+
+it('renders country mega menu in header navbar', function () {
+    Country::factory()->create([
+        'name' => ['id' => 'Turki', 'en' => 'Turkey', 'ms' => 'Turki'],
+        'slug' => 'turki',
+        'is_active' => true,
+        'is_featured' => true,
+    ]);
+
+    $response = $this->get('/id');
+
+    $response->assertStatus(200)
+        ->assertSee('Negara')
+        ->assertSee('Turki')
+        ->assertSee('id="country-mega-menu"', false);
+});

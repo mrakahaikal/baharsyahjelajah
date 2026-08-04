@@ -4,6 +4,7 @@ return [
     'nav' => [
         'transport' => 'Transport',
         'tour' => 'Tours',
+        'country' => 'Countries',
         'umroh' => 'Umrah',
         'visa' => 'Visa',
         'shop' => 'Shop',
@@ -39,6 +40,10 @@ return [
             'category-label' => 'Categories & Destinations',
             'recommendation-label' => 'Featured Tours',
             'trailing-link' => 'View All Tours',
+        ],
+        'country-mega-menu' => [
+            'featured-label' => 'Featured Destinations',
+            'trailing-link' => 'View All Countries',
         ],
     ],
     'hero' => [

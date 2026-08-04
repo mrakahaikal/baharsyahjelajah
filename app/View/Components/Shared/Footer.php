@@ -2,6 +2,7 @@
 
 namespace App\View\Components\Shared;
 
+use App\Models\Country;
 use App\Models\Destination;
 use App\Settings\FooterSettings;
 use App\Settings\GeneralSettings;
@@ -97,6 +98,21 @@ class Footer extends Component
     /** @return array<int, array{label: string, url: string}> */
     private function destinationLinks(FooterSettings $settings): array
     {
+        $countries = Country::query()
+            ->active()
+            ->featured()
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->take(4)
+            ->get()
+            ->map(fn (Country $country): array => [
+                'label' => $country->name,
+                'url' => route('country.show', [
+                    'locale' => $this->locale,
+                    'country' => $country,
+                ]),
+            ]);
+
         $destinations = Destination::query()
             ->select(['id', 'name', 'slug'])
             ->active()
@@ -112,14 +128,16 @@ class Footer extends Component
                 ]),
             ]);
 
-        if ($destinations->isNotEmpty()) {
-            $destinations->push([
+        $allLinks = $countries->toBase()->merge($destinations->toBase());
+
+        if ($allLinks->isNotEmpty()) {
+            $allLinks->push([
                 'label' => $this->localized($settings->destinations_all_label),
                 'url' => route('destination.index', ['locale' => $this->locale]),
             ]);
         }
 
-        return $destinations->values()->all();
+        return $allLinks->values()->all();
     }
 
     /** @param array<int, array<string, mixed>> $links

@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Enums\TourType;
+use App\Models\Country;
 use App\Models\Destination;
 use App\Models\Tour;
 use App\Models\TourCategory;
@@ -29,6 +30,9 @@ class TourCatalog extends Component
 
     #[Url(as: 'place', history: true, except: '')]
     public string $destinationSlug = '';
+
+    #[Url(as: 'country', history: true, except: '')]
+    public string $country = '';
 
     #[Locked]
     public string $heroImageUrl = '';
@@ -71,6 +75,12 @@ class TourCatalog extends Component
         $this->resetPage();
     }
 
+    public function updatedCountry(): void
+    {
+        $this->country = trim($this->country);
+        $this->resetPage();
+    }
+
     public function search(): void
     {
         $this->destination = trim($this->destination);
@@ -79,7 +89,7 @@ class TourCatalog extends Component
 
     public function clearFilter(string $filter): void
     {
-        if (! in_array($filter, ['destination', 'category', 'type', 'destinationSlug'], true)) {
+        if (! in_array($filter, ['destination', 'category', 'type', 'destinationSlug', 'country'], true)) {
             return;
         }
 
@@ -89,7 +99,7 @@ class TourCatalog extends Component
 
     public function resetFilters(): void
     {
-        $this->reset(['destination', 'category', 'type', 'destinationSlug']);
+        $this->reset(['destination', 'category', 'type', 'destinationSlug', 'country']);
         $this->resetPage();
     }
 
@@ -101,6 +111,7 @@ class TourCatalog extends Component
             $this->category,
             $this->isValidTourType() ? $this->type : '',
             $this->destinationSlug,
+            $this->country,
         ])
             ->filter(fn (string $value): bool => filled($value))
             ->count();
@@ -122,6 +133,16 @@ class TourCatalog extends Component
             )
             ->get()
             ->sortBy(fn (Destination $destination): string => $destination->name, SORT_NATURAL | SORT_FLAG_CASE)
+            ->values();
+
+        $countries = Country::query()
+            ->active()
+            ->where(function (Builder $query): void {
+                $query->whereHas('tours', fn (Builder $q) => $q->active())
+                    ->orWhereHas('tourPackages.tour', fn (Builder $q) => $q->active());
+            })
+            ->get()
+            ->sortBy(fn (Country $c) => $c->name, SORT_NATURAL | SORT_FLAG_CASE)
             ->values();
 
         $tours = Tour::query()
@@ -178,13 +199,19 @@ class TourCatalog extends Component
                     fn (Builder $destinationQuery): Builder => $destinationQuery->where('slug', $this->destinationSlug),
                 ),
             )
+            ->when(filled($this->country), function (Builder $query): void {
+                $query->where(function (Builder $q): void {
+                    $q->whereHas('countries', fn (Builder $cq) => $cq->where('slug', $this->country))
+                        ->orWhereHas('packages.countries', fn (Builder $cq) => $cq->where('slug', $this->country));
+                });
+            })
             ->orderByDesc('is_featured')
             ->latest()
             ->paginate(6);
 
         $tourTypes = TourType::cases();
 
-        return view('livewire.tour-catalog', compact('categories', 'destinations', 'locale', 'tours', 'tourTypes'));
+        return view('livewire.tour-catalog', compact('categories', 'destinations', 'countries', 'locale', 'tours', 'tourTypes'));
     }
 
     private function isValidTourType(): bool
