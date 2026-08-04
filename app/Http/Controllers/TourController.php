@@ -59,7 +59,7 @@ class TourController extends Controller
 
         $tour->load([
             'category',
-            'vehicles.media',
+            'countries',
             'packages' => fn ($query) => $query
                 ->oldest('id')
                 ->with(['includes', 'itineraries', 'vehicles.media', 'media', 'tiers.priceTiers']),
@@ -125,6 +125,7 @@ class TourController extends Controller
             'media',
             'itineraries.destinations.media',
             'includes',
+            'vehicles.media',
             'tiers.priceTiers',
         ]);
         $alternateUrls = $this->localizedPackageUrls($tour, $package);

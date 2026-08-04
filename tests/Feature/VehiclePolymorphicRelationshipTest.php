@@ -120,7 +120,7 @@ it('renders associated vehicles on umrah package show page', function () {
         ->assertSee('GMC Executive Bus');
 });
 
-it('renders associated vehicles on tour show page', function () {
+it('renders associated vehicles on tour package show page', function () {
     $vehicle = Vehicle::factory()->create([
         'name' => ['id' => 'Hyundai Staria VIP'],
         'slug' => 'hyundai-staria-vip',
@@ -130,12 +130,18 @@ it('renders associated vehicles on tour show page', function () {
     ]);
 
     $tour = createTestTour();
+    $tourPackage = $tour->packages()->create([
+        'name' => ['id' => 'Paket Bali 4D3N', 'en' => 'Bali Package 4D3N'],
+        'slug' => ['id' => 'paket-bali-4d3n', 'en' => 'bali-package-4d3n'],
+        'duration_days' => 4,
+        'duration_nights' => 3,
+    ]);
 
-    $tour->vehicles()->attach($vehicle);
+    $tourPackage->vehicles()->attach($vehicle);
 
-    $response = $this->get('/id/tour/pesona-bali-island-tour');
+    $response = $this->get('/id/tour/pesona-bali-island-tour/package/paket-bali-4d3n');
 
     $response->assertStatus(200)
-        ->assertSee('Kendaraan yang Digunakan')
+        ->assertSee('Armada')
         ->assertSee('Hyundai Staria VIP');
 });

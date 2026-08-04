@@ -81,6 +81,7 @@ class UmrahPackageController extends Controller
 
         $package->load([
             'media',
+            'countries',
             'prices',
             'privatePrices',
             'upcomingDepartures.prices',

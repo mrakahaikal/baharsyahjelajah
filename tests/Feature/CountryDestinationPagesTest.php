@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Country;
+use App\Models\UmrahPackage;
+use App\Models\Vehicle;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -90,4 +92,30 @@ it('renders country mega menu in header navbar', function () {
         ->assertSee('Negara')
         ->assertSee('Turki')
         ->assertSee('id="country-mega-menu"', false);
+});
+
+it('renders associated tour packages, umrah packages, and vehicles on country show page', function () {
+    $country = Country::factory()->create([
+        'name' => ['id' => 'Jepang', 'en' => 'Japan', 'ms' => 'Jepun'],
+        'slug' => 'jepang',
+        'is_active' => true,
+    ]);
+
+    $umrah = UmrahPackage::factory()->create([
+        'name' => ['id' => 'Umrah Plus Sakura Jepang', 'en' => 'Umrah Plus Sakura Japan'],
+        'is_active' => true,
+    ]);
+    $umrah->countries()->attach($country);
+
+    $vehicle = Vehicle::factory()->create([
+        'name' => ['id' => 'Toyota Coaster Japan VIP'],
+        'is_active' => true,
+    ]);
+    $vehicle->countries()->attach($country);
+
+    $response = $this->get('/id/negara/jepang');
+
+    $response->assertStatus(200)
+        ->assertSee('Umrah Plus Sakura Jepang')
+        ->assertSee('Toyota Coaster Japan VIP');
 });

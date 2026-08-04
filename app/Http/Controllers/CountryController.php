@@ -96,7 +96,10 @@ class CountryController extends Controller
 
         $tourPackages = TourPackage::query()
             ->whereHas('tour', fn (Builder $query): Builder => $query->active())
-            ->whereHas('countries', fn (Builder $query): Builder => $query->whereKey($country->getKey()))
+            ->where(function (Builder $query) use ($country): void {
+                $query->whereHas('countries', fn (Builder $q): Builder => $q->whereKey($country->getKey()))
+                    ->orWhereHas('tour.countries', fn (Builder $q): Builder => $q->whereKey($country->getKey()));
+            })
             ->with([
                 'tour.category',
                 'media',
@@ -142,8 +145,6 @@ class CountryController extends Controller
             ->active()
             ->whereHas('countries', fn (Builder $query): Builder => $query->whereKey($country->getKey()))
             ->with('media')
-            ->availableForRentalOn(today())
-            ->withEffectiveRentalSummary(today())
             ->latest('id')
             ->paginate(6, ['*'], 'vehicle_page')
             ->withQueryString();

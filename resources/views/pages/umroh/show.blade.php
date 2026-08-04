@@ -39,6 +39,15 @@
                     <span>{{ __('umrah.types.'.$package->package_type) }}</span>
                     <span aria-hidden="true">/</span>
                     <span>{{ __('umrah.card.days', ['count' => $package->duration_days]) }}</span>
+                    @foreach($package->countries as $country)
+                        <a href="{{ route('country.show', ['locale' => $locale, 'country' => $country]) }}"
+                           class="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-xs font-bold text-amber-300 hover:bg-amber-400 hover:text-neutral-950 transition-colors normal-case">
+                            @if($country->flag_url)
+                                <img src="{{ $country->flag_url }}" alt="" class="h-3.5 w-5 rounded-xs object-cover">
+                            @endif
+                            <span>{{ $country->name }}</span>
+                        </a>
+                    @endforeach
                 </div>
                 <h1 id="umrah-package-heading" class="mt-4 text-balance text-3xl font-extrabold leading-tight sm:text-5xl lg:text-6xl">{{ $package->name }}</h1>
                 <p class="mt-5 max-w-2xl text-sm leading-7 text-neutral-300 sm:text-base">{{ strip_tags($package->description ?? '') }}</p>

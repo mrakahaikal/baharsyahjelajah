@@ -72,6 +72,9 @@
             <nav class="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-3 text-sm font-semibold text-slate-600 sm:px-6 lg:px-8" aria-label="Package sections">
                 <a href="#overview" class="min-w-max rounded-full px-3 py-1.5 hover:bg-slate-100">{{ __('frontend.tour.overview') }}</a>
                 <a href="#itinerary" class="min-w-max rounded-full px-3 py-1.5 hover:bg-slate-100">{{ __('frontend.tour.itinerary') }}</a>
+                @if($package->vehicles->isNotEmpty())
+                    <a href="#vehicles" class="min-w-max rounded-full px-3 py-1.5 hover:bg-slate-100">Armada Transportasi</a>
+                @endif
                 <a href="#includes" class="min-w-max rounded-full px-3 py-1.5 hover:bg-slate-100">{{ __('frontend.tour.whats_included') }}</a>
                 <a href="#pricing" class="min-w-max rounded-full px-3 py-1.5 hover:bg-slate-100">{{ __('frontend.tour.package.pricing_nav') }}</a>
             </nav>
@@ -127,6 +130,34 @@
                         <p class="mt-4 text-sm text-slate-500">{{ __('frontend.tour.package.itinerary_empty') }}</p>
                     @endforelse
                 </section>
+
+                @if($package->vehicles->isNotEmpty())
+                    <section id="vehicles" class="scroll-mt-36 pt-12">
+                        <h2 class="text-2xl font-extrabold text-slate-900">Armada & Transportasi Paket</h2>
+                        <p class="mt-2 text-sm text-slate-500">Pilihan armada kendaraan yang disediakan untuk melayani perjalanan paket ini.</p>
+                        <div class="mt-5 grid gap-4 sm:grid-cols-2">
+                            @foreach($package->vehicles as $vehicle)
+                                <a href="{{ route('transport.show', ['locale' => $locale, 'vehicle' => $vehicle]) }}"
+                                   class="group flex items-center gap-4 rounded-xl border border-slate-200 bg-white p-4 transition-all hover:border-blue-500 hover:shadow-md">
+                                    <img src="{{ $vehicle->cover_url }}" alt="{{ $vehicle->name }}" class="h-16 w-20 rounded-lg object-cover shrink-0">
+                                    <div class="min-w-0 flex-1">
+                                        <h3 class="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors truncate">{{ $vehicle->name }}</h3>
+                                        <p class="text-xs text-slate-500 mt-0.5">{{ $vehicle->brand }} {{ $vehicle->model }}</p>
+                                        <div class="mt-2 flex items-center gap-3 text-[11px] font-medium text-slate-600">
+                                            <span class="flex items-center gap-1">
+                                                <x-lucide-users class="h-3.5 w-3.5 text-slate-400" aria-hidden="true" />
+                                                {{ $vehicle->capacity_pax }} Pax
+                                            </span>
+                                            @if($vehicle->transmission)
+                                                <span>• {{ ucfirst($vehicle->transmission) }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </a>
+                            @endforeach
+                        </div>
+                    </section>
+                @endif
 
                 <section id="includes" class="scroll-mt-36 pt-12">
                     <div class="grid gap-6 md:grid-cols-2">
