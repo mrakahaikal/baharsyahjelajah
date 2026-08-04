@@ -66,6 +66,8 @@
         </div>
     </section>
 
+    <x-partials.home.featured-countries :countries="$featuredCountries" :$locale />
+
     <x-partials.home.featured-vehicles :vehicles="$featuredVehicles" :$locale />
 
     @if($promoBanner)

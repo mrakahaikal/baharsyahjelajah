@@ -25,7 +25,12 @@ class CountriesTable
                 SpatieMediaLibraryImageColumn::make('flag')
                     ->label('Bendera')
                     ->collection(Country::MEDIA_COLLECTION_FLAG)
-                    ->size(48),
+                    ->size(40),
+                SpatieMediaLibraryImageColumn::make('cover')
+                    ->label('Sampul')
+                    ->collection(Country::MEDIA_COLLECTION_COVER)
+                    ->height(40)
+                    ->width(70),
                 TextColumn::make('name')
                     ->label('Negara')
                     ->searchable()
@@ -48,6 +53,10 @@ class CountriesTable
                     ->numeric()
                     ->sortable()
                     ->alignCenter(),
+                IconColumn::make('is_featured')
+                    ->label('Featured')
+                    ->boolean()
+                    ->alignCenter(),
                 IconColumn::make('is_active')
                     ->label('Aktif')
                     ->boolean()
@@ -59,6 +68,7 @@ class CountriesTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                TernaryFilter::make('is_featured')->label('Tampil di Beranda'),
                 TernaryFilter::make('is_active')->label('Status Aktif'),
                 TrashedFilter::make()->label('Sampah'),
             ])

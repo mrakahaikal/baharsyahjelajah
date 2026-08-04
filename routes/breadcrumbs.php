@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Country;
 use App\Models\Destination;
 use App\Models\Post;
 use App\Models\Tour;
@@ -25,7 +26,7 @@ $breadcrumbSlug = static function (Model|string $value, string $locale): string 
         return $value;
     }
 
-    if ($value instanceof Destination || $value instanceof VisaService) {
+    if ($value instanceof Country || $value instanceof Destination || $value instanceof VisaService) {
         return (string) $value->getRouteKey();
     }
 
@@ -144,6 +145,26 @@ Breadcrumbs::for('destination.show', function (
     $trail->push($breadcrumbTitle($destination), route('destination.show', [
         'locale' => $locale,
         'destination' => $breadcrumbSlug($destination, $locale),
+    ]));
+});
+
+Breadcrumbs::for('country.index', function (
+    BreadcrumbTrail $trail,
+    string $locale,
+): void {
+    $trail->parent('home', $locale);
+    $trail->push('Negara Destinasi', route('country.index', ['locale' => $locale]));
+});
+
+Breadcrumbs::for('country.show', function (
+    BreadcrumbTrail $trail,
+    string $locale,
+    Country|string $country,
+) use ($breadcrumbSlug, $breadcrumbTitle): void {
+    $trail->parent('country.index', $locale);
+    $trail->push($breadcrumbTitle($country), route('country.show', [
+        'locale' => $locale,
+        'country' => $breadcrumbSlug($country, $locale),
     ]));
 });
 

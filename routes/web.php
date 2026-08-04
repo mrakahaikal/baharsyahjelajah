@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CountryController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TourController;
@@ -95,6 +96,18 @@ Route::get('/destinasi/{path?}', function (Request $request, ?string $path = nul
     ->where('path', '.*')
     ->name('destination.redirect');
 
+Route::get('/negara/{path?}', function (Request $request, ?string $path = null) {
+    $destination = '/id/negara'.($path !== null ? '/'.$path : '');
+
+    if ($queryString = $request->getQueryString()) {
+        $destination .= '?'.$queryString;
+    }
+
+    return redirect($destination);
+})
+    ->where('path', '.*')
+    ->name('country.redirect');
+
 Route::get('/visa/{path?}', function (Request $request, ?string $path = null) {
     $destination = '/id/visa'.($path !== null ? '/'.$path : '');
 
@@ -150,6 +163,11 @@ Route::group([
     Route::prefix('destinasi')->group(function () {
         Route::get('/', [DestinationController::class, 'index'])->name('destination.index');
         Route::get('/{destination}', [DestinationController::class, 'show'])->name('destination.show');
+    });
+
+    Route::prefix('negara')->group(function () {
+        Route::get('/', [CountryController::class, 'index'])->name('country.index');
+        Route::get('/{country}', [CountryController::class, 'show'])->name('country.show');
     });
 
     Route::prefix('blog')->group(function () {

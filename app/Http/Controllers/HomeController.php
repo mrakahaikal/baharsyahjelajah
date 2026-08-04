@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\BannerPlacement;
 use App\Enums\FaqContext;
 use App\Models\Banner;
+use App\Models\Country;
 use App\Models\Faq;
 use App\Models\Post;
 use App\Models\Testimonial;
@@ -64,6 +65,21 @@ class HomeController extends Controller
             ->orderBy('sort_order')
             ->orderBy('id')
             ->limit(2)
+            ->get();
+
+        $featuredCountries = Country::query()
+            ->active()
+            ->with('media')
+            ->withCount([
+                'tourPackages as tour_packages_count' => fn ($query) => $query
+                    ->whereHas('tour', fn ($query) => $query->active()),
+                'umrahPackages as umrah_packages_count' => fn ($query) => $query->active(),
+                'visaServices as visa_services_count' => fn ($query) => $query->publiclyAvailable(),
+            ])
+            ->orderByDesc('is_featured')
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->limit(5)
             ->get();
 
         $testimonials = Testimonial::query()
@@ -146,6 +162,7 @@ class HomeController extends Controller
 
         return view('pages.home', compact(
             'alternateUrls',
+            'featuredCountries',
             'featuredTours',
             'featuredUmrahPackages',
             'featuredVehicles',

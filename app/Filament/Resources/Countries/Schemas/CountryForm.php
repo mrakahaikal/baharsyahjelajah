@@ -81,13 +81,26 @@ class CountryForm
                             ->disk('public')
                             ->visibility('public')
                             ->helperText('Format JPG, PNG, atau WebP. Maksimal 2 MB.'),
-                        Grid::make(2)->schema([
+                        SpatieMediaLibraryFileUpload::make('cover')
+                            ->label('Foto Thumbnail / Sampul Destinasi')
+                            ->collection(Country::MEDIA_COLLECTION_COVER)
+                            ->image()
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->maxSize(5120)
+                            ->imageEditor()
+                            ->disk('public')
+                            ->visibility('public')
+                            ->helperText('Foto lansekap utama negara. Format JPG, PNG, atau WebP. Maksimal 5 MB.'),
+                        Grid::make(3)->schema([
                             TextInput::make('sort_order')
                                 ->label('Urutan Tampilan')
                                 ->numeric()
                                 ->minValue(0)
                                 ->default(0)
                                 ->required(),
+                            Toggle::make('is_featured')
+                                ->label('Tampilkan di Beranda (Bento Grid)')
+                                ->default(false),
                             Toggle::make('is_active')
                                 ->label('Aktif dan Dapat Dipilih')
                                 ->default(true),
