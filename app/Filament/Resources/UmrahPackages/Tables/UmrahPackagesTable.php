@@ -3,7 +3,10 @@
 namespace App\Filament\Resources\UmrahPackages\Tables;
 
 use App\Enums\UmrahPackageType;
+use App\Models\Country;
 use App\Models\UmrahPackage;
+use App\Models\Vehicle;
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
@@ -11,12 +14,15 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\Select;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection;
 
 class UmrahPackagesTable
 {
@@ -103,6 +109,58 @@ class UmrahPackagesTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    BulkAction::make('attachCountries')
+                        ->label('Kaitkan Negara Destinasi')
+                        ->icon('lucide-globe')
+                        ->modalHeading('Kaitkan Negara Destinasi Ke Paket Umrah Terpilih')
+                        ->modalDescription('Pilih satu atau beberapa negara yang ingin dikaitkan secara massal ke paket umrah yang dipilih.')
+                        ->form([
+                            Select::make('countries')
+                                ->label('Pilih Negara Destinasi')
+                                ->options(fn () => Country::query()->pluck('name', 'id'))
+                                ->multiple()
+                                ->searchable()
+                                ->preload()
+                                ->required(),
+                        ])
+                        ->action(function (Collection $records, array $data): void {
+                            $countryIds = $data['countries'] ?? [];
+                            foreach ($records as $record) {
+                                $record->countries()->syncWithoutDetaching($countryIds);
+                            }
+
+                            Notification::make()
+                                ->title('Berhasil Mengaitkan Negara Destinasi')
+                                ->body(count($records).' paket umrah berhasil dikaitkan dengan negara pilihan.')
+                                ->success()
+                                ->send();
+                        }),
+                    BulkAction::make('attachVehicles')
+                        ->label('Kaitkan Armada Kendaraan')
+                        ->icon('lucide-bus')
+                        ->modalHeading('Kaitkan Armada Kendaraan Ke Paket Umrah Terpilih')
+                        ->modalDescription('Pilih satu atau beberapa armada kendaraan yang ingin dikaitkan secara massal ke paket umrah yang dipilih.')
+                        ->form([
+                            Select::make('vehicles')
+                                ->label('Pilih Armada Kendaraan')
+                                ->options(fn () => Vehicle::query()->pluck('name', 'id'))
+                                ->multiple()
+                                ->searchable()
+                                ->preload()
+                                ->required(),
+                        ])
+                        ->action(function (Collection $records, array $data): void {
+                            $vehicleIds = $data['vehicles'] ?? [];
+                            foreach ($records as $record) {
+                                $record->vehicles()->syncWithoutDetaching($vehicleIds);
+                            }
+
+                            Notification::make()
+                                ->title('Berhasil Mengaitkan Armada Kendaraan')
+                                ->body(count($records).' paket umrah berhasil dikaitkan dengan armada kendaraan pilihan.')
+                                ->success()
+                                ->send();
+                        }),
                     DeleteBulkAction::make()->label('Hapus Terpilih'),
                     ForceDeleteBulkAction::make()->label('Hapus Permanen'),
                     RestoreBulkAction::make()->label('Pulihkan'),
