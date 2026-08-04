@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Country;
+use App\Models\Tour;
+use App\Models\TourCategory;
 use App\Models\UmrahPackage;
 use App\Models\Vehicle;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -94,12 +96,29 @@ it('renders country mega menu in header navbar', function () {
         ->assertSee('id="country-mega-menu"', false);
 });
 
-it('renders associated tour packages, umrah packages, and vehicles on country show page', function () {
+it('renders associated tours, umrah packages, and vehicles on country show page', function () {
     $country = Country::factory()->create([
         'name' => ['id' => 'Jepang', 'en' => 'Japan', 'ms' => 'Jepun'],
         'slug' => 'jepang',
         'is_active' => true,
     ]);
+
+    $tour = Tour::create([
+        'tour_category_id' => TourCategory::create([
+            'name' => ['id' => 'Wisata Alam', 'en' => 'Nature Tour'],
+            'slug' => ['id' => 'wisata-alam-jp', 'en' => 'nature-tour-jp'],
+            'icon' => 'heroicon-o-sparkles',
+            'sort_order' => rand(1, 999999),
+        ])->id,
+        'name' => ['id' => 'Tour Sakura Jepang', 'en' => 'Japan Sakura Tour'],
+        'slug' => ['id' => 'tour-sakura-jepang', 'en' => 'japan-sakura-tour'],
+        'short_description' => ['id' => 'Deskripsi'],
+        'description' => ['id' => 'Deskripsi'],
+        'tour_type' => 'international',
+        'currency' => 'IDR',
+        'is_active' => true,
+    ]);
+    $tour->countries()->attach($country);
 
     $umrah = UmrahPackage::factory()->create([
         'name' => ['id' => 'Umrah Plus Sakura Jepang', 'en' => 'Umrah Plus Sakura Japan'],
@@ -116,6 +135,7 @@ it('renders associated tour packages, umrah packages, and vehicles on country sh
     $response = $this->get('/id/negara/jepang');
 
     $response->assertStatus(200)
+        ->assertSee('Tour Sakura Jepang')
         ->assertSee('Umrah Plus Sakura Jepang')
         ->assertSee('Toyota Coaster Japan VIP');
 });

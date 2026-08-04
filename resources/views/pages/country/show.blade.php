@@ -111,23 +111,23 @@
         </div>
     </section>
 
-    <!-- Tour Packages Section -->
-    @if($tourPackages->isNotEmpty())
+    <!-- Tours Section -->
+    @if($tours->isNotEmpty())
         <section class="bg-slate-50 py-16 sm:py-20" aria-labelledby="tours-heading">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="max-w-2xl">
                     <p class="text-xs font-bold uppercase tracking-[0.16em] text-blue-600">Paket Perjalanan</p>
                     <h2 id="tours-heading" class="mt-2 text-3xl font-extrabold text-slate-950 sm:text-4xl">
-                        {{ __('country.show.tabs.tours', ['count' => $tourPackages->total()]) }}
+                        {{ __('country.show.tabs.tours', ['count' => $tours->total()]) }}
                     </h2>
                 </div>
 
                 <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    @foreach($tourPackages as $package)
-                        <x-ui.tour-package-card :$package :$locale />
+                    @foreach($tours as $tour)
+                        <x-ui.tour-card :$tour :$locale />
                     @endforeach
                 </div>
-                <div class="mt-10">{{ $tourPackages->links() }}</div>
+                <div class="mt-10">{{ $tours->links() }}</div>
             </div>
         </section>
     @endif

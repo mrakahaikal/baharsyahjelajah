@@ -137,9 +137,9 @@
                         <p class="mt-2 text-sm text-slate-500">Pilihan armada kendaraan yang disediakan untuk melayani perjalanan paket ini.</p>
                         <div class="mt-5 grid gap-4 sm:grid-cols-2">
                             @foreach($package->vehicles as $vehicle)
-                                <a href="{{ route('transport.show', ['locale' => $locale, 'vehicle' => $vehicle]) }}"
+                                <a href="{{ route('transport.show', ['locale' => $locale, 'vehicle' => $vehicle->slug]) }}"
                                    class="group flex items-center gap-4 rounded-xl border border-slate-200 bg-white p-4 transition-all hover:border-blue-500 hover:shadow-md">
-                                    <img src="{{ $vehicle->cover_url }}" alt="{{ $vehicle->name }}" class="h-16 w-20 rounded-lg object-cover shrink-0">
+                                    <img src="{{ $vehicle->thumbnail_url }}" alt="{{ $vehicle->name }}" class="h-16 w-20 rounded-lg object-cover shrink-0">
                                     <div class="min-w-0 flex-1">
                                         <h3 class="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors truncate">{{ $vehicle->name }}</h3>
                                         <p class="text-xs text-slate-500 mt-0.5">{{ $vehicle->brand }} {{ $vehicle->model }}</p>

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Country;
 use App\Models\Destination;
 use App\Models\Post;
-use App\Models\TourPackage;
+use App\Models\Tour;
 use App\Models\UmrahPackage;
 use App\Models\Vehicle;
 use App\Models\VisaService;
@@ -94,19 +94,17 @@ class CountryController extends Controller
 
         $country->load('media');
 
-        $tourPackages = TourPackage::query()
-            ->whereHas('tour', fn (Builder $query): Builder => $query->active())
+        $tours = Tour::query()
+            ->active()
             ->where(function (Builder $query) use ($country): void {
                 $query->whereHas('countries', fn (Builder $q): Builder => $q->whereKey($country->getKey()))
-                    ->orWhereHas('tour.countries', fn (Builder $q): Builder => $q->whereKey($country->getKey()));
+                    ->orWhereHas('packages.countries', fn (Builder $q): Builder => $q->whereKey($country->getKey()));
             })
             ->with([
-                'tour.category',
-                'media',
-                'includes',
-                'itineraries',
-                'tiers.priceTiers',
+                'category',
+                'packages' => fn ($query) => $query->with(['media', 'tiers.priceTiers']),
             ])
+            ->orderByDesc('is_featured')
             ->latest('id')
             ->paginate(6, ['*'], 'tour_page')
             ->withQueryString();
@@ -197,7 +195,7 @@ class CountryController extends Controller
             'destinations',
             'posts',
             'schemaJson',
-            'tourPackages',
+            'tours',
             'umrahPackages',
             'vehicles',
             'visaServices',
