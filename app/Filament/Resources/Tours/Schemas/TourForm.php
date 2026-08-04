@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Tours\Schemas;
 use App\Models\Country;
 use App\Models\Destination;
 use App\Models\TourPackage;
+use App\Models\Vehicle;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -76,6 +77,16 @@ class TourForm
                                                                 ->native(false)
                                                                 ->helperText('Pilih satu atau lebih negara tujuan tur ini.')
                                                                 ->prefixIcon('lucide-flag'),
+                                                            Select::make('vehicles')
+                                                                ->label('Armada Transportasi / Kendaraan')
+                                                                ->relationship('vehicles', 'name')
+                                                                ->getOptionLabelFromRecordUsing(fn (Vehicle $record): string => $record->name)
+                                                                ->multiple()
+                                                                ->searchable()
+                                                                ->preload()
+                                                                ->native(false)
+                                                                ->helperText('Pilih armada transportasi / kendaraan yang dikaitkan dengan tur ini.')
+                                                                ->prefixIcon('lucide-bus'),
                                                             Select::make('currency')
                                                                 ->label('Mata Uang Utama')
                                                                 ->options(self::currencyOptions())

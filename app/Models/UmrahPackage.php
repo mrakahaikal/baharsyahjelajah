@@ -42,6 +42,7 @@ class UmrahPackage extends Model implements HasMedia
         static::forceDeleted(function (UmrahPackage $package) {
             $package->destinations()->detach();
             $package->countries()->detach();
+            $package->vehicles()->detach();
         });
     }
 
@@ -111,6 +112,12 @@ class UmrahPackage extends Model implements HasMedia
     public function countries(): MorphToMany
     {
         return $this->morphToMany(Country::class, 'countryable')
+            ->withTimestamps();
+    }
+
+    public function vehicles(): MorphToMany
+    {
+        return $this->morphToMany(Vehicle::class, 'vehicleable')
             ->withTimestamps();
     }
 

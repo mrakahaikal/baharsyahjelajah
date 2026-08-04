@@ -98,6 +98,24 @@ class Vehicle extends Model implements HasMedia
             ->withTimestamps();
     }
 
+    public function tours(): MorphToMany
+    {
+        return $this->morphedByMany(Tour::class, 'vehicleable')
+            ->withTimestamps();
+    }
+
+    public function tourPackages(): MorphToMany
+    {
+        return $this->morphedByMany(TourPackage::class, 'vehicleable')
+            ->withTimestamps();
+    }
+
+    public function umrahPackages(): MorphToMany
+    {
+        return $this->morphedByMany(UmrahPackage::class, 'vehicleable')
+            ->withTimestamps();
+    }
+
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);

@@ -263,6 +263,33 @@ class VehicleForm
                                             ->helperText('Biaya lembur per jam. Kosongkan bila harus konfirmasi admin.'),
                                     ]),
                             ]),
+                        Tab::make('Paket Terkait (Tour & Umrah)')
+                            ->icon('lucide-link')
+                            ->schema([
+                                Section::make('Keterkaitan Paket Tour & Umrah')
+                                    ->description('Pilih paket-paket tour dan umrah yang menggunakan atau menyediakan armada kendaraan ini.')
+                                    ->icon('lucide-layers')
+                                    ->schema([
+                                        Select::make('tours')
+                                            ->label('Paket Tour Terkait')
+                                            ->relationship('tours', 'name')
+                                            ->multiple()
+                                            ->searchable()
+                                            ->preload()
+                                            ->placeholder('Pilih tur yang menggunakan armada ini')
+                                            ->helperText('Pilih paket tour yang menggunakan unit kendaraan ini.')
+                                            ->prefixIcon('lucide-map'),
+                                        Select::make('umrahPackages')
+                                            ->label('Paket Umrah Terkait')
+                                            ->relationship('umrahPackages', 'name')
+                                            ->multiple()
+                                            ->searchable()
+                                            ->preload()
+                                            ->placeholder('Pilih paket umrah yang menggunakan armada ini')
+                                            ->helperText('Pilih paket umrah yang menggunakan unit kendaraan ini.')
+                                            ->prefixIcon('lucide-moon-star'),
+                                    ]),
+                            ]),
                     ])
                     ->persistTabInQueryString('tab')
                     ->columnSpanFull(),

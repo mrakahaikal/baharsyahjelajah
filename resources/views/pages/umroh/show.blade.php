@@ -180,6 +180,32 @@
                         </section>
                     @endif
 
+                    @if($package->vehicles->isNotEmpty())
+                        <section aria-labelledby="vehicles-heading">
+                            <h2 id="vehicles-heading" class="text-2xl font-extrabold text-neutral-950">Armada & Transportasi Paket</h2>
+                            <div class="mt-5 grid gap-4 sm:grid-cols-2">
+                                @foreach($package->vehicles as $vehicle)
+                                    <a href="{{ route('transport.show', ['locale' => $locale, 'vehicle' => $vehicle]) }}" class="group flex items-center gap-4 rounded-xl border border-stone-200 bg-white p-4 transition-all hover:border-amber-500 hover:shadow-md">
+                                        <img src="{{ $vehicle->cover_url }}" alt="{{ $vehicle->name }}" class="h-16 w-20 rounded-lg object-cover shrink-0">
+                                        <div class="min-w-0 flex-1">
+                                            <h3 class="text-sm font-bold text-neutral-950 group-hover:text-amber-700 transition-colors truncate">{{ $vehicle->name }}</h3>
+                                            <p class="text-xs text-stone-500 mt-0.5">{{ $vehicle->brand }} {{ $vehicle->model }}</p>
+                                            <div class="mt-2 flex items-center gap-3 text-[11px] font-medium text-stone-600">
+                                                <span class="flex items-center gap-1">
+                                                    <x-lucide-users class="h-3.5 w-3.5 text-stone-400" aria-hidden="true" />
+                                                    {{ $vehicle->capacity_pax }} Pax
+                                                </span>
+                                                @if($vehicle->transmission)
+                                                    <span>• {{ ucfirst($vehicle->transmission) }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </section>
+                    @endif
+
                     @foreach([
                         ['items' => $includedItems, 'title' => __('umrah.show.included_title'), 'icon' => 'check', 'color' => 'text-emerald-700'],
                         ['items' => $excludedItems, 'title' => __('umrah.show.excluded_title'), 'icon' => 'x', 'color' => 'text-red-700'],

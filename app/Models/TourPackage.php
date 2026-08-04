@@ -31,6 +31,7 @@ class TourPackage extends Model implements HasMedia
         static::deleting(function (TourPackage $tourPackage): void {
             $tourPackage->destinations()->detach();
             $tourPackage->countries()->detach();
+            $tourPackage->vehicles()->detach();
 
             $tourPackage->itineraries()
                 ->eachById(fn (TourPackageItinerary $itinerary) => $itinerary->destinations()->detach());
@@ -93,6 +94,12 @@ class TourPackage extends Model implements HasMedia
     public function countries(): MorphToMany
     {
         return $this->morphToMany(Country::class, 'countryable')
+            ->withTimestamps();
+    }
+
+    public function vehicles(): MorphToMany
+    {
+        return $this->morphToMany(Vehicle::class, 'vehicleable')
             ->withTimestamps();
     }
 

@@ -86,6 +86,7 @@ class UmrahPackageController extends Controller
             'upcomingDepartures.prices',
             'includes',
             'itineraries',
+            'vehicles.media',
             'testimonials',
         ]);
 

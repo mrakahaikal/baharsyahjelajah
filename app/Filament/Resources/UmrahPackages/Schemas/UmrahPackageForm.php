@@ -67,6 +67,26 @@ class UmrahPackageForm
                                                                 ->placeholder('Contoh: 28500000')
                                                                 ->helperText('Harga dasar acuan sebelum tipe kamar.')
                                                                 ->prefixIcon('lucide-banknote'),
+                                                            Select::make('countries')
+                                                                ->label('Negara Destinasi')
+                                                                ->relationship('countries', 'name')
+                                                                ->multiple()
+                                                                ->searchable()
+                                                                ->preload()
+                                                                ->placeholder('Pilih negara destinasi')
+                                                                ->helperText('Dapat memilih satu atau beberapa negara (misal: Saudi Arabia, Turki).')
+                                                                ->prefixIcon('lucide-globe')
+                                                                ->columnSpanFull(),
+                                                            Select::make('vehicles')
+                                                                ->label('Armada Transportasi / Kendaraan')
+                                                                ->relationship('vehicles', 'name')
+                                                                ->multiple()
+                                                                ->searchable()
+                                                                ->preload()
+                                                                ->placeholder('Pilih armada bus / mobil untuk paket ini')
+                                                                ->helperText('Pilih kendaraan / armada transportasi yang digunakan dalam paket ini.')
+                                                                ->prefixIcon('lucide-bus')
+                                                                ->columnSpanFull(),
                                                         ]),
                                                     Translate::make()
                                                         ->locales(['id', 'en', 'ms'])

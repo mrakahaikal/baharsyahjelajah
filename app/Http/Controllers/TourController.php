@@ -59,9 +59,10 @@ class TourController extends Controller
 
         $tour->load([
             'category',
+            'vehicles.media',
             'packages' => fn ($query) => $query
                 ->oldest('id')
-                ->with(['includes', 'itineraries', 'media', 'tiers.priceTiers']),
+                ->with(['includes', 'itineraries', 'vehicles.media', 'media', 'tiers.priceTiers']),
         ]);
 
         $destinationHighlights = Destination::query()
