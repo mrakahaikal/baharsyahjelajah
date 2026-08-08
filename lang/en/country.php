@@ -28,6 +28,7 @@ return [
         'umrah_count' => ':count Umrah',
         'visa_count' => ':count Visas',
         'destinations_count' => ':count Places',
+        'vehicles_count' => ':count Vehicles',
     ],
     'show' => [
         'eyebrow' => 'Destination Country',

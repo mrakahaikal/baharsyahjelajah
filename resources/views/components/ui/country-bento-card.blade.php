@@ -5,7 +5,9 @@
     $toursCount = $country->tour_packages_count ?? $country->tourPackages()->count();
     $umrahCount = $country->umrah_packages_count ?? $country->umrahPackages()->count();
     $visaCount = $country->visa_services_count ?? $country->visaServices()->count();
-    $totalCount = $toursCount + $umrahCount + $visaCount;
+    $vehiclesCount = $country->vehicles_count ?? $country->vehicles()->count();
+    $destinationsCount = $country->destinations_count ?? $country->destinations()->count();
+    $totalCount = $toursCount + $umrahCount + $visaCount + $vehiclesCount + $destinationsCount;
 @endphp
 
 <article {{ $attributes->class([
@@ -65,6 +67,18 @@
                     <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-500/20 px-3 py-1 text-xs font-bold text-amber-200 border border-amber-400/30 backdrop-blur-xs">
                         <x-lucide-moon-star class="h-3.5 w-3.5" aria-hidden="true" />
                         {{ __('country.home.umrah_count', ['count' => $umrahCount]) }}
+                    </span>
+                @endif
+                @if($vehiclesCount > 0)
+                    <span class="inline-flex items-center gap-1.5 rounded-full bg-purple-500/20 px-3 py-1 text-xs font-bold text-purple-200 border border-purple-400/30 backdrop-blur-xs">
+                        <x-lucide-bus class="h-3.5 w-3.5" aria-hidden="true" />
+                        {{ __('country.home.vehicles_count', ['count' => $vehiclesCount]) }}
+                    </span>
+                @endif
+                @if($destinationsCount > 0)
+                    <span class="inline-flex items-center gap-1.5 rounded-full bg-sky-500/20 px-3 py-1 text-xs font-bold text-sky-200 border border-sky-400/30 backdrop-blur-xs">
+                        <x-lucide-map-pin class="h-3.5 w-3.5" aria-hidden="true" />
+                        {{ __('country.home.destinations_count', ['count' => $destinationsCount]) }}
                     </span>
                 @endif
                 @if($visaCount > 0)

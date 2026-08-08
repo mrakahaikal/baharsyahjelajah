@@ -75,6 +75,8 @@ class HomeController extends Controller
                     ->whereHas('tour', fn ($query) => $query->active()),
                 'umrahPackages as umrah_packages_count' => fn ($query) => $query->active(),
                 'visaServices as visa_services_count' => fn ($query) => $query->publiclyAvailable(),
+                'destinations as destinations_count' => fn ($query) => $query->active(),
+                'vehicles as vehicles_count' => fn ($query) => $query->active(),
             ])
             ->orderByDesc('is_featured')
             ->orderBy('sort_order')

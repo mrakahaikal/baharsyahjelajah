@@ -32,6 +32,7 @@
         <h2 class="mt-3 text-xl font-extrabold leading-7 text-slate-950">
             <a href="{{ $url }}" class="rounded-sm transition-colors hover:text-blue-600 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600">
                 {{ $destination->name }}
+                <span class="absolute inset-0 z-10"></span>
             </a>
         </h2>
         @if(filled($destination->description))
