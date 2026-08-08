@@ -6,6 +6,7 @@ use App\Filament\Resources\Destinations\Pages\ManageDestinations;
 use App\Models\Country;
 use App\Models\Destination;
 use BackedEnum;
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
@@ -16,6 +17,7 @@ use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
@@ -27,6 +29,7 @@ use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 use SolutionForest\FilamentTranslateField\Forms\Component\Translate;
 
@@ -227,6 +230,32 @@ class DestinationResource extends Resource
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    BulkAction::make('attachCountries')
+                        ->label('Kaitkan Negara')
+                        ->icon('lucide-globe')
+                        ->modalHeading('Kaitkan Negara Ke Destinasi Terpilih')
+                        ->modalDescription('Pilih satu atau beberapa negara yang ingin dikaitkan secara massal ke destinasi yang dipilih.')
+                        ->form([
+                            Select::make('countries')
+                                ->label('Pilih Negara')
+                                ->options(fn () => Country::query()->pluck('name', 'id'))
+                                ->multiple()
+                                ->searchable()
+                                ->preload()
+                                ->required(),
+                        ])
+                        ->action(function (Collection $records, array $data): void {
+                            $countryIds = $data['countries'] ?? [];
+                            foreach ($records as $record) {
+                                $record->countries()->syncWithoutDetaching($countryIds);
+                            }
+
+                            Notification::make()
+                                ->title('Berhasil Mengaitkan Negara')
+                                ->body(count($records).' destinasi berhasil dikaitkan dengan negara pilihan.')
+                                ->success()
+                                ->send();
+                        }),
                     DeleteBulkAction::make()
                         ->label('Hapus Terpilih'),
                 ]),

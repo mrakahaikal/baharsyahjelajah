@@ -1,9 +1,11 @@
 <?php
 
+use App\Filament\Resources\Destinations\Pages\ManageDestinations;
 use App\Filament\Resources\Tours\Pages\ListTours;
 use App\Filament\Resources\UmrahPackages\Pages\ListUmrahPackages;
 use App\Filament\Resources\Vehicles\Pages\ListVehicles;
 use App\Models\Country;
+use App\Models\Destination;
 use App\Models\Tour;
 use App\Models\TourCategory;
 use App\Models\UmrahPackage;
@@ -110,4 +112,23 @@ it('allows bulk attaching tour packages and umrah packages to vehicles in Filame
     expect($vehicle2->fresh()->tourPackages)->toHaveCount(1);
     expect($vehicle1->fresh()->umrahPackages)->toHaveCount(1);
     expect($vehicle2->fresh()->umrahPackages)->toHaveCount(1);
+});
+
+it('allows bulk attaching countries to destinations in Filament table', function () {
+    $destination1 = Destination::factory()->create();
+    $destination2 = Destination::factory()->create();
+
+    $country = Country::factory()->create([
+        'name' => ['id' => 'Turki', 'en' => 'Turkey', 'ms' => 'Turki'],
+        'slug' => 'turki',
+    ]);
+
+    Livewire::test(ManageDestinations::class)
+        ->callTableBulkAction('attachCountries', [$destination1, $destination2], [
+            'countries' => [$country->id],
+        ])
+        ->assertHasNoTableBulkActionErrors();
+
+    expect($destination1->fresh()->countries)->toHaveCount(1);
+    expect($destination2->fresh()->countries)->toHaveCount(1);
 });
