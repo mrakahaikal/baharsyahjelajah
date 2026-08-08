@@ -115,3 +115,39 @@ test('authenticated user via sanctum can delete a post category through mcp tool
     $response->assertSuccessful();
     expect(PostCategory::find($category->id))->toBeNull();
 });
+
+test('authenticated user via sanctum can list and search post categories through mcp tool', function () {
+    $user = User::factory()->create();
+    Sanctum::actingAs($user);
+
+    PostCategory::create([
+        'name' => ['id' => 'Panduan Wisata', 'en' => 'Travel Guide', 'ms' => 'Panduan Pelancongan'],
+        'slug' => ['id' => 'panduan-wisata', 'en' => 'travel-guide', 'ms' => 'panduan-pelancongan'],
+    ]);
+
+    PostCategory::create([
+        'name' => ['id' => 'Alam & Satwa', 'en' => 'Nature & Wildlife', 'ms' => 'Alam & Satwa'],
+        'slug' => ['id' => 'alam-satwa', 'en' => 'nature-wildlife', 'ms' => 'alam-satwa'],
+    ]);
+
+    $payload = [
+        'jsonrpc' => '2.0',
+        'id' => 4,
+        'method' => 'tools/call',
+        'params' => [
+            'name' => 'list-post-categories-tool',
+            'arguments' => [
+                'search' => 'Wisata',
+            ],
+        ],
+    ];
+
+    $response = $this->postJson('/mcp', $payload);
+
+    $response->assertSuccessful();
+    $content = json_decode($response->json('result.content.0.text'), true);
+
+    expect($content['success'])->toBeTrue();
+    expect($content['total'])->toBe(1);
+    expect($content['categories'][0]['name']['id'])->toBe('Panduan Wisata');
+});

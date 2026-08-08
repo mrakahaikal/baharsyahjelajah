@@ -242,9 +242,17 @@ Aplikasi ini dilengkapi dengan **MCP Server** berbasis HTTPS menggunakan paket `
   - `Accept: application/json`
 
 ### 🛠️ Daftar Tools MCP Terdaftar (`AppServer`)
-- **`create-post-category-tool`**: Membuat kategori artikel (`PostCategory`) baru dengan dukungan terjemahan multi-bahasa (`id`, `en`, `ms`) dan generasi slug otomatis.
+#### 📂 Kategori Artikel (`PostCategory`):
+- **`list-post-categories-tool`**: Menampilkan dan mencari daftar kategori artikel (`PostCategory`) dengan dukungan pencarian kata kunci multi-bahasa dan paginasi.
+- **`create-post-category-tool`**: Membuat kategori artikel baru dengan dukungan terjemahan multi-bahasa (`id`, `en`, `ms`) dan generasi slug otomatis.
 - **`update-post-category-tool`**: Memperbarui data kategori artikel berdasarkan `id`.
 - **`delete-post-category-tool`**: Menghapus kategori artikel dari database berdasarkan `id`.
+
+#### 📝 Artikel Blog (`Post`):
+- **`list-posts-tool`**: Menampilkan dan mencari daftar artikel (`Post`) dengan filter kata kunci, kategori, status (`draft`/`published`), dan paginasi.
+- **`create-post-tool`**: Membuat artikel blog baru dengan judul, terjemahan, excerpt, konten, cover image, status, dan penanganan kategori otomatis.
+- **`update-post-tool`**: Memperbarui data artikel blog berdasarkan `id`.
+- **`delete-post-tool`**: Menghapus artikel blog dari database berdasarkan `id`.
 
 ### 🔑 Membuat Token Sanctum untuk AI Agent
 Jalankan Artisan command khusus berikut untuk menghasilkan token API bagi AI Agent:
