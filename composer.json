@@ -13,6 +13,8 @@
         "filament/spatie-laravel-media-library-plugin": "^5.6",
         "filament/spatie-laravel-settings-plugin": "^5.6",
         "laravel/framework": "^13.7",
+        "laravel/mcp": "^0.9.2",
+        "laravel/sanctum": "^4.3",
         "laravel/tinker": "^3.0",
         "livewire/blaze": "^1.0",
         "mallardduck/blade-lucide-icons": "^1.26",

@@ -230,6 +230,53 @@ Proyek ini menggunakan **Pest PHP** dengan tingkat cakupan pengujian yang tinggi
 
 ---
 
-## 📄 7. Lisensi
+## 🤖 7. Integrasi MCP (Model Context Protocol) Server
+
+Aplikasi ini dilengkapi dengan **MCP Server** berbasis HTTPS menggunakan paket `laravel/mcp` dan dilindungi oleh otentikasi **Laravel Sanctum Bearer Token** (`laravel/sanctum`). Fitur ini memungkinkan AI Agent (baik berbasis Web maupun CLI) untuk melakukan operasi manajemen data aplikasi secara aman dan terstruktur.
+
+### 🔌 Endpoint MCP
+- **URL Endpoint**: `POST /mcp`
+- **Header Wajib**:
+  - `Authorization: Bearer <sanctum_token>`
+  - `Content-Type: application/json`
+  - `Accept: application/json`
+
+### 🛠️ Daftar Tools MCP Terdaftar (`AppServer`)
+- **`create-post-category-tool`**: Membuat kategori artikel (`PostCategory`) baru dengan dukungan terjemahan multi-bahasa (`id`, `en`, `ms`) dan generasi slug otomatis.
+- **`update-post-category-tool`**: Memperbarui data kategori artikel berdasarkan `id`.
+- **`delete-post-category-tool`**: Menghapus kategori artikel dari database berdasarkan `id`.
+
+### 🔑 Membuat Token Sanctum untuk AI Agent
+Jalankan Artisan command khusus berikut untuk menghasilkan token API bagi AI Agent:
+```bash
+# Token default untuk user pertama
+php artisan mcp:token
+
+# Token untuk user spesifik dengan nama token custom
+php artisan mcp:token admin@baharsyahjelajah.com --name="my-custom-agent"
+```
+
+### 📩 Contoh Payload JSON-RPC MCP
+Contoh request pembuatan kategori baru via HTTP POST ke `/mcp`:
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "create-post-category-tool",
+    "arguments": {
+      "name": "Wisata Kuliner",
+      "name_en": "Culinary Travel",
+      "name_ms": "Pelancongan Kuliner",
+      "description": "Panduan tempat makan dan kuliner khas Kalimantan."
+    }
+  }
+}
+```
+
+---
+
+## 📄 8. Lisensi
 
 Hak Cipta © 2026 **PT Baharsyah Jelajah Untuk Semua**. Seluruh hak cipta dilindungi undang-undang.
