@@ -10,7 +10,7 @@
     :$schemaJson
     :$canonicalUrl
     :$alternateUrls>
-    <x-partials.home.hero-section :$locale :$heroBanner />
+    <x-partials.home.hero-section :$locale :$heroBanners />
     <livewire:partials.home.search-panel :$locale />
 
     <section class="border-b border-slate-200 bg-white pt-24 sm:pt-28" aria-label="{{ __('home.hero.eyebrow') }}">

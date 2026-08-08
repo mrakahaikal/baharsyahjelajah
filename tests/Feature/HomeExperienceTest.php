@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\BannerPlacement;
+use App\Models\Banner;
 use App\Models\Country;
 use App\Models\UmrahDeparture;
 use App\Models\UmrahPackage;
@@ -132,3 +134,29 @@ it('localizes the home and umrah catalog', function (string $locale, string $hom
     'English' => ['en', 'A clearer journey from the very first step.', 'Thoughtful preparation for a calmer journey of worship.'],
     'Malay' => ['ms', 'Perjalanan yang lebih jelas sejak langkah pertama.', 'Persediaan yang baik untuk perjalanan ibadah yang lebih tenang.'],
 ]);
+
+it('renders hero carousel when multiple active hero banners are present', function () {
+    Banner::create([
+        'placement' => BannerPlacement::HomeHero,
+        'title' => ['id' => 'Promo Umrah Syawal 1447H', 'en' => 'Promo Umrah Syawal 1447H', 'ms' => 'Promo Umrah Syawal 1447H'],
+        'subtitle' => ['id' => 'Subjudul Promo 1', 'en' => 'Subtitle Promo 1', 'ms' => 'Subtitle Promo 1'],
+        'image_path' => 'banners/hero-1.jpg',
+        'is_active' => true,
+        'sort_order' => 1,
+    ]);
+
+    Banner::create([
+        'placement' => BannerPlacement::HomeHero,
+        'title' => ['id' => 'Promo Liburan Musim Panas Jepang', 'en' => 'Japan Summer Promo', 'ms' => 'Promo Musim Panas Jepun'],
+        'subtitle' => ['id' => 'Subjudul Promo 2', 'en' => 'Subtitle Promo 2', 'ms' => 'Subtitle Promo 2'],
+        'image_path' => 'banners/hero-2.jpg',
+        'is_active' => true,
+        'sort_order' => 2,
+    ]);
+
+    get('/id')
+        ->assertSuccessful()
+        ->assertSee('Promo Umrah Syawal 1447H')
+        ->assertSee('Promo Liburan Musim Panas Jepang')
+        ->assertSee('nextSlide()', false);
+});

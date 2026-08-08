@@ -96,14 +96,14 @@ class HomeController extends Controller
             ->limit(3)
             ->get();
 
-        $heroBanner = Banner::query()
+        $heroBanners = Banner::query()
             ->with('media')
             ->active()
             ->withImage()
             ->currentlyVisible()
             ->forPlacement(BannerPlacement::HomeHero)
             ->ordered()
-            ->first();
+            ->get();
 
         $promoBanner = Banner::query()
             ->with('media')
@@ -169,7 +169,7 @@ class HomeController extends Controller
             'featuredVisaServices',
             'testimonials',
             'latestPosts',
-            'heroBanner',
+            'heroBanners',
             'canonicalUrl',
             'faqs',
             'promoBanner',
