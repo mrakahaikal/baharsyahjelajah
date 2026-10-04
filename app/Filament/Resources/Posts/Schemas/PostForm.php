@@ -2,18 +2,18 @@
 
 namespace App\Filament\Resources\Posts\Schemas;
 
+use App\Filament\Support\FilamentLocale;
+use App\Filament\Support\Forms\Components\TranslatableNameSlug;
+use App\Filament\Support\Forms\Presets\MediaUploadPreset;
 use App\Models\Destination;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Str;
 use SolutionForest\FilamentTranslateField\Forms\Component\Translate;
 
 class PostForm
@@ -53,24 +53,17 @@ class PostForm
                                 ->native(false),
                         ]),
                         Translate::make()
-                            ->locales(['id', 'en', 'ms'])
+                            ->locales(FilamentLocale::locales())
                             ->schema(fn (string $locale) => [
-                                Grid::make(2)->schema([
-                                    TextInput::make('title')
-                                        ->label('Judul Artikel')
-                                        ->placeholder('Masukkan judul artikel...')
-                                        ->required($locale === 'id')
-                                        ->live(onBlur: true)
-                                        ->afterStateUpdated(fn ($state, Set $set) => $set("slug.{$locale}", Str::slug($state)))
-                                        ->maxLength(255)
-                                        ->prefixIcon('lucide-type'),
-                                    TextInput::make('slug')
-                                        ->label('Slug URL')
-                                        ->placeholder('judul-artikel')
-                                        ->required($locale === 'id')
-                                        ->maxLength(255)
-                                        ->prefixIcon('lucide-link-2'),
-                                ]),
+                                TranslatableNameSlug::make(
+                                    locale: $locale,
+                                    nameLabel: 'Judul Artikel',
+                                    slugLabel: 'Slug URL',
+                                    namePlaceholder: 'Masukkan judul artikel...',
+                                    slugPlaceholder: 'judul-artikel',
+                                    nameField: 'title',
+                                    slugField: 'slug',
+                                ),
                                 TextInput::make('excerpt')
                                     ->label('Ringkasan Singkat')
                                     ->placeholder('Tuliskan ringkasan singkat artikel...')
@@ -81,7 +74,7 @@ class PostForm
                                 RichEditor::make('content')
                                     ->label('Isi Konten Artikel')
                                     ->placeholder('Tulis isi konten artikel lengkap di sini...')
-                                    ->required($locale === 'id')
+                                    ->required($locale === FilamentLocale::primary())
                                     ->helperText('Konten utama artikel.')
                                     ->columnSpanFull(),
                             ]),
@@ -91,15 +84,12 @@ class PostForm
                     ->icon('lucide-image')
                     ->columnSpanFull()
                     ->schema([
-                        FileUpload::make('cover_image')
-                            ->label('Gambar Sampul (Cover)')
-                            ->image()
-                            ->directory('posts/covers')
-                            ->disk('public')
-                            ->visibility('public')
-                            ->imageEditor()
-                            ->helperText('Format: JPG, PNG, WebP (Rasio ideal 16:9, maks 5MB).')
-                            ->columnSpanFull(),
+                        MediaUploadPreset::publicImage(
+                            name: 'cover_image',
+                            directory: 'posts/covers',
+                            label: 'Gambar Sampul (Cover)',
+                            helperText: 'Format: JPG, PNG, WebP (Rasio ideal 16:9, maks 5MB).'
+                        )->columnSpanFull(),
                         Select::make('destinations')
                             ->label('Destinasi Terkait')
                             ->relationship('destinations', 'name')
@@ -122,3 +112,4 @@ class PostForm
             ]);
     }
 }
+

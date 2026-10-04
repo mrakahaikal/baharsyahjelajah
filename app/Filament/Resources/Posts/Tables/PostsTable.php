@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Posts\Tables;
 
+use App\Filament\Support\Tables\Presets\TimestampColumnPreset;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
@@ -51,11 +52,7 @@ class PostsTable
                     ->label('Tanggal Publikasi')
                     ->dateTime('d M Y H:i')
                     ->sortable(),
-                TextColumn::make('created_at')
-                    ->label('Tanggal Dibuat')
-                    ->dateTime('d M Y')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TimestampColumnPreset::createdAt('d M Y'),
             ])
             ->filters([
                 SelectFilter::make('status')
@@ -95,3 +92,4 @@ class PostsTable
             ]);
     }
 }
+
