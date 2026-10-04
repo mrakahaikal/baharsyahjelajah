@@ -4,6 +4,9 @@ namespace App\Filament\Resources\Testimonials;
 
 use App\Filament\Resources\Testimonials\Pages\ManageTestimonials;
 use App\Models\Testimonial;
+use App\Models\Tour;
+use App\Models\UmrahPackage;
+use App\Models\Vehicle;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
@@ -17,12 +20,15 @@ use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use SolutionForest\FilamentTranslateField\Forms\Component\Translate;
 
 class TestimonialResource extends Resource
@@ -95,21 +101,62 @@ class TestimonialResource extends Resource
                             Select::make('product_type')
                                 ->label('Tipe Produk')
                                 ->options([
-                                    'App\Models\Tour' => 'Tour Wisata',
-                                    'App\Models\Vehicle' => 'Sewa Kendaraan',
-                                    'App\Models\UmrahPackage' => 'Paket Umrah',
+                                    Tour::class => 'Tour Wisata',
+                                    Vehicle::class => 'Sewa Kendaraan',
+                                    UmrahPackage::class => 'Paket Umrah',
                                 ])
                                 ->placeholder('Pilih jenis produk')
                                 ->prefixIcon('lucide-package')
                                 ->native(false)
-                                ->required(),
-                            TextInput::make('product_id')
-                                ->label('ID Produk')
-                                ->numeric()
                                 ->required()
-                                ->placeholder('Masukkan ID model produk')
-                                ->prefixIcon('lucide-hash')
-                                ->helperText('Nomor ID unik dari produk yang diulas.'),
+                                ->live()
+                                ->afterStateUpdated(fn (Set $set) => $set('product_id', null)),
+                            Select::make('product_id')
+                                ->label('Produk')
+                                ->placeholder(fn (Get $get): string => filled($get('product_type'))
+                                    ? 'Cari dan pilih nama produk...'
+                                    : 'Pilih tipe produk terlebih dahulu')
+                                ->prefixIcon('lucide-box')
+                                ->native(false)
+                                ->searchable()
+                                ->preload()
+                                ->disabled(fn (Get $get): bool => blank($get('product_type')))
+                                ->required()
+                                ->options(function (Get $get): array {
+                                    $productType = $get('product_type');
+
+                                    return match ($productType) {
+                                        Tour::class => Tour::query()
+                                            ->latest()
+                                            ->get()
+                                            ->mapWithKeys(fn (Tour $tour) => [$tour->id => $tour->name])
+                                            ->all(),
+                                        Vehicle::class => Vehicle::query()
+                                            ->latest()
+                                            ->get()
+                                            ->mapWithKeys(fn (Vehicle $vehicle) => [$vehicle->id => $vehicle->name])
+                                            ->all(),
+                                        UmrahPackage::class => UmrahPackage::query()
+                                            ->latest()
+                                            ->get()
+                                            ->mapWithKeys(fn (UmrahPackage $package) => [$package->id => $package->name])
+                                            ->all(),
+                                        default => [],
+                                    };
+                                })
+                                ->getOptionLabelUsing(function (Get $get, mixed $value): ?string {
+                                    $productType = $get('product_type');
+                                    if (! $productType || ! class_exists($productType) || ! $value) {
+                                        return null;
+                                    }
+
+                                    $query = method_exists($productType, 'withTrashed')
+                                        ? $productType::withTrashed()
+                                        : $productType::query();
+
+                                    return $query->find($value)?->name;
+                                })
+                                ->helperText('Pilih nama produk dari daftar yang tersedia.'),
                             Select::make('rating')
                                 ->label('Rating Penilaian')
                                 ->options([
@@ -151,6 +198,7 @@ class TestimonialResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->with('product'))
             ->recordTitleAttribute('reviewer_name')
             ->defaultSort('created_at', 'desc')
             ->columns([
@@ -166,17 +214,21 @@ class TestimonialResource extends Resource
                     ->label('Tipe Produk')
                     ->badge()
                     ->formatStateUsing(fn (?string $state): string => match ($state) {
-                        'App\Models\Tour' => 'Tour',
-                        'App\Models\Vehicle' => 'Sewa Mobil',
-                        'App\Models\UmrahPackage' => 'Umrah',
+                        Tour::class => 'Tour',
+                        Vehicle::class => 'Sewa Mobil',
+                        UmrahPackage::class => 'Umrah',
                         default => $state ?? '-',
                     })
                     ->color(fn (?string $state): string => match ($state) {
-                        'App\Models\Tour' => 'success',
-                        'App\Models\Vehicle' => 'info',
-                        'App\Models\UmrahPackage' => 'warning',
+                        Tour::class => 'success',
+                        Vehicle::class => 'info',
+                        UmrahPackage::class => 'warning',
                         default => 'gray',
                     }),
+                TextColumn::make('product_id')
+                    ->label('Produk')
+                    ->state(fn (Testimonial $record): string => $record->product?->name ?? '-')
+                    ->wrap(),
                 TextColumn::make('rating')
                     ->label('Rating')
                     ->formatStateUsing(fn (int $state): string => str_repeat('★', $state).str_repeat('☆', 5 - $state))
@@ -197,9 +249,9 @@ class TestimonialResource extends Resource
                 SelectFilter::make('product_type')
                     ->label('Tipe Produk')
                     ->options([
-                        'App\Models\Tour' => 'Tour Wisata',
-                        'App\Models\Vehicle' => 'Sewa Kendaraan',
-                        'App\Models\UmrahPackage' => 'Paket Umrah',
+                        Tour::class => 'Tour Wisata',
+                        Vehicle::class => 'Sewa Kendaraan',
+                        UmrahPackage::class => 'Paket Umrah',
                     ])
                     ->native(false),
                 SelectFilter::make('rating')
