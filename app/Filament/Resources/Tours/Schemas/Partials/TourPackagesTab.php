@@ -25,12 +25,7 @@ class TourPackagesTab
         return Tab::make('Paket Perjalanan & Harga')
             ->icon('lucide-package')
             ->schema([
-                Section::make('Kelola Pilihan Paket Perjalanan')
-                    ->description('Buat dan kelola satu atau beberapa pilihan paket perjalanan untuk tur ini.')
-                    ->icon('lucide-layers')
-                    ->schema([
-                        self::packageRepeater(),
-                    ]),
+                self::packageRepeater(),
             ]);
     }
 
@@ -73,6 +68,7 @@ class TourPackagesTab
                 Section::make('Detail Utama Paket')
                     ->description('Nama paket tur, tautan URL, dan durasi perjalanan.')
                     ->icon('lucide-file-text')
+                    ->compact()
                     ->schema([
                         Translate::make()
                             ->locales(FilamentLocale::locales())
@@ -122,6 +118,7 @@ class TourPackagesTab
                 Section::make('Media Visual Paket')
                     ->description('Unggah foto utama dan foto-foto galeri pendukung untuk paket tur ini.')
                     ->icon('lucide-images')
+                    ->compact()
                     ->schema([
                         Grid::make(2)
                             ->schema([
@@ -150,6 +147,7 @@ class TourPackagesTab
                 Section::make('Rencana Perjalanan Harian')
                     ->description('Kelola aktivitas harian dan destinasi yang dikunjungi sepanjang durasi tur.')
                     ->icon('lucide-map')
+                    ->compact()
                     ->schema([
                         Repeater::make('itineraries')
                             ->label('Daftar Rencana Perjalanan')
@@ -215,6 +213,7 @@ class TourPackagesTab
                 Section::make('Fasilitas & Layanan Terkait')
                     ->description('Tentukan apa saja yang termasuk, tidak termasuk, atau catatan khusus untuk paket ini.')
                     ->icon('lucide-clipboard-check')
+                    ->compact()
                     ->schema([
                         Repeater::make('includes')
                             ->label('Daftar Layanan & Fasilitas')
@@ -284,6 +283,7 @@ class TourPackagesTab
                 Section::make('Tiering Kualitas & Harga Peserta')
                     ->description('Kelola tingkatan fasilitas (seperti bintang hotel) beserta struktur harga berdasarkan jumlah pax.')
                     ->icon('lucide-trending-up')
+                    ->compact()
                     ->schema([
                         Repeater::make('tiers')
                             ->label('Daftar Tier Paket')
