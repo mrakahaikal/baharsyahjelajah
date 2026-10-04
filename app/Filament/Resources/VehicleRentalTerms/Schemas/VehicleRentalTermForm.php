@@ -4,10 +4,11 @@ namespace App\Filament\Resources\VehicleRentalTerms\Schemas;
 
 use App\Enums\VehicleCategory;
 use App\Enums\VehicleRentalTermType;
+use App\Filament\Support\FilamentLocale;
+use App\Filament\Support\Forms\Presets\StatusTogglePreset;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -30,16 +31,17 @@ class VehicleRentalTermForm
                             Select::make('vehicle_category')->label('Khusus Kategori')->options(VehicleCategory::class)->placeholder('Semua kendaraan')->native(false),
                         ]),
                         Translate::make()
-                            ->locales(['id', 'en', 'ms'])
+                            ->locales(FilamentLocale::locales())
                             ->schema(fn (string $locale): array => [
-                                TextInput::make('title')->label('Judul')->required($locale === 'id')->maxLength(255),
-                                RichEditor::make('content')->label('Isi Ketentuan')->required($locale === 'id')->columnSpanFull(),
+                                TextInput::make('title')->label('Judul')->required($locale === FilamentLocale::primary())->maxLength(255),
+                                RichEditor::make('content')->label('Isi Ketentuan')->required($locale === FilamentLocale::primary())->columnSpanFull(),
                             ]),
                         Grid::make(2)->schema([
                             TextInput::make('sort_order')->label('Urutan')->numeric()->minValue(0)->default(0),
-                            Toggle::make('is_active')->label('Tampilkan')->default(true),
+                            StatusTogglePreset::active(label: 'Tampilkan'),
                         ]),
                     ]),
             ]);
     }
 }
+

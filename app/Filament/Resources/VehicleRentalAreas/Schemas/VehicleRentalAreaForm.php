@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\VehicleRentalAreas\Schemas;
 
+use App\Filament\Support\FilamentLocale;
+use App\Filament\Support\Forms\Presets\StatusTogglePreset;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
@@ -24,13 +25,13 @@ class VehicleRentalAreaForm
                     ->columnSpanFull()
                     ->schema([
                         Translate::make()
-                            ->locales(['id', 'en', 'ms'])
+                            ->locales(FilamentLocale::locales())
                             ->schema(fn (string $locale): array => [
                                 TextInput::make('name')
                                     ->label('Nama Wilayah')
-                                    ->required($locale === 'id')
+                                    ->required($locale === FilamentLocale::primary())
                                     ->live(onBlur: true)
-                                    ->afterStateUpdated(fn (?string $state, Set $set) => $locale === 'id' ? $set('../../slug', Str::slug($state ?? '')) : null),
+                                    ->afterStateUpdated(fn (?string $state, Set $set) => $locale === FilamentLocale::primary() ? $set('../../slug', Str::slug($state ?? '')) : null),
                                 Textarea::make('description')
                                     ->label('Deskripsi')
                                     ->rows(3),
@@ -53,11 +54,10 @@ class VehicleRentalAreaForm
                                 ->numeric()
                                 ->minValue(0)
                                 ->default(0),
-                            Toggle::make('is_active')
-                                ->label('Wilayah Aktif')
-                                ->default(true),
+                            StatusTogglePreset::active(label: 'Wilayah Aktif'),
                         ]),
                     ]),
             ]);
     }
 }
+

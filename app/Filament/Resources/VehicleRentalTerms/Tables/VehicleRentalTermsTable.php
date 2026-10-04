@@ -3,11 +3,11 @@
 namespace App\Filament\Resources\VehicleRentalTerms\Tables;
 
 use App\Enums\VehicleRentalTermType;
+use App\Filament\Support\Tables\Presets\StatusColumnPreset;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -22,7 +22,7 @@ class VehicleRentalTermsTable
                 TextColumn::make('type')->label('Jenis')->badge(),
                 TextColumn::make('vehicle_category')->label('Kategori')->badge()->placeholder('Semua'),
                 TextColumn::make('sort_order')->label('Urutan')->sortable(),
-                IconColumn::make('is_active')->label('Aktif')->boolean(),
+                StatusColumnPreset::active('Aktif'),
             ])
             ->filters([
                 SelectFilter::make('type')->label('Jenis')->options(VehicleRentalTermType::class),
@@ -38,3 +38,4 @@ class VehicleRentalTermsTable
             ]);
     }
 }
+
