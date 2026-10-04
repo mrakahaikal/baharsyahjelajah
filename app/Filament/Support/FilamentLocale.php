@@ -19,6 +19,14 @@ class FilamentLocale
         return self::DEFAULT_LOCALES;
     }
 
+    /**
+     * @return array<int, string>
+     */
+    public static function locales(): array
+    {
+        return self::supported();
+    }
+
     public static function primary(): string
     {
         return self::PRIMARY_LOCALE;
