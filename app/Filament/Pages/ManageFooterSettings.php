@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Filament\Clusters\Settings\SettingsCluster;
+use App\Filament\Support\FilamentLocale;
 use App\Settings\FooterSettings;
 use BackedEnum;
 use Filament\Forms\Components\Repeater;
@@ -43,32 +44,32 @@ class ManageFooterSettings extends SettingsPage
                     ->icon('lucide-megaphone')
                     ->schema([
                         Translate::make()
-                            ->locales(['id', 'en', 'ms'])
+                            ->locales(FilamentLocale::locales())
                             ->schema(fn (string $locale): array => [
                                 Textarea::make('brand_description')
                                     ->label('Deskripsi Brand')
                                     ->rows(3)
                                     ->placeholder('Tuliskan deskripsi singkat mengenai brand/perusahaan...')
                                     ->helperText('Deskripsi singkat tentang perusahaan yang tampil di footer.')
-                                    ->required($locale === 'id'),
+                                    ->required($locale === FilamentLocale::primary()),
                                 TextInput::make('cta_title')
                                     ->label('Judul Panggilan Aksi (CTA Title)')
                                     ->placeholder('Contoh: Siap Menjelajahi Dunia Bersama Kami?')
                                     ->helperText('Judul ajakan bertindak utama di atas footer.')
                                     ->prefixIcon('lucide-type')
-                                    ->required($locale === 'id'),
+                                    ->required($locale === FilamentLocale::primary()),
                                 Textarea::make('cta_subtitle')
                                     ->label('Subjudul Panggilan Aksi (CTA Subtitle)')
                                     ->rows(2)
                                     ->placeholder('Tuliskan subjudul ajakan bertindak...')
                                     ->helperText('Kalimat penjelas di bawah judul ajakan bertindak.')
-                                    ->required($locale === 'id'),
+                                    ->required($locale === FilamentLocale::primary()),
                                 TextInput::make('cta_button_label')
                                     ->label('Label Tombol CTA')
                                     ->placeholder('Contoh: Hubungi Kami Sekarang')
                                     ->helperText('Teks yang tampil pada tombol tindakan.')
                                     ->prefixIcon('lucide-square-play')
-                                    ->required($locale === 'id'),
+                                    ->required($locale === FilamentLocale::primary()),
                             ]),
                         TextInput::make('cta_button_route')
                             ->label('Route Tombol CTA')
@@ -148,7 +149,7 @@ class ManageFooterSettings extends SettingsPage
                                     ->columns(1)
                                     ->reorderable()
                                     ->collapsible(),
-                            ])
+                                ])
                             ->columns(1)
                             ->reorderable()
                             ->collapsible(),
@@ -168,38 +169,38 @@ class ManageFooterSettings extends SettingsPage
                     ->icon('lucide-info')
                     ->schema([
                         Translate::make()
-                            ->locales(['id', 'en', 'ms'])
+                            ->locales(FilamentLocale::locales())
                             ->schema(fn (string $locale): array => [
                                 TextInput::make('social_title')
                                     ->label('Judul Media Sosial')
                                     ->placeholder('Contoh: Ikuti Media Sosial Kami')
                                     ->helperText('Judul untuk area tautan sosial media.')
                                     ->prefixIcon('lucide-type')
-                                    ->required($locale === 'id'),
+                                    ->required($locale === FilamentLocale::primary()),
                                 Textarea::make('social_description')
                                     ->label('Deskripsi Media Sosial')
                                     ->rows(2)
                                     ->placeholder('Tuliskan deskripsi ajakan untuk mengikuti media sosial...')
                                     ->helperText('Kalimat deskripsi singkat di bawah judul media sosial.')
-                                    ->required($locale === 'id'),
+                                    ->required($locale === FilamentLocale::primary()),
                                 TextInput::make('contact_title')
                                     ->label('Judul Kontak')
                                     ->placeholder('Contoh: Hubungi Kami')
                                     ->helperText('Judul untuk area informasi kontak di footer.')
                                     ->prefixIcon('lucide-type')
-                                    ->required($locale === 'id'),
+                                    ->required($locale === FilamentLocale::primary()),
                                 TextInput::make('destinations_all_label')
                                     ->label('Label Semua Destinasi')
                                     ->placeholder('Contoh: Lihat Semua Destinasi')
                                     ->helperText('Teks tautan untuk mengarahkan pengguna ke halaman seluruh destinasi.')
                                     ->prefixIcon('lucide-type')
-                                    ->required($locale === 'id'),
+                                    ->required($locale === FilamentLocale::primary()),
                                 TextInput::make('copyright_text')
                                     ->label('Copyright')
                                     ->placeholder('Contoh: © 2026 Baharsyah Jelajah. All rights reserved.')
                                     ->helperText('Teks hak cipta yang muncul di bagian paling bawah halaman.')
                                     ->prefixIcon('lucide-copyright')
-                                    ->required($locale === 'id'),
+                                    ->required($locale === FilamentLocale::primary()),
                             ]),
                         Repeater::make('legal_links')
                             ->label('Daftar Tautan Hukum & Legal')
@@ -243,3 +244,4 @@ class ManageFooterSettings extends SettingsPage
             ->columns(1);
     }
 }
+

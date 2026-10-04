@@ -4,9 +4,10 @@ namespace App\Filament\Pages;
 
 use App\Enums\StaticSeoPage;
 use App\Filament\Clusters\Settings\SettingsCluster;
+use App\Filament\Support\FilamentLocale;
+use App\Filament\Support\Forms\Presets\MediaUploadPreset;
 use App\Settings\SeoSettings;
 use BackedEnum;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\SettingsPage;
@@ -43,30 +44,26 @@ class ManageSeoSettings extends SettingsPage
                 ->icon('lucide-share-2')
                 ->schema([
                     Translate::make()
-                        ->locales(['id', 'en', 'ms'])
+                        ->locales(FilamentLocale::locales())
                         ->schema(fn (string $locale) => [
                             TextInput::make('og_title')
                                 ->label('Judul Open Graph (OG Title)')
                                 ->placeholder('Contoh: Agen Perjalanan Wisata Baharsyah Jelajah')
                                 ->helperText('Judul halaman yang akan muncul di pratinjau saat tautan dibagikan.')
                                 ->prefixIcon('lucide-type')
-                                ->required($locale === 'id'),
+                                ->required($locale === FilamentLocale::primary()),
                             Textarea::make('og_description')
                                 ->label('Deskripsi Open Graph (OG Description)')
                                 ->placeholder('Tuliskan deskripsi pratinjau yang menarik...')
                                 ->helperText('Ringkasan singkat isi halaman untuk pratinjau sharing media sosial.')
                                 ->rows(3),
                         ]),
-                    FileUpload::make('og_image')
-                        ->label('Gambar Pratinjau (OG Image)')
-                        ->image()
-                        ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                        ->maxSize(5120)
-                        ->directory('seo')
-                        ->imageEditor()
-                        ->disk('public')
-                        ->visibility('public')
-                        ->helperText('Gambar thumbnail yang tampil di media sosial. Ukuran rekomendasi: 1200 x 630 piksel (Rasio 1.91:1), format JPG/PNG/WebP, maks 5MB.'),
+                    MediaUploadPreset::publicImage(
+                        name: 'og_image',
+                        directory: 'seo',
+                        label: 'Gambar Pratinjau (OG Image)',
+                        helperText: 'Gambar thumbnail yang tampil di media sosial. Ukuran rekomendasi: 1200 x 630 piksel (Rasio 1.91:1), format JPG/PNG/WebP, maks 5MB.'
+                    ),
                 ]),
 
             Section::make('SEO per Halaman')
@@ -108,7 +105,7 @@ class ManageSeoSettings extends SettingsPage
         return Tab::make($page->label())
             ->schema([
                 Translate::make()
-                    ->locales(['id', 'en', 'ms'])
+                    ->locales(FilamentLocale::locales())
                     ->schema(fn (string $locale): array => [
                         TextInput::make("{$statePath}.title")
                             ->label('Meta Title')
@@ -128,7 +125,7 @@ class ManageSeoSettings extends SettingsPage
                     ->collapsible()
                     ->schema([
                         Translate::make()
-                            ->locales(['id', 'en', 'ms'])
+                            ->locales(FilamentLocale::locales())
                             ->schema(fn (string $locale): array => [
                                 TextInput::make("{$statePath}.og_title")
                                     ->label('OG Title')
@@ -139,17 +136,14 @@ class ManageSeoSettings extends SettingsPage
                                     ->maxLength(200)
                                     ->rows(3),
                             ]),
-                        FileUpload::make("{$statePath}.og_image")
-                            ->label('OG Image Halaman')
-                            ->image()
-                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                            ->maxSize(5120)
-                            ->directory('seo/pages')
-                            ->imageEditor()
-                            ->disk('public')
-                            ->visibility('public')
-                            ->helperText('Gunakan gambar 1200 × 630 piksel. Jika kosong, gambar OG global akan digunakan.'),
+                        MediaUploadPreset::publicImage(
+                            name: "{$statePath}.og_image",
+                            directory: 'seo/pages',
+                            label: 'OG Image Halaman',
+                            helperText: 'Gunakan gambar 1200 × 630 piksel. Jika kosong, gambar OG global akan digunakan.'
+                        ),
                     ]),
             ]);
     }
 }
+

@@ -3,6 +3,8 @@
 namespace App\Filament\Pages;
 
 use App\Filament\Clusters\Settings\SettingsCluster;
+use App\Filament\Support\CurrencyOptions;
+use App\Filament\Support\FilamentLocale;
 use App\Services\SitemapService;
 use App\Settings\GeneralSettings;
 use BackedEnum;
@@ -82,19 +84,19 @@ class ManageGeneralSettings extends SettingsPage
                     ->icon('lucide-globe')
                     ->schema([
                         Translate::make()
-                            ->locales(['id', 'en', 'ms'])
+                            ->locales(FilamentLocale::locales())
                             ->schema(fn (string $locale) => [
                                 TextInput::make('site_name')
                                     ->label('Nama Website')
                                     ->placeholder('Misal: Baharsyah Jelajah')
-                                    ->required($locale === 'id')
+                                    ->required($locale === FilamentLocale::primary())
                                     ->helperText('Nama utama website yang akan muncul di bilah judul browser.')
                                     ->prefixIcon('lucide-type'),
                                 Textarea::make('meta_description')
                                     ->label('Deskripsi Meta (SEO)')
                                     ->placeholder('Tuliskan deskripsi singkat website untuk SEO...')
                                     ->rows(3)
-                                    ->required($locale === 'id')
+                                    ->required($locale === FilamentLocale::primary())
                                     ->helperText('Deskripsi ringkas situs Anda untuk hasil pencarian mesin pencari.'),
                             ]),
                     ]),
@@ -127,7 +129,7 @@ class ManageGeneralSettings extends SettingsPage
                                 ->columnSpanFull(),
                         ]),
                         Translate::make()
-                            ->locales(['id', 'en', 'ms'])
+                            ->locales(FilamentLocale::locales())
                             ->schema(fn (string $locale) => [
                                 Textarea::make('address')
                                     ->label('Alamat Kantor')
@@ -149,11 +151,7 @@ class ManageGeneralSettings extends SettingsPage
                         Grid::make(2)->schema([
                             Select::make('default_currency')
                                 ->label('Mata Uang Utama Default')
-                                ->options(fn (): array => collect(config('currencies.supported'))
-                                    ->mapWithKeys(fn (array $metadata, string $code): array => [
-                                        $code => "{$code} ({$metadata['symbol']}) - {$metadata['name']}",
-                                    ])
-                                    ->all())
+                                ->options(CurrencyOptions::detailedOptions())
                                 ->required()
                                 ->placeholder('Pilih mata uang utama')
                                 ->helperText('Mata uang utama yang digunakan secara default di seluruh sistem.')
@@ -183,3 +181,4 @@ class ManageGeneralSettings extends SettingsPage
             ->columns(1);
     }
 }
+
