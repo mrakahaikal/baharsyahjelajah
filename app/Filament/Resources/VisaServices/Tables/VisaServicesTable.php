@@ -3,6 +3,9 @@
 namespace App\Filament\Resources\VisaServices\Tables;
 
 use App\Enums\VisaEntryType;
+use App\Filament\Support\CurrencyOptions;
+use App\Filament\Support\Tables\Presets\StatusColumnPreset;
+use App\Filament\Support\Tables\Presets\TimestampColumnPreset;
 use App\Models\VisaService;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -10,11 +13,9 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -61,10 +62,10 @@ class VisaServicesTable
                     ->badge()
                     ->placeholder('-')
                     ->toggleable(isToggledHiddenByDefault: true),
-                IconColumn::make('is_featured')->label('Unggulan')->boolean()->alignCenter(),
-                IconColumn::make('is_active')->label('Aktif')->boolean()->alignCenter(),
+                StatusColumnPreset::featured('Unggulan'),
+                StatusColumnPreset::active('Aktif'),
                 TextColumn::make('sort_order')->label('Urutan')->numeric()->sortable()->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')->label('Diperbarui')->dateTime('d M Y H:i')->sortable()->toggleable(isToggledHiddenByDefault: true),
+                TimestampColumnPreset::updatedAt('d M Y H:i'),
             ])
             ->filters([
                 SelectFilter::make('country')
@@ -75,18 +76,14 @@ class VisaServicesTable
                     ->native(false),
                 SelectFilter::make('currency')
                     ->label('Mata Uang')
-                    ->options(collect(config('currencies.supported'))
-                        ->mapWithKeys(fn (array $metadata, string $code): array => [
-                            $code => "{$code} ({$metadata['symbol']})",
-                        ])
-                        ->all())
+                    ->options(CurrencyOptions::selectOptions())
                     ->native(false),
                 SelectFilter::make('entry_type')
                     ->label('Tipe Masuk')
                     ->options(VisaEntryType::class)
                     ->native(false),
-                TernaryFilter::make('is_active')->label('Status Aktif'),
-                TernaryFilter::make('is_featured')->label('Layanan Unggulan'),
+                StatusColumnPreset::filterActive('Status Aktif'),
+                StatusColumnPreset::filterFeatured('Layanan Unggulan'),
                 TrashedFilter::make()->label('Sampah'),
             ])
             ->recordActions([
@@ -105,3 +102,4 @@ class VisaServicesTable
             ->emptyStateIcon('lucide-stamp');
     }
 }
+

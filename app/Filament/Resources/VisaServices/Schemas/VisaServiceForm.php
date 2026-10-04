@@ -3,18 +3,20 @@
 namespace App\Filament\Resources\VisaServices\Schemas;
 
 use App\Enums\VisaEntryType;
+use App\Filament\Support\CurrencyOptions;
+use App\Filament\Support\FilamentLocale;
+use App\Filament\Support\Forms\Components\TranslatableNameSlug;
+use App\Filament\Support\Forms\Presets\MediaUploadPreset;
+use App\Filament\Support\Forms\Presets\StatusTogglePreset;
 use App\Models\Country;
 use App\Models\VisaService;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
-use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Components\Wizard;
 use Filament\Schemas\Components\Wizard\Step;
 use Filament\Schemas\Schema;
@@ -63,23 +65,17 @@ class VisaServiceForm
                                         ->maxLength(255)
                                         ->prefixIcon('lucide-link-2'),
                                     Translate::make()
-                                        ->locales(['id', 'en', 'ms'])
+                                        ->locales(FilamentLocale::locales())
                                         ->schema(fn (string $locale): array => [
                                             Grid::make(2)->schema([
-                                                TextInput::make('name')
-                                                    ->label('Nama Layanan')
-                                                    ->required($locale === 'id')
-                                                    ->live(onBlur: true)
-                                                    ->afterStateUpdated(function (Get $get, Set $set, ?string $state) use ($locale): void {
-                                                        if ($locale === 'id' && blank($get('slug'))) {
-                                                            $set('slug', Str::slug($state ?? ''));
-                                                        }
-                                                    })
-                                                    ->maxLength(255)
-                                                    ->placeholder('Contoh: Visa Turis Mesir'),
+                                                TranslatableNameSlug::forNonTranslatableSlug(
+                                                    locale: $locale,
+                                                    nameLabel: 'Nama Layanan',
+                                                    namePlaceholder: 'Contoh: Visa Turis Mesir',
+                                                ),
                                                 TextInput::make('visa_type')
                                                     ->label('Jenis Visa')
-                                                    ->required($locale === 'id')
+                                                    ->required($locale === FilamentLocale::primary())
                                                     ->maxLength(255)
                                                     ->placeholder('Contoh: Visa Kunjungan'),
                                             ]),
@@ -137,7 +133,7 @@ class VisaServiceForm
                                     Grid::make(3)->schema([
                                         Select::make('currency')
                                             ->label('Mata Uang')
-                                            ->options(self::currencyOptions())
+                                            ->options(CurrencyOptions::detailedOptions())
                                             ->default('IDR')
                                             ->required()
                                             ->live()
@@ -161,27 +157,16 @@ class VisaServiceForm
                         ->schema([
                             Section::make('Media Visual')
                                 ->schema([
-                                    SpatieMediaLibraryFileUpload::make('cover')
-                                        ->label('Foto Utama')
-                                        ->collection(VisaService::MEDIA_COLLECTION_COVER)
-                                        ->image()
-                                        ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                                        ->maxSize(5120)
-                                        ->imageEditor()
-                                        ->disk('public')
-                                        ->visibility('public'),
-                                    SpatieMediaLibraryFileUpload::make('gallery')
-                                        ->label('Galeri Foto')
-                                        ->collection(VisaService::MEDIA_COLLECTION_GALLERY)
-                                        ->image()
-                                        ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                                        ->maxSize(5120)
-                                        ->multiple()
-                                        ->reorderable()
-                                        ->appendFiles()
-                                        ->imageEditor()
-                                        ->disk('public')
-                                        ->visibility('public'),
+                                    MediaUploadPreset::spatieImage(
+                                        name: 'cover',
+                                        collection: VisaService::MEDIA_COLLECTION_COVER,
+                                        label: 'Foto Utama',
+                                    ),
+                                    MediaUploadPreset::spatieGallery(
+                                        name: 'gallery',
+                                        collection: VisaService::MEDIA_COLLECTION_GALLERY,
+                                        label: 'Galeri Foto',
+                                    ),
                                 ]),
                         ]),
                     Step::make('Publikasi')
@@ -197,12 +182,8 @@ class VisaServiceForm
                                             ->minValue(0)
                                             ->default(0)
                                             ->required(),
-                                        Toggle::make('is_active')
-                                            ->label('Aktif dan Dapat Diakses')
-                                            ->default(true),
-                                        Toggle::make('is_featured')
-                                            ->label('Layanan Unggulan')
-                                            ->default(false),
+                                        StatusTogglePreset::active(label: 'Aktif dan Dapat Diakses'),
+                                        StatusTogglePreset::featured(label: 'Layanan Unggulan'),
                                     ]),
                                 ]),
                         ]),
@@ -213,10 +194,7 @@ class VisaServiceForm
     /** @return array<string, string> */
     public static function currencyOptions(): array
     {
-        return collect(config('currencies.supported'))
-            ->mapWithKeys(fn (array $metadata, string $code): array => [
-                $code => "{$code} ({$metadata['symbol']}) - {$metadata['name']}",
-            ])
-            ->all();
+        return CurrencyOptions::detailedOptions();
     }
 }
+
