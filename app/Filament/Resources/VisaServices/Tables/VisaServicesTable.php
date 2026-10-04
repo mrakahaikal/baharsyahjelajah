@@ -17,6 +17,8 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class VisaServicesTable
 {
@@ -40,11 +42,12 @@ class VisaServicesTable
                     ->label('Negara Tujuan')
                     ->badge()
                     ->searchable(),
-                TextColumn::make('price_idr')
+                TextColumn::make('price')
                     ->label('Harga')
-                    ->money('IDR', locale: 'id')
+                    ->state(fn (VisaService $record) => $record->price ?? $record->price_idr)
+                    ->money(fn (VisaService $record): string => $record->currency ?? 'IDR', locale: 'id')
                     ->placeholder('Hubungi admin')
-                    ->sortable(),
+                    ->sortable(query: fn (Builder $query, string $direction): Builder => $query->orderBy(DB::raw('COALESCE(price, price_idr)'), $direction)),
                 TextColumn::make('processing_time')
                     ->label('Estimasi Proses')
                     ->state(fn (VisaService $record): string => match (true) {
@@ -69,6 +72,14 @@ class VisaServicesTable
                     ->relationship('country', 'name')
                     ->searchable()
                     ->preload()
+                    ->native(false),
+                SelectFilter::make('currency')
+                    ->label('Mata Uang')
+                    ->options(collect(config('currencies.supported'))
+                        ->mapWithKeys(fn (array $metadata, string $code): array => [
+                            $code => "{$code} ({$metadata['symbol']})",
+                        ])
+                        ->all())
                     ->native(false),
                 SelectFilter::make('entry_type')
                     ->label('Tipe Masuk')

@@ -89,11 +89,12 @@ class VisaServiceController extends Controller
             ->all();
         $canonicalUrl = $alternateUrls[$locale];
         $description = Str::limit(strip_tags((string) ($service->summary ?: $service->description)), 160, '');
-        $offer = $service->price_idr === null ? null : [
+        $price = $service->price ?? $service->price_idr;
+        $offer = $price === null ? null : [
             '@type' => 'Offer',
             'url' => $canonicalUrl,
-            'priceCurrency' => 'IDR',
-            'price' => $service->price_idr,
+            'priceCurrency' => $service->currency ?: 'IDR',
+            'price' => fmod((float) $price, 1) == 0 ? (int) $price : (float) $price,
             'availability' => 'https://schema.org/InStock',
         ];
         $serviceSchema = array_filter([

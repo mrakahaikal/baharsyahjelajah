@@ -194,3 +194,92 @@ it('seeds visa catalog idempotently', function () {
         ->and(VisaService::query()->count())->toBe(2)
         ->and(VisaServiceItem::query()->count())->toBe(6);
 });
+
+it('creates a visa service with foreign currency through filament', function () {
+    $this->actingAs(User::factory()->create());
+    $country = Country::factory()->create([
+        'name' => ['id' => 'Amerika Serikat', 'en' => 'United States', 'ms' => 'Amerika Syarikat'],
+        'iso_alpha_2' => 'US',
+        'iso_alpha_3' => 'USA',
+    ]);
+
+    Livewire::test(CreateVisaService::class)
+        ->fillForm([
+            'country_id' => $country->id,
+            'name' => ['id' => 'Visa Turis AS', 'en' => 'US Tourist Visa', 'ms' => 'Visa Pelancong AS'],
+            'slug' => 'visa-turis-as',
+            'visa_type' => ['id' => 'B1/B2', 'en' => 'B1/B2', 'ms' => 'B1/B2'],
+            'currency' => 'USD',
+            'price' => 185,
+            'is_active' => true,
+            'sort_order' => 1,
+        ])
+        ->call('create')
+        ->assertHasNoFormErrors()
+        ->assertNotified()
+        ->assertRedirect();
+
+    $service = VisaService::query()->where('slug', 'visa-turis-as')->sole();
+
+    expect($service->currency)->toBe('USD')
+        ->and((float) $service->price)->toBe(185.0);
+});
+
+it('filters visa services by currency on table', function () {
+    $this->actingAs(User::factory()->create());
+
+    $country = Country::factory()->create();
+    $idrService = VisaService::factory()->for($country)->create([
+        'name' => ['id' => 'Visa IDR'],
+        'currency' => 'IDR',
+        'price_idr' => 1_000_000,
+    ]);
+    $usdService = VisaService::factory()->for($country)->create([
+        'name' => ['id' => 'Visa USD'],
+        'currency' => 'USD',
+        'price' => 150,
+    ]);
+
+    Livewire::test(ListVisaServices::class)
+        ->assertCanSeeTableRecords([$idrService, $usdService])
+        ->filterTable('currency', 'USD')
+        ->assertCanSeeTableRecords([$usdService])
+        ->assertCanNotSeeTableRecords([$idrService])
+        ->filterTable('currency', 'IDR')
+        ->assertCanSeeTableRecords([$idrService])
+        ->assertCanNotSeeTableRecords([$usdService]);
+});
+
+it('maintains bi-directional backward compatibility between price and price_idr', function () {
+    $country = Country::factory()->create();
+
+    // 1. Setting price_idr creates price and defaults currency to IDR
+    $service1 = VisaService::create([
+        'country_id' => $country->id,
+        'name' => ['id' => 'Visa Test 1'],
+        'slug' => 'visa-test-1',
+        'visa_type' => ['id' => 'Wisata'],
+        'price_idr' => 2_000_000,
+    ]);
+
+    expect((float) $service1->price)->toBe(2000000.0)
+        ->and($service1->currency)->toBe('IDR')
+        ->and($service1->price_idr)->toBe(2000000);
+
+    // 2. Setting price in IDR syncs price_idr
+    $service2 = VisaService::create([
+        'country_id' => $country->id,
+        'name' => ['id' => 'Visa Test 2'],
+        'slug' => 'visa-test-2',
+        'visa_type' => ['id' => 'Wisata'],
+        'currency' => 'IDR',
+        'price' => 3_500_000,
+    ]);
+
+    expect($service2->price_idr)->toBe(3500000)
+        ->and((float) $service2->price)->toBe(3500000.0);
+
+    // 3. Updating price_idr updates price
+    $service2->update(['price_idr' => 4_000_000]);
+    expect((float) $service2->fresh()->price)->toBe(4000000.0);
+});

@@ -100,7 +100,7 @@ class VisaServiceForm
                         ->description('Estimasi proses, masa berlaku, dan harga layanan.')
                         ->icon('lucide-calendar-clock')
                         ->schema([
-                            Section::make('Detail Visa')
+                            Section::make('Ketentuan & Estimasi Proses')
                                 ->schema([
                                     Grid::make(3)->schema([
                                         Select::make('entry_type')
@@ -129,12 +129,29 @@ class VisaServiceForm
                                             ->numeric()
                                             ->minValue(1)
                                             ->suffix('hari'),
-                                        TextInput::make('price_idr')
+                                    ]),
+                                ]),
+                            Section::make('Tarif & Mata Uang')
+                                ->description('Tentukan mata uang dasar dan nominal tarif layanan visa.')
+                                ->schema([
+                                    Grid::make(3)->schema([
+                                        Select::make('currency')
+                                            ->label('Mata Uang')
+                                            ->options(self::currencyOptions())
+                                            ->default('IDR')
+                                            ->required()
+                                            ->live()
+                                            ->placeholder('Pilih mata uang')
+                                            ->helperText('Mata uang dasar untuk tarif layanan.')
+                                            ->prefixIcon('lucide-coins')
+                                            ->native(false),
+                                        TextInput::make('price')
                                             ->label('Harga Layanan')
                                             ->numeric()
-                                            ->minValue(1)
-                                            ->prefix('Rp')
-                                            ->helperText('Kosongkan jika harga perlu dikonsultasikan.'),
+                                            ->minValue(0)
+                                            ->prefix(fn (Get $get): string => config("currencies.supported.{$get('currency')}.symbol", 'Rp'))
+                                            ->helperText('Kosongkan jika harga perlu dikonsultasikan.')
+                                            ->columnSpan(2),
                                     ]),
                                 ]),
                         ]),
@@ -191,5 +208,15 @@ class VisaServiceForm
                         ]),
                 ])->columnSpanFull(),
             ]);
+    }
+
+    /** @return array<string, string> */
+    public static function currencyOptions(): array
+    {
+        return collect(config('currencies.supported'))
+            ->mapWithKeys(fn (array $metadata, string $code): array => [
+                $code => "{$code} ({$metadata['symbol']}) - {$metadata['name']}",
+            ])
+            ->all();
     }
 }

@@ -39,7 +39,11 @@ class VisaServiceInfolist
                     Section::make('Proses & Publikasi')
                         ->icon('lucide-settings')
                         ->schema([
-                            TextEntry::make('price_idr')->label('Harga')->money('IDR', locale: 'id')->placeholder('Hubungi admin'),
+                            TextEntry::make('price')
+                                ->label('Harga')
+                                ->state(fn (VisaService $record) => $record->price ?? $record->price_idr)
+                                ->money(fn (VisaService $record): string => $record->currency ?? 'IDR', locale: 'id')
+                                ->placeholder('Hubungi admin'),
                             TextEntry::make('processing_days_min')->label('Proses Minimum')->suffix(' hari')->placeholder('-'),
                             TextEntry::make('processing_days_max')->label('Proses Maksimum')->suffix(' hari')->placeholder('-'),
                             TextEntry::make('validity_days')->label('Masa Berlaku')->suffix(' hari')->placeholder('-'),

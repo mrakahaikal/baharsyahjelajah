@@ -21,7 +21,7 @@ use Spatie\Translatable\HasTranslations;
 #[Fillable([
     'country_id', 'name', 'slug', 'visa_type', 'summary', 'description', 'entry_type',
     'processing_days_min', 'processing_days_max', 'validity_days', 'maximum_stay_days',
-    'price_idr', 'is_active', 'is_featured', 'sort_order',
+    'currency', 'price', 'price_idr', 'is_active', 'is_featured', 'sort_order',
 ])]
 class VisaService extends Model implements HasMedia
 {
@@ -39,10 +39,46 @@ class VisaService extends Model implements HasMedia
     public array $translatable = ['name', 'visa_type', 'summary', 'description'];
 
     protected $attributes = [
+        'currency' => 'IDR',
         'is_active' => true,
         'is_featured' => false,
         'sort_order' => 0,
     ];
+
+    protected static function booted(): void
+    {
+        static::saving(function (VisaService $service): void {
+            if (blank($service->currency)) {
+                $service->currency = (string) config('currencies.base', 'IDR');
+            }
+
+            $priceDirty = $service->isDirty('price');
+            $priceIdrDirty = $service->isDirty('price_idr');
+
+            if ($priceDirty && ! $priceIdrDirty) {
+                if ($service->price === null) {
+                    $service->price_idr = null;
+                } elseif ($service->currency === 'IDR') {
+                    $service->price_idr = (int) round((float) $service->price);
+                } else {
+                    try {
+                        $service->price_idr = (int) round(app(CurrencyService::class)->convertRaw((float) $service->price, 'IDR', $service->currency));
+                    } catch (\Throwable) {
+                        $service->price_idr = null;
+                    }
+                }
+            } elseif ($priceIdrDirty && ! $priceDirty) {
+                $service->price = $service->price_idr;
+                if ($service->price_idr !== null && blank($service->currency)) {
+                    $service->currency = 'IDR';
+                }
+            } elseif ($priceDirty && $priceIdrDirty) {
+                if ($service->currency === 'IDR' && $service->price !== null) {
+                    $service->price_idr = (int) round((float) $service->price);
+                }
+            }
+        });
+    }
 
     protected function casts(): array
     {
@@ -52,6 +88,8 @@ class VisaService extends Model implements HasMedia
             'processing_days_max' => 'integer',
             'validity_days' => 'integer',
             'maximum_stay_days' => 'integer',
+            'price' => 'decimal:2',
+            'currency' => 'string',
             'price_idr' => 'integer',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
@@ -112,11 +150,19 @@ class VisaService extends Model implements HasMedia
 
     public function getFormattedPriceAttribute(): ?string
     {
-        if ($this->price_idr === null) {
+        $amount = $this->price ?? $this->price_idr;
+
+        if ($amount === null) {
             return null;
         }
 
-        return app(CurrencyService::class)->convert($this->price_idr, LocaleHelper::currency());
+        $currency = $this->currency ?: (string) config('currencies.base', 'IDR');
+
+        return app(CurrencyService::class)->convert(
+            (float) $amount,
+            LocaleHelper::currency(),
+            $currency,
+        );
     }
 
     public function getCoverUrlAttribute(): string

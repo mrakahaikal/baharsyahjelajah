@@ -24,4 +24,27 @@ class EditVisaService extends EditRecord
             RestoreAction::make()->label('Pulihkan')->icon('lucide-rotate-ccw'),
         ];
     }
+
+    /** @param array<string, mixed> $data */
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $data['currency'] ??= 'IDR';
+
+        if (! isset($data['price']) && isset($data['price_idr'])) {
+            $data['price'] = $data['price_idr'];
+        }
+
+        return $data;
+    }
+
+    /** @param array<string, mixed> $data */
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        if (array_key_exists('price_idr', $data) && ! array_key_exists('price', $data)) {
+            $data['price'] = $data['price_idr'];
+            $data['currency'] ??= 'IDR';
+        }
+
+        return $data;
+    }
 }

@@ -4,6 +4,7 @@ use App\Enums\VisaItemType;
 use App\Livewire\VisaCatalog;
 use App\Livewire\VisaInquiry;
 use App\Models\Country;
+use App\Models\CurrencyRate;
 use App\Models\VisaService;
 use App\Models\VisaServiceItem;
 use App\Settings\GeneralSettings;
@@ -180,4 +181,35 @@ it('keeps the inquiry form on the page when whatsapp is unavailable', function (
         ->call('submit')
         ->assertHasErrors('service')
         ->assertNoRedirect();
+});
+
+it('converts foreign currency visa price based on active currency session', function () {
+    CurrencyRate::updateRate('USD', 0.00006250);
+    CurrencyRate::updateRate('MYR', 0.00029200);
+
+    $service = VisaService::factory()->for(visaCountry())->create([
+        'name' => ['id' => 'Visa AS', 'en' => 'US Visa', 'ms' => 'Visa AS'],
+        'slug' => 'visa-as',
+        'currency' => 'USD',
+        'price' => 100,
+    ]);
+
+    // In default IDR: 100 / 0.00006250 = 1,600,000
+    get('/id/visa/visa-as')
+        ->assertOk()
+        ->assertSee('Rp 1.600.000')
+        ->assertSee('"priceCurrency":"USD"', false)
+        ->assertSee('"price":100', false);
+
+    // In USD session
+    $this->withSession(['app_currency' => 'USD'])
+        ->get('/id/visa/visa-as')
+        ->assertOk()
+        ->assertSee('$ 100.00');
+
+    // In MYR session
+    $this->withSession(['app_currency' => 'MYR'])
+        ->get('/id/visa/visa-as')
+        ->assertOk()
+        ->assertSee('RM 467.20');
 });
