@@ -24,14 +24,42 @@ class SeoMeta extends Component
         public array $alternateUrls = [],
         public ?string $robots = null,
     ) {
+        $currentLocale = app()->getLocale();
+
+        if (empty($this->alternateUrls) && request()->route()) {
+            $routeName = request()->route()->getName();
+            if ($routeName && in_array('locale', request()->route()->parameterNames(), true)) {
+                $parameters = request()->route()->parameters();
+                $supportedLocales = ['id', 'ms', 'en'];
+                $generated = [];
+                try {
+                    foreach ($supportedLocales as $loc) {
+                        $generated[$loc] = route($routeName, array_merge($parameters, ['locale' => $loc]));
+                    }
+                    $this->alternateUrls = $generated;
+                } catch (\Throwable) {
+                    // Fall back if route parameters cannot be resolved
+                }
+            }
+        }
+
+        if (blank($this->canonicalUrl)) {
+            $this->canonicalUrl = $this->alternateUrls[$currentLocale] ?? url()->current();
+        }
+
+        if (blank($this->robots)) {
+            $this->robots = 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+        }
+
         $this->metadata = $resolver->resolve(
             page: $page,
-            locale: app()->getLocale(),
+            locale: $currentLocale,
             fallbackTitle: $fallbackTitle,
             fallbackDescription: $fallbackDescription,
             fallbackOgImage: $fallbackOgImage,
             ogType: $ogType,
-            canonicalUrl: $canonicalUrl,
+            canonicalUrl: $this->canonicalUrl,
+            alternateUrls: $this->alternateUrls,
         );
     }
 

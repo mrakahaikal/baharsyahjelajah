@@ -104,14 +104,35 @@ it('renders one complete set of managed metadata on a static page', function ():
         ->assertSuccessful()
         ->assertSee('<title>Beranda SEO Terkelola</title>', false)
         ->assertSee('<meta name="description" content="Deskripsi SEO terkelola untuk beranda.">', false)
+        ->assertSee('<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">', false)
         ->assertSee('<meta property="og:title" content="Judul Berbagi Beranda">', false)
         ->assertSee('<meta property="og:description" content="Deskripsi SEO terkelola untuk beranda.">', false)
+        ->assertSee('<meta property="og:locale" content="id_ID">', false)
+        ->assertSee('<meta property="og:locale:alternate" content="ms_MY">', false)
+        ->assertSee('<meta property="og:locale:alternate" content="en_US">', false)
+        ->assertSee('<meta property="og:image" content="'.url('images/og-default.png').'">', false)
+        ->assertSee('<meta property="og:image:width" content="1200">', false)
+        ->assertSee('<meta property="og:image:height" content="630">', false)
+        ->assertSee('<meta name="twitter:card" content="summary_large_image">', false)
         ->assertSee('<meta name="twitter:title" content="Judul Berbagi Beranda">', false)
-        ->assertSee('<link rel="canonical" href="'.route('home', ['locale' => 'id']).'">', false);
+        ->assertSee('<link rel="canonical" href="'.route('home', ['locale' => 'id']).'">', false)
+        ->assertSee('<link rel="alternate" hreflang="id" href="'.route('home', ['locale' => 'id']).'">', false)
+        ->assertSee('<link rel="alternate" hreflang="ms" href="'.route('home', ['locale' => 'ms']).'">', false)
+        ->assertSee('<link rel="alternate" hreflang="en" href="'.route('home', ['locale' => 'en']).'">', false)
+        ->assertSee('<link rel="alternate" hreflang="x-default" href="'.route('home', ['locale' => 'id']).'">', false);
 
     expect(substr_count($response->getContent(), '<title>'))->toBe(1)
         ->and(substr_count($response->getContent(), 'property="og:title"'))->toBe(1)
         ->and(substr_count($response->getContent(), 'name="twitter:title"'))->toBe(1);
+});
+
+it('renders proper localized OpenGraph and alternate tags on english page', function (): void {
+    $response = get('/en')
+        ->assertSuccessful()
+        ->assertSee('<meta property="og:locale" content="en_US">', false)
+        ->assertSee('<meta property="og:locale:alternate" content="id_ID">', false)
+        ->assertSee('<meta property="og:locale:alternate" content="ms_MY">', false)
+        ->assertSee('<link rel="canonical" href="'.route('home', ['locale' => 'en']).'">', false);
 });
 
 it('persists localized page metadata from the filament settings page', function (): void {
