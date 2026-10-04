@@ -42,6 +42,7 @@ class ManageFooterSettings extends SettingsPage
                 Section::make('Brand & CTA')
                     ->description('Konten utama footer yang terlihat sebelum daftar tautan.')
                     ->icon('lucide-megaphone')
+                    ->aside()
                     ->schema([
                         Translate::make()
                             ->locales(FilamentLocale::locales())
@@ -82,6 +83,7 @@ class ManageFooterSettings extends SettingsPage
                 Section::make('Kolom Tautan')
                     ->description('Susun klasifikasi navigasi footer. Destinasi dapat diisi otomatis dari tour aktif.')
                     ->icon('lucide-list')
+                    ->aside()
                     ->schema([
                         Repeater::make('link_groups')
                             ->label('Grup Tautan Navigasi')
@@ -149,7 +151,7 @@ class ManageFooterSettings extends SettingsPage
                                     ->columns(1)
                                     ->reorderable()
                                     ->collapsible(),
-                                ])
+                            ])
                             ->columns(1)
                             ->reorderable()
                             ->collapsible(),
@@ -167,6 +169,7 @@ class ManageFooterSettings extends SettingsPage
                 Section::make('Media Sosial, Kontak & Legal')
                     ->description('Konten pendukung serta tautan kecil pada bagian bawah footer.')
                     ->icon('lucide-info')
+                    ->aside()
                     ->schema([
                         Translate::make()
                             ->locales(FilamentLocale::locales())

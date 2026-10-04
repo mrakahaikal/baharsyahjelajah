@@ -42,6 +42,7 @@ class ManageSeoSettings extends SettingsPage
             Section::make('Default SEO & Open Graph')
                 ->description('Fallback metadata yang digunakan ketika suatu halaman tidak memiliki pengaturan khusus.')
                 ->icon('lucide-share-2')
+                ->aside()
                 ->schema([
                     Translate::make()
                         ->locales(FilamentLocale::locales())
@@ -69,6 +70,7 @@ class ManageSeoSettings extends SettingsPage
             Section::make('SEO per Halaman')
                 ->description('Override metadata halaman statis dan katalog. Field yang dikosongkan akan menggunakan teks bawaan halaman atau pengaturan global.')
                 ->icon('lucide-files')
+                ->aside()
                 ->schema([
                     Tabs::make('Halaman')
                         ->tabs(collect(StaticSeoPage::cases())
@@ -80,6 +82,7 @@ class ManageSeoSettings extends SettingsPage
             Section::make('Pelacakan & Analitik')
                 ->description('Integrasikan website dengan layanan pihak ketiga untuk statistik.')
                 ->icon('lucide-line-chart')
+                ->aside()
                 ->schema([
                     Grid::make(2)->schema([
                         TextInput::make('google_analytics_id')
@@ -121,6 +124,7 @@ class ManageSeoSettings extends SettingsPage
                 Section::make('Override Open Graph')
                     ->description('Opsional. Jika kosong, judul dan deskripsi Open Graph mengikuti metadata di atas.')
                     ->icon('lucide-share-2')
+                    ->compact()
                     ->collapsed()
                     ->collapsible()
                     ->schema([

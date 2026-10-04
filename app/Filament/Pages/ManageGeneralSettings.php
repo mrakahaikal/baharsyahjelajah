@@ -82,6 +82,7 @@ class ManageGeneralSettings extends SettingsPage
                 Section::make('Identitas Website')
                     ->description('Informasi utama yang muncul di judul dan meta website.')
                     ->icon('lucide-globe')
+                    ->aside()
                     ->schema([
                         Translate::make()
                             ->locales(FilamentLocale::locales())
@@ -104,6 +105,7 @@ class ManageGeneralSettings extends SettingsPage
                 Section::make('Informasi Kontak & Alamat')
                     ->description('Detail kontak yang dapat dihubungi oleh pelanggan.')
                     ->icon('lucide-phone')
+                    ->aside()
                     ->schema([
                         Grid::make(2)->schema([
                             TextInput::make('whatsapp_number')
@@ -147,6 +149,7 @@ class ManageGeneralSettings extends SettingsPage
                 Section::make('Preferensi Default')
                     ->description('Pengaturan standar untuk aplikasi dan perhitungan harga.')
                     ->icon('lucide-sliders')
+                    ->aside()
                     ->schema([
                         Grid::make(2)->schema([
                             Select::make('default_currency')
@@ -171,6 +174,7 @@ class ManageGeneralSettings extends SettingsPage
                     ->icon('lucide-code')
                     ->inlineLabel()
                     ->columnSpanFull()
+                    ->aside()
                     ->schema([
                         CodeEditor::make('head_snippets')
                             ->label('Kode Snippet')
