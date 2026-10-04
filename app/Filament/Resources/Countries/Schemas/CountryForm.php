@@ -2,15 +2,15 @@
 
 namespace App\Filament\Resources\Countries\Schemas;
 
+use App\Filament\Support\FilamentLocale;
+use App\Filament\Support\Forms\Components\TranslatableNameSlug;
+use App\Filament\Support\Forms\Presets\MediaUploadPreset;
+use App\Filament\Support\Forms\Presets\StatusTogglePreset;
 use App\Models\Country;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Utilities\Get;
-use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
 use SolutionForest\FilamentTranslateField\Forms\Component\Translate;
@@ -26,20 +26,13 @@ class CountryForm
                     ->icon('lucide-globe-2')
                     ->schema([
                         Translate::make()
-                            ->locales(['id', 'en', 'ms'])
+                            ->locales(FilamentLocale::locales())
                             ->schema(fn (string $locale): array => [
-                                TextInput::make('name')
-                                    ->label('Nama Negara')
-                                    ->required($locale === 'id')
-                                    ->live(onBlur: true)
-                                    ->afterStateUpdated(function (Get $get, Set $set, ?string $state) use ($locale): void {
-                                        if ($locale === 'id' && blank($get('slug'))) {
-                                            $set('slug', Str::slug($state ?? ''));
-                                        }
-                                    })
-                                    ->maxLength(255)
-                                    ->placeholder('Contoh: Mesir')
-                                    ->prefixIcon('lucide-type'),
+                                TranslatableNameSlug::forNonTranslatableSlug(
+                                    locale: $locale,
+                                    nameLabel: 'Nama Negara',
+                                    namePlaceholder: 'Contoh: Mesir',
+                                ),
                                 Textarea::make('description')
                                     ->label('Deskripsi Negara')
                                     ->rows(3)
@@ -106,26 +99,20 @@ class CountryForm
                     ->description('Tambahkan bendera dan atur ketersediaan negara pada pilihan layanan Visa.')
                     ->icon('lucide-flag')
                     ->schema([
-                        SpatieMediaLibraryFileUpload::make('flag')
-                            ->label('Gambar Bendera')
-                            ->collection(Country::MEDIA_COLLECTION_FLAG)
-                            ->image()
-                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                            ->maxSize(2048)
-                            ->imageEditor()
-                            ->disk('public')
-                            ->visibility('public')
-                            ->helperText('Format JPG, PNG, atau WebP. Maksimal 2 MB.'),
-                        SpatieMediaLibraryFileUpload::make('cover')
-                            ->label('Foto Thumbnail / Sampul Destinasi')
-                            ->collection(Country::MEDIA_COLLECTION_COVER)
-                            ->image()
-                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                            ->maxSize(5120)
-                            ->imageEditor()
-                            ->disk('public')
-                            ->visibility('public')
-                            ->helperText('Foto lansekap utama negara. Format JPG, PNG, atau WebP. Maksimal 5 MB.'),
+                        MediaUploadPreset::spatieImage(
+                            name: 'flag',
+                            collection: Country::MEDIA_COLLECTION_FLAG,
+                            label: 'Gambar Bendera',
+                            maxSizeKb: 2048,
+                            helperText: 'Format JPG, PNG, atau WebP. Maksimal 2 MB.'
+                        ),
+                        MediaUploadPreset::spatieImage(
+                            name: 'cover',
+                            collection: Country::MEDIA_COLLECTION_COVER,
+                            label: 'Foto Thumbnail / Sampul Destinasi',
+                            maxSizeKb: 5120,
+                            helperText: 'Foto lansekap utama negara. Format JPG, PNG, atau WebP. Maksimal 5 MB.'
+                        ),
                         Grid::make(3)->schema([
                             TextInput::make('sort_order')
                                 ->label('Urutan Tampilan')
@@ -133,12 +120,8 @@ class CountryForm
                                 ->minValue(0)
                                 ->default(0)
                                 ->required(),
-                            Toggle::make('is_featured')
-                                ->label('Tampilkan di Beranda (Bento Grid)')
-                                ->default(false),
-                            Toggle::make('is_active')
-                                ->label('Aktif dan Dapat Dipilih')
-                                ->default(true),
+                            StatusTogglePreset::featured(label: 'Tampilkan di Beranda (Bento Grid)'),
+                            StatusTogglePreset::active(label: 'Aktif dan Dapat Dipilih'),
                         ]),
                     ])
                     ->columnSpanFull(),
@@ -146,3 +129,4 @@ class CountryForm
             ->columns(1);
     }
 }
+
