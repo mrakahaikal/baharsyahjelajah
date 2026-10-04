@@ -20,6 +20,8 @@ use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
@@ -110,16 +112,32 @@ class BannerResource extends Resource
                             Select::make('cta_type')
                                 ->label('Tipe Aksi (CTA)')
                                 ->options(BannerCtaType::class)
-                                ->placeholder('Pilih tipe aksi')
+                                ->placeholder('Tanpa tombol aksi')
                                 ->prefixIcon('lucide-settings')
                                 ->native(false)
-                                ->live(),
-                            TextInput::make('cta_value')
-                                ->label('Nilai Aksi (CTA Target)')
-                                ->placeholder('Contoh: https://wa.me/... atau nama.route')
-                                ->maxLength(255)
+                                ->live()
+                                ->afterStateUpdated(fn (Set $set) => $set('cta_value', null))
+                                ->helperText(fn (Get $get): ?string => self::ctaTypeIs($get('cta_type'), BannerCtaType::Whatsapp)
+                                    ? 'Tombol akan membuka WhatsApp dengan nomor dari Pengaturan Umum.'
+                                    : null),
+                            Select::make('cta_value')
+                                ->label('Halaman Tujuan')
+                                ->options(Banner::CTA_ROUTE_OPTIONS)
+                                ->placeholder('Pilih halaman website')
                                 ->prefixIcon('lucide-link')
-                                ->helperText('Target URL tujuan, nomor WA, atau nama route internal.'),
+                                ->native(false)
+                                ->required()
+                                ->in(array_keys(Banner::CTA_ROUTE_OPTIONS))
+                                ->visible(fn (Get $get): bool => self::ctaTypeIs($get('cta_type'), BannerCtaType::Route)),
+                            TextInput::make('cta_value')
+                                ->label('URL Tujuan')
+                                ->placeholder('https://example.com/promo')
+                                ->prefixIcon('lucide-link')
+                                ->url()
+                                ->startsWith(['http://', 'https://'])
+                                ->required()
+                                ->maxLength(255)
+                                ->visible(fn (Get $get): bool => self::ctaTypeIs($get('cta_type'), BannerCtaType::Url)),
                         ]),
                         Grid::make(2)->schema([
                             DateTimePicker::make('starts_at')
@@ -224,5 +242,14 @@ class BannerResource extends Resource
         return [
             'index' => ManageBanners::route('/'),
         ];
+    }
+
+    private static function ctaTypeIs(mixed $state, BannerCtaType $expected): bool
+    {
+        if ($state instanceof BannerCtaType) {
+            return $state === $expected;
+        }
+
+        return is_string($state) && $state === $expected->value;
     }
 }

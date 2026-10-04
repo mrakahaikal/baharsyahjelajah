@@ -183,6 +183,66 @@ it('seeds banners and faqs idempotently', function () {
         ->and(Faq::query()->count())->toBe($faqCount);
 });
 
+it('falls back to default search cta label and anchor when hero banner has invalid cta', function () {
+    Banner::create([
+        'title' => localizedContent('Invalid CTA hero'),
+        'subtitle' => localizedContent('Subtitle'),
+        'cta_label' => localizedContent('Click Me'),
+        'image_path' => 'https://example.com/hero.jpg',
+        'placement' => BannerPlacement::HomeHero,
+        'cta_type' => BannerCtaType::Route,
+        'cta_value' => 'invalid.route.name',
+        'is_active' => true,
+    ]);
+
+    get('/en')
+        ->assertSuccessful()
+        ->assertSee('Invalid CTA hero')
+        ->assertDontSee('Click Me')
+        ->assertSee(__('home.hero.search'));
+});
+
+it('validates cta target based on selected cta type in filament', function () {
+    $this->actingAs(User::factory()->create());
+    Storage::fake('public');
+
+    // Route type requires key in CTA_ROUTE_OPTIONS
+    Livewire::test(ManageBanners::class)
+        ->callAction(CreateAction::class, data: [
+            'placement' => BannerPlacement::HomeHero->value,
+            'image_path' => 'https://example.com/banner.jpg',
+            'title' => localizedContent('Test Route'),
+            'cta_type' => BannerCtaType::Route->value,
+            'cta_value' => 'invalid.route',
+            'is_active' => true,
+        ])
+        ->assertHasActionErrors(['cta_value' => 'in']);
+
+    // URL type requires startsWith http:// or https://
+    Livewire::test(ManageBanners::class)
+        ->callAction(CreateAction::class, data: [
+            'placement' => BannerPlacement::HomeHero->value,
+            'image_path' => 'https://example.com/banner.jpg',
+            'title' => localizedContent('Test URL'),
+            'cta_type' => BannerCtaType::Url->value,
+            'cta_value' => 'ftp://example.com',
+            'is_active' => true,
+        ])
+        ->assertHasActionErrors(['cta_value' => 'starts_with']);
+
+    // Valid URL succeeds
+    Livewire::test(ManageBanners::class)
+        ->callAction(CreateAction::class, data: [
+            'placement' => BannerPlacement::HomeHero->value,
+            'image_path' => 'https://example.com/banner.jpg',
+            'title' => localizedContent('Test Valid URL'),
+            'cta_type' => BannerCtaType::Url->value,
+            'cta_value' => 'https://example.com/promo',
+            'is_active' => true,
+        ])
+        ->assertHasNoActionErrors();
+});
+
 /** @return array{id: string, en: string, ms: string} */
 function localizedContent(string $value): array
 {

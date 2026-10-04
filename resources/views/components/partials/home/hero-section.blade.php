@@ -5,14 +5,19 @@
 
     if ($heroBanners instanceof \Illuminate\Support\Collection && $heroBanners->isNotEmpty()) {
         foreach ($heroBanners as $banner) {
+            $ctaUrl = $banner->ctaUrl($locale);
+            $hasValidCta = filled($ctaUrl);
+
             $slides->push([
                 'id' => $banner->id,
                 'imageUrl' => $banner->image_url ?? 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=85',
                 'title' => filled($banner->title) ? $banner->title : __('home.hero.title'),
                 'subtitle' => filled($banner->subtitle) ? $banner->subtitle : __('home.hero.subtitle'),
-                'primaryCtaUrl' => $banner->ctaUrl($locale) ?? '#search-panel',
-                'primaryCtaLabel' => filled($banner->cta_label) ? $banner->cta_label : __('home.hero.search'),
-                'opensInNewTab' => $banner->opensCtaInNewTab() ?? false,
+                'primaryCtaUrl' => $hasValidCta ? $ctaUrl : '#search-panel',
+                'primaryCtaLabel' => $hasValidCta && filled($banner->cta_label)
+                    ? $banner->cta_label
+                    : __('home.hero.search'),
+                'opensInNewTab' => $hasValidCta && $banner->opensCtaInNewTab(),
             ]);
         }
     } else {
