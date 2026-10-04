@@ -31,11 +31,23 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->favicon(asset('images/favicon.png'))
             ->brandLogo(asset('images/logo-baharsyah-jelajah.webp'))
+            ->brandLogoHeight('2.5rem')
             ->darkMode(false)
+            ->sidebarCollapsibleOnDesktop()
+            ->unsavedChangesAlerts()
             ->login()
             ->databaseNotifications()
             ->colors([
                 'primary' => Color::Violet,
+            ])
+            ->navigationGroups([
+                'Manajemen Tur',
+                'Layanan Umrah',
+                'Layanan Transportasi',
+                'Layanan Visa',
+                'Manajemen Blog',
+                'Konten Website',
+                'Pengaturan',
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
