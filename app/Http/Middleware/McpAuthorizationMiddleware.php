@@ -100,7 +100,7 @@ class McpAuthorizationMiddleware
     protected function resolveRequiredScope(string $method, ?string $toolName): string
     {
         if ($method === 'tools/call' && ! empty($toolName)) {
-            if (str_starts_with($toolName, 'delete_')) {
+            if (str_starts_with($toolName, 'delete_') || str_starts_with($toolName, 'merge_')) {
                 return 'mcp:admin';
             }
 

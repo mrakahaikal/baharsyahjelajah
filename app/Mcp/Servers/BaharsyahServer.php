@@ -7,10 +7,17 @@ namespace App\Mcp\Servers;
 use App\Mcp\Prompts\AuditCategoryTaxonomyPrompt;
 use App\Mcp\Prompts\SuggestCategoryForTopicPrompt;
 use App\Mcp\Resources\CategoryTaxonomyResource;
+use App\Mcp\Tools\Articles\CreateArticleTool;
+use App\Mcp\Tools\Articles\DeleteArticleTool;
+use App\Mcp\Tools\Articles\GetArticleTool;
+use App\Mcp\Tools\Articles\ListArticlesTool;
+use App\Mcp\Tools\Articles\PublishArticleTool;
+use App\Mcp\Tools\Articles\UpdateArticleTool;
 use App\Mcp\Tools\Categories\CreateArticleCategoryTool;
 use App\Mcp\Tools\Categories\DeleteArticleCategoryTool;
 use App\Mcp\Tools\Categories\GetArticleCategoryTool;
 use App\Mcp\Tools\Categories\ListArticleCategoriesTool;
+use App\Mcp\Tools\Categories\MergeArticleCategoriesTool;
 use App\Mcp\Tools\Categories\UpdateArticleCategoryTool;
 use Laravel\Mcp\Server;
 use Laravel\Mcp\Server\Attributes\Instructions;
@@ -34,6 +41,15 @@ class BaharsyahServer extends Server
         CreateArticleCategoryTool::class,
         UpdateArticleCategoryTool::class,
         DeleteArticleCategoryTool::class,
+        MergeArticleCategoriesTool::class,
+
+        // Article Management
+        ListArticlesTool::class,
+        GetArticleTool::class,
+        CreateArticleTool::class,
+        UpdateArticleTool::class,
+        PublishArticleTool::class,
+        DeleteArticleTool::class,
     ];
 
     /**
