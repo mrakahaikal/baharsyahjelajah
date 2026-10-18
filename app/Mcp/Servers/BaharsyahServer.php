@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace App\Mcp\Servers;
 
 use App\Mcp\Prompts\AuditCategoryTaxonomyPrompt;
+use App\Mcp\Prompts\DraftArticlePrompt;
+use App\Mcp\Prompts\ReviewArticleSeoPrompt;
 use App\Mcp\Prompts\SuggestCategoryForTopicPrompt;
+use App\Mcp\Resources\ArticleCatalogOverviewResource;
 use App\Mcp\Resources\CategoryTaxonomyResource;
+use App\Mcp\Resources\RecentArticlesResource;
 use App\Mcp\Tools\Articles\CreateArticleTool;
 use App\Mcp\Tools\Articles\DeleteArticleTool;
 use App\Mcp\Tools\Articles\GetArticleTool;
@@ -59,6 +63,8 @@ class BaharsyahServer extends Server
      */
     protected array $resources = [
         CategoryTaxonomyResource::class,
+        RecentArticlesResource::class,
+        ArticleCatalogOverviewResource::class,
     ];
 
     /**
@@ -69,5 +75,7 @@ class BaharsyahServer extends Server
     protected array $prompts = [
         AuditCategoryTaxonomyPrompt::class,
         SuggestCategoryForTopicPrompt::class,
+        DraftArticlePrompt::class,
+        ReviewArticleSeoPrompt::class,
     ];
 }
