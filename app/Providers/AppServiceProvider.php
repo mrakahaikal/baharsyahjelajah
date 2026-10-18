@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Passport\Passport;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,5 +43,24 @@ class AppServiceProvider extends ServiceProvider
         Blade::anonymousComponentPath(resource_path('views/components/shared'), 'shared');
         Blade::anonymousComponentPath(resource_path('views/components/ui'), 'ui');
         Blade::anonymousComponentPath(resource_path('views/components/forms'), 'forms');
+
+        Passport::tokensExpireIn(now()->addDays(30));
+        Passport::refreshTokensExpireIn(now()->addDays(90));
+        Passport::personalAccessTokensExpireIn(now()->addMonths(6));
+
+        Passport::tokensCan([
+            'mcp:use' => 'Mengakses dan mengeksekusi Model Context Protocol (MCP) server',
+            'mcp:read' => 'Membaca konten artikel, kategori, paket tour, dan data Baharsyah Jelajah',
+            'mcp:write' => 'Membuat dan menyunting draf artikel serta kategori',
+            'mcp:publish' => 'Mempublikasikan atau menarik kembali artikel',
+            'mcp:admin' => 'Akses penuh ke seluruh eksekusi Model Context Protocol (termasuk penghapusan)',
+        ]);
+
+        Passport::setDefaultScope([
+            'mcp:use',
+            'mcp:read',
+        ]);
+
+        Passport::authorizationView('oauth.authorize');
     }
 }

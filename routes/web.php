@@ -233,3 +233,6 @@ Route::get('/design-system', function () {
         abort(404);
     }
 })->name('design-system.index');
+
+// Fallback login route directing unauthenticated OAuth requests to Filament admin login
+Route::get('/login', fn () => redirect()->route('filament.admin.auth.login'))->name('login');
