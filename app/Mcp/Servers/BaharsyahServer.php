@@ -25,6 +25,7 @@ use App\Mcp\Resources\FeaturedCountriesResource;
 use App\Mcp\Resources\FeaturedDestinationsResource;
 use App\Mcp\Resources\RecentArticlesResource;
 use App\Mcp\Resources\VehicleFleetCatalogResource;
+use App\Mcp\Resources\VehicleRentalAreasResource;
 use App\Mcp\Resources\VehicleRentalTermsResource;
 use App\Mcp\Resources\VisaCatalogResource;
 use App\Mcp\Resources\VisaRequirementsSummaryResource;
@@ -50,10 +51,15 @@ use App\Mcp\Tools\Destinations\DeleteDestinationTool;
 use App\Mcp\Tools\Destinations\GetDestinationTool;
 use App\Mcp\Tools\Destinations\ListDestinationsTool;
 use App\Mcp\Tools\Destinations\UpdateDestinationTool;
+use App\Mcp\Tools\Vehicles\CreateVehicleRentalAreaTool;
 use App\Mcp\Tools\Vehicles\CreateVehicleTool;
+use App\Mcp\Tools\Vehicles\DeleteVehicleRentalAreaTool;
 use App\Mcp\Tools\Vehicles\DeleteVehicleTool;
+use App\Mcp\Tools\Vehicles\GetVehicleRentalAreaTool;
 use App\Mcp\Tools\Vehicles\GetVehicleTool;
+use App\Mcp\Tools\Vehicles\ListVehicleRentalAreasTool;
 use App\Mcp\Tools\Vehicles\ListVehiclesTool;
+use App\Mcp\Tools\Vehicles\UpdateVehicleRentalAreaTool;
 use App\Mcp\Tools\Vehicles\UpdateVehicleTool;
 use App\Mcp\Tools\VisaServices\CreateVisaServiceTool;
 use App\Mcp\Tools\VisaServices\DeleteVisaServiceTool;
@@ -119,6 +125,13 @@ class BaharsyahServer extends Server
         CreateVehicleTool::class,
         UpdateVehicleTool::class,
         DeleteVehicleTool::class,
+
+        // Vehicle Rental Areas
+        ListVehicleRentalAreasTool::class,
+        GetVehicleRentalAreaTool::class,
+        CreateVehicleRentalAreaTool::class,
+        UpdateVehicleRentalAreaTool::class,
+        DeleteVehicleRentalAreaTool::class,
     ];
 
     /**
@@ -139,6 +152,7 @@ class BaharsyahServer extends Server
         VisaRequirementsSummaryResource::class,
         VehicleFleetCatalogResource::class,
         VehicleRentalTermsResource::class,
+        VehicleRentalAreasResource::class,
     ];
 
     /**
