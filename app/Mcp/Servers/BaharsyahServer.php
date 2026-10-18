@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace App\Mcp\Servers;
 
 use App\Mcp\Prompts\AuditCategoryTaxonomyPrompt;
+use App\Mcp\Prompts\AuditCountryReadinessPrompt;
 use App\Mcp\Prompts\AuditDestinationsReadinessPrompt;
+use App\Mcp\Prompts\CurateCountryGuidePrompt;
 use App\Mcp\Prompts\DraftArticlePrompt;
 use App\Mcp\Prompts\PlanDestinationHighlightPrompt;
 use App\Mcp\Prompts\ReviewArticleSeoPrompt;
 use App\Mcp\Prompts\SuggestCategoryForTopicPrompt;
 use App\Mcp\Resources\ArticleCatalogOverviewResource;
 use App\Mcp\Resources\CategoryTaxonomyResource;
+use App\Mcp\Resources\CountryCatalogResource;
 use App\Mcp\Resources\DestinationCatalogResource;
+use App\Mcp\Resources\FeaturedCountriesResource;
 use App\Mcp\Resources\FeaturedDestinationsResource;
 use App\Mcp\Resources\RecentArticlesResource;
 use App\Mcp\Tools\Articles\CreateArticleTool;
@@ -95,6 +99,8 @@ class BaharsyahServer extends Server
         ArticleCatalogOverviewResource::class,
         DestinationCatalogResource::class,
         FeaturedDestinationsResource::class,
+        CountryCatalogResource::class,
+        FeaturedCountriesResource::class,
     ];
 
     /**
@@ -109,5 +115,7 @@ class BaharsyahServer extends Server
         ReviewArticleSeoPrompt::class,
         PlanDestinationHighlightPrompt::class,
         AuditDestinationsReadinessPrompt::class,
+        CurateCountryGuidePrompt::class,
+        AuditCountryReadinessPrompt::class,
     ];
 }
