@@ -27,6 +27,11 @@ use App\Mcp\Tools\Categories\GetArticleCategoryTool;
 use App\Mcp\Tools\Categories\ListArticleCategoriesTool;
 use App\Mcp\Tools\Categories\MergeArticleCategoriesTool;
 use App\Mcp\Tools\Categories\UpdateArticleCategoryTool;
+use App\Mcp\Tools\Countries\CreateCountryTool;
+use App\Mcp\Tools\Countries\DeleteCountryTool;
+use App\Mcp\Tools\Countries\GetCountryTool;
+use App\Mcp\Tools\Countries\ListCountriesTool;
+use App\Mcp\Tools\Countries\UpdateCountryTool;
 use App\Mcp\Tools\Destinations\CreateDestinationTool;
 use App\Mcp\Tools\Destinations\DeleteDestinationTool;
 use App\Mcp\Tools\Destinations\GetDestinationTool;
@@ -39,7 +44,7 @@ use Laravel\Mcp\Server\Attributes\Version;
 
 #[Name('Baharsyah Jelajah Management & Content Server')]
 #[Version('1.0.0')]
-#[Instructions('This server provides tools to manage and monitor Baharsyah Jelajah content, including article category and content operations.')]
+#[Instructions('This server provides tools to manage and monitor Baharsyah Jelajah content, including category, article, destination, and country management operations.')]
 class BaharsyahServer extends Server
 {
     /**
@@ -70,6 +75,13 @@ class BaharsyahServer extends Server
         CreateDestinationTool::class,
         UpdateDestinationTool::class,
         DeleteDestinationTool::class,
+
+        // Country Management
+        ListCountriesTool::class,
+        GetCountryTool::class,
+        CreateCountryTool::class,
+        UpdateCountryTool::class,
+        DeleteCountryTool::class,
     ];
 
     /**
