@@ -226,4 +226,10 @@ Route::group([
     })->name('contact.index');
 });
 
-Route::view('/design-system', 'pages.design-system')->name('design-system.index');
+Route::get('/design-system', function () {
+    if (app()->isLocal()) {
+        return view('pages.design-system');
+    } else {
+        abort(404);
+    }
+})->name('design-system.index');

@@ -37,7 +37,7 @@
                         <a href="{{ route('country.show', ['locale' => $locale, 'country' => $country]) }}"
                            class="group relative overflow-hidden rounded-xl border border-slate-200/80 bg-slate-900 p-4 transition-all duration-300 hover:shadow-lg hover:border-blue-400/50" role="menuitem">
                             <img src="{{ $country->cover_url }}" alt="{{ $country->name }}" width="400" height="200" class="absolute inset-0 h-full w-full object-cover opacity-40 transition-transform duration-500 group-hover:scale-105">
-                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-slate-950/20"></div>
+                            <div class="absolute inset-0 bg-linear-to-t from-slate-950/90 via-slate-950/50 to-slate-950/20"></div>
 
                             <div class="relative flex flex-col justify-between h-22">
                                 <div class="flex items-center justify-between">
