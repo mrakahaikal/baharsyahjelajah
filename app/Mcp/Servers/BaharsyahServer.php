@@ -23,6 +23,11 @@ use App\Mcp\Tools\Categories\GetArticleCategoryTool;
 use App\Mcp\Tools\Categories\ListArticleCategoriesTool;
 use App\Mcp\Tools\Categories\MergeArticleCategoriesTool;
 use App\Mcp\Tools\Categories\UpdateArticleCategoryTool;
+use App\Mcp\Tools\Destinations\CreateDestinationTool;
+use App\Mcp\Tools\Destinations\DeleteDestinationTool;
+use App\Mcp\Tools\Destinations\GetDestinationTool;
+use App\Mcp\Tools\Destinations\ListDestinationsTool;
+use App\Mcp\Tools\Destinations\UpdateDestinationTool;
 use Laravel\Mcp\Server;
 use Laravel\Mcp\Server\Attributes\Instructions;
 use Laravel\Mcp\Server\Attributes\Name;
@@ -54,6 +59,13 @@ class BaharsyahServer extends Server
         UpdateArticleTool::class,
         PublishArticleTool::class,
         DeleteArticleTool::class,
+
+        // Destination Management
+        ListDestinationsTool::class,
+        GetDestinationTool::class,
+        CreateDestinationTool::class,
+        UpdateDestinationTool::class,
+        DeleteDestinationTool::class,
     ];
 
     /**
