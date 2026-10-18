@@ -197,4 +197,3 @@ class VisaServiceForm
         return CurrencyOptions::detailedOptions();
     }
 }
-

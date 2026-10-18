@@ -147,4 +147,3 @@ class CreateArticleCategoryTool extends Tool
         ];
     }
 }
-

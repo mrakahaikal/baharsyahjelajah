@@ -77,4 +77,3 @@ class CountriesTable
             ->emptyStateIcon('lucide-globe-2');
     }
 }
-

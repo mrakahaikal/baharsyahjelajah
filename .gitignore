@@ -36,6 +36,7 @@ skills-lock.json
 /public/fonts/filament
 /storage/*.key
 /storage/pail
+/storage/framework/*.php
 /vendor
 /scratch
 _ide_helper.php

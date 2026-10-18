@@ -185,4 +185,3 @@ class ManageGeneralSettings extends SettingsPage
             ->columns(1);
     }
 }
-

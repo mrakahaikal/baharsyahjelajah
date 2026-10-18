@@ -46,4 +46,3 @@ class ManageOAuthClients extends ManageRecords
         ];
     }
 }
-

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Mcp\Servers;
 
+use App\Mcp\Prompts\AuditCategoryTaxonomyPrompt;
+use App\Mcp\Prompts\SuggestCategoryForTopicPrompt;
+use App\Mcp\Resources\CategoryTaxonomyResource;
 use App\Mcp\Tools\Categories\CreateArticleCategoryTool;
 use App\Mcp\Tools\Categories\DeleteArticleCategoryTool;
 use App\Mcp\Tools\Categories\GetArticleCategoryTool;
@@ -39,7 +42,7 @@ class BaharsyahServer extends Server
      * @var array<int, class-string>
      */
     protected array $resources = [
-        //
+        CategoryTaxonomyResource::class,
     ];
 
     /**
@@ -48,7 +51,7 @@ class BaharsyahServer extends Server
      * @var array<int, class-string>
      */
     protected array $prompts = [
-        //
+        AuditCategoryTaxonomyPrompt::class,
+        SuggestCategoryForTopicPrompt::class,
     ];
 }
-

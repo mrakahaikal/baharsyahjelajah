@@ -170,4 +170,3 @@ class UpdateArticleCategoryTool extends Tool
         ];
     }
 }
-

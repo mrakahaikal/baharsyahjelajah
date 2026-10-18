@@ -102,4 +102,3 @@ class VisaServicesTable
             ->emptyStateIcon('lucide-stamp');
     }
 }
-

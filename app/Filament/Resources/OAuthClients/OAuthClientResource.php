@@ -49,4 +49,3 @@ class OAuthClientResource extends Resource
         ];
     }
 }
-

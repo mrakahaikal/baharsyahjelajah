@@ -129,4 +129,3 @@ class CountryForm
             ->columns(1);
     }
 }
-

@@ -61,4 +61,3 @@ it('can render the stats overview widget on the dashboard', function () {
         ->assertSee('Artikel Blog')
         ->assertSee('1 / 1');
 });
-

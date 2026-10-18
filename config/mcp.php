@@ -79,4 +79,3 @@ return [
     'auth_token' => env('MCP_AUTH_TOKEN'),
 
 ];
-

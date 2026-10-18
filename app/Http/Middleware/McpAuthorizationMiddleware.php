@@ -118,4 +118,3 @@ class McpAuthorizationMiddleware
         return 'mcp:read';
     }
 }
-

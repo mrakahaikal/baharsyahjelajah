@@ -247,4 +247,3 @@ class ManageFooterSettings extends SettingsPage
             ->columns(1);
     }
 }
-

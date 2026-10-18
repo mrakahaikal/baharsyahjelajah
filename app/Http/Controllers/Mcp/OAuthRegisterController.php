@@ -187,4 +187,3 @@ class OAuthRegisterController extends BaseOAuthRegisterController
             ->first();
     }
 }
-

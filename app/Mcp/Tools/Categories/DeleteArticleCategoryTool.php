@@ -78,4 +78,3 @@ class DeleteArticleCategoryTool extends Tool
         ]);
     }
 }
-

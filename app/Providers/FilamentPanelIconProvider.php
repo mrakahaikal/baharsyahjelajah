@@ -92,4 +92,3 @@ class FilamentPanelIconProvider extends ServiceProvider
         //
     }
 }
-
