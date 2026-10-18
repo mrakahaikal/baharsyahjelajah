@@ -20,14 +20,36 @@
     $seoDescription = \Illuminate\Support\Str::limit($tour->short_description ?: $descriptionText, 155);
     $tourSlug = $tour->localizedSlug($locale);
     $contactUrl = route('contact.index', ['locale' => $locale, 'tour' => $tourSlug]);
+    $tourUrl = route('tour.show', ['locale' => $locale, 'tour' => $tourSlug]);
     $schemaJson = json_encode([
         '@context' => 'https://schema.org',
-        '@type' => 'CollectionPage',
-        'name' => $tour->name,
-        'description' => $seoDescription,
-        'url' => route('tour.show', ['locale' => $locale, 'tour' => $tourSlug]),
-        'image' => $coverUrl,
-        'numberOfItems' => $packageCount,
+        '@graph' => [
+            [
+                '@type' => 'TouristTrip',
+                '@id' => $tourUrl.'#trip',
+                'name' => $tour->name,
+                'description' => $seoDescription,
+                'url' => $tourUrl,
+                'image' => $coverUrl,
+                'provider' => [
+                    '@type' => 'TravelAgency',
+                    'name' => config('app.name'),
+                ],
+                'itinerary' => $destinationHighlights->map(fn ($dest): array => [
+                    '@type' => 'TouristDestination',
+                    'name' => $dest->name,
+                ])->all(),
+            ],
+            [
+                '@type' => 'CollectionPage',
+                '@id' => $tourUrl.'#webpage',
+                'name' => $tour->name,
+                'description' => $seoDescription,
+                'url' => $tourUrl,
+                'image' => $coverUrl,
+                'numberOfItems' => $packageCount,
+            ],
+        ],
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 @endphp
 

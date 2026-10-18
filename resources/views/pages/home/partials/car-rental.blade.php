@@ -66,7 +66,7 @@
 
                                 <a href="{{ route('transport.show', ['locale' => app()->getLocale(), 'vehicle' => $vehicle->id]) }}"
                                    class="mt-3 w-full h-9 rounded-lg bg-gray-50 text-gray-600 group-hover:bg-primary group-hover:text-white flex items-center justify-center gap-1.5 text-xs font-semibold transition-colors duration-300">
-                                    {{ __('frontend.car_rental.labels.daily') !== 'Daily' ? 'Lihat Detail' : 'View Detail' }}
+                                    {{ __('frontend.car_rental.view_detail') }}
                                     <x-lucide-chevron-right class="w-3.5 h-3.5" />
                                 </a>
                             </div>

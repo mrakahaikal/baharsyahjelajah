@@ -1,2 +1,6 @@
 User-agent: *
-Disallow:
+Disallow: /admin
+Disallow: /set-currency/
+Disallow: /livewire/
+
+Sitemap: https://baharsyahjelajah.com/sitemap.xml

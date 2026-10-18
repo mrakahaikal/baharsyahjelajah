@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Country;
 use App\Models\Destination;
 use App\Models\Post;
 use App\Models\Tour;
@@ -29,6 +30,7 @@ class SitemapService
         'blog.index',
         'tour.index',
         'umroh.index',
+        'country.index',
         'destination.index',
         'transport.index',
         'visa.index',
@@ -45,6 +47,7 @@ class SitemapService
             'sitemap-posts.xml' => fn (): Sitemap => $this->postsSitemap(),
             'sitemap-tours.xml' => fn (): Sitemap => $this->toursSitemap(),
             'sitemap-umrah.xml' => fn (): Sitemap => $this->umrahSitemap(),
+            'sitemap-countries.xml' => fn (): Sitemap => $this->countriesSitemap(),
             'sitemap-destinations.xml' => fn (): Sitemap => $this->destinationsSitemap(),
             'sitemap-vehicles.xml' => fn (): Sitemap => $this->vehiclesSitemap(),
             'sitemap-visas.xml' => fn (): Sitemap => $this->visasSitemap(),
@@ -175,6 +178,32 @@ class SitemapService
                         'umrah' => $this->translatedSlug($package, $locale, fallbackToKey: true),
                     ], absolute: false),
                     $package->updated_at,
+                );
+            });
+
+        return $sitemap;
+    }
+
+    private function countriesSitemap(): Sitemap
+    {
+        $sitemap = Sitemap::create();
+
+        Country::query()
+            ->active()
+            ->select(['id', 'slug', 'updated_at'])
+            ->lazyById()
+            ->each(function (Country $country) use ($sitemap): void {
+                if (blank($country->slug)) {
+                    return;
+                }
+
+                $this->addLocalizedUrls(
+                    $sitemap,
+                    fn (string $locale): string => route('country.show', [
+                        'locale' => $locale,
+                        'country' => $country->slug,
+                    ], absolute: false),
+                    $country->updated_at,
                 );
             });
 

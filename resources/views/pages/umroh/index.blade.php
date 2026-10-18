@@ -49,10 +49,10 @@
 
                 @if($countries->isNotEmpty())
                     <label class="min-w-0 flex-1 sm:max-w-xs">
-                        <span class="mb-2 block text-xs font-bold uppercase tracking-wide text-neutral-400">Negara Destinasi</span>
+                        <span class="mb-2 block text-xs font-bold uppercase tracking-wide text-neutral-400">{{ __('umrah.catalog.destination_country') }}</span>
                         <span class="relative block">
                             <select name="country" class="min-h-12 w-full appearance-none rounded-lg border border-white/15 bg-white/8 px-4 pr-10 text-sm font-semibold text-white outline-none transition-colors hover:border-amber-300/50 focus:border-amber-300">
-                                <option value="" class="bg-neutral-900 text-white">Semua Negara</option>
+                                <option value="" class="bg-neutral-900 text-white">{{ __('umrah.catalog.all_countries') }}</option>
                                 @foreach($countries as $c)
                                     <option value="{{ $c->slug }}" @selected($activeCountry === $c->slug) class="bg-neutral-900 text-white">{{ $c->name }}</option>
                                 @endforeach

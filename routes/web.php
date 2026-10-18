@@ -4,6 +4,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\UmrahPackageController;
 use App\Http\Controllers\VehicleController;
@@ -120,6 +121,30 @@ Route::get('/visa/{path?}', function (Request $request, ?string $path = null) {
     ->where('path', '.*')
     ->name('visa.redirect');
 
+Route::get('/gallery/{path?}', function (Request $request, ?string $path = null) {
+    $destination = '/id/gallery'.($path !== null ? '/'.$path : '');
+
+    if ($queryString = $request->getQueryString()) {
+        $destination .= '?'.$queryString;
+    }
+
+    return redirect($destination);
+})
+    ->where('path', '.*')
+    ->name('gallery.redirect');
+
+Route::get('/testimonials/{path?}', function (Request $request, ?string $path = null) {
+    $destination = '/id/testimonials'.($path !== null ? '/'.$path : '');
+
+    if ($queryString = $request->getQueryString()) {
+        $destination .= '?'.$queryString;
+    }
+
+    return redirect($destination);
+})
+    ->where('path', '.*')
+    ->name('testimonials.redirect');
+
 // Route for Currency Switcher
 Route::get('/set-currency/{currency}', function (string $currency) {
     $currency = strtoupper($currency);
@@ -185,12 +210,8 @@ Route::group([
     Route::get('/shop/{product}', function () {
         return view('pages.shop.show');
     })->name('shop.show');
-    Route::get('/gallery', function () {
-        return view('pages.gallery.index');
-    })->name('gallery.index');
-    Route::get('/testimonials', function () {
-        return view('pages.testimonials.index');
-    })->name('testimonials.index');
+    Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery.index');
+    Route::get('/testimonials', [PageController::class, 'testimonials'])->name('testimonials.index');
     Route::get('/kontak', function (string $locale) {
         $alternateUrls = collect(['id', 'ms', 'en'])
             ->mapWithKeys(fn (string $supportedLocale): array => [

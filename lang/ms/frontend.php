@@ -91,6 +91,7 @@ return [
         'title' => 'Pilihan Armada Terbaik',
         'subtitle' => 'Sewa kereta dengan atau tanpa pemandu untuk perjalanan yang fleksibel dan selesa.',
         'view_all' => 'Lihat Semua Armada',
+        'view_detail' => 'Lihat Butiran',
         'labels' => [
             'pax' => ':count Orang',
             'transmission' => 'Transmisi :type',
@@ -615,5 +616,63 @@ return [
                 'notes' => '- Catatan: :value',
             ],
         ],
+    ],
+    'floating_whatsapp' => [
+        'label' => 'Hubungi melalui WhatsApp',
+    ],
+    'mega_menu' => [
+        'popular_destinations' => 'Destinasi Pelancongan Popular',
+        'explore_all_destinations' => 'Terokai Semua Destinasi',
+    ],
+    'mobile_nav' => [
+        'tour_categories' => 'Kategori Pakej',
+    ],
+    'country_card' => [
+        'featured_destinations' => 'Destinasi Pilihan',
+        'explore' => 'Jelajah',
+    ],
+    'tour_card' => [
+        'view_packages' => 'Lihat pilihan pakej',
+    ],
+    'catalog' => [
+        'destination_country' => 'Negara Destinasi',
+        'all_countries' => 'Semua Negara',
+    ],
+    'gallery_page' => [
+        'title' => 'Galeri Perjalanan',
+        'subtitle' => 'Dokumentasi detik bermakna dan keindahan destinasi bersama Baharsyah Jelajah.',
+        'seo_title' => 'Galeri Perjalanan Pelancongan | :brand',
+        'seo_description' => 'Lihat koleksi foto perjalanan, destinasi pelancongan halal, dan kenangan indah para pengembara bersama Baharsyah Jelajah.',
+        'empty' => 'Belum ada foto galeri yang dipaparkan.',
+    ],
+    'testimonials_page' => [
+        'title' => 'Kisah & Maklum Balas Pelanggan',
+        'subtitle' => 'Pengalaman sebenar pengembara yang menjelajahi dunia bersama kami.',
+        'seo_title' => 'Testimoni Pelanggan | :brand',
+        'seo_description' => 'Baca ulasan dan pengalaman sebenar pelanggan yang menggunakan perkhidmatan pakej pelancongan, sewa kenderaan, dan umrah Baharsyah Jelajah.',
+        'empty' => 'Belum ada ulasan yang dipaparkan pada masa ini.',
+    ],
+    'errors' => [
+        'not_found' => [
+            'badge' => '404 Tidak Ditemui',
+            'title' => 'Halaman Tidak Ditemui',
+            'description' => 'Maaf, halaman yang anda cari mungkin telah dipindahkan, dipadamkan, atau pautan tersebut salah.',
+        ],
+        'server_error' => [
+            'badge' => '500 Ralat Pelayan',
+            'title' => 'Ralat Pelayan Dalaman',
+            'description' => 'Maaf, sistem kami mengalami gangguan sementara. Pasukan teknikal kami sedang membaikinya.',
+        ],
+        'client_error' => [
+            'badge' => 'Ralat Permintaan',
+            'title' => 'Permintaan Tidak Boleh Diproses',
+            'description' => 'Maaf, permintaan anda tidak dapat diproses oleh pelayan sistem.',
+        ],
+        'actions' => [
+            'home' => 'Kembali ke Laman Utama',
+            'tour' => 'Lihat Pakej Tour',
+            'contact' => 'Hubungi Kami',
+        ],
+        'support_text' => 'Pasukan kami sedia membantu melalui saluran rasmi sekiranya anda memerlukan maklumat pakej atau jadual perjalanan tertentu.',
     ],
 ];

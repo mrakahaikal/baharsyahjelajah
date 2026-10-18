@@ -91,6 +91,7 @@ return [
         'title' => 'Preferred Fleet Choices',
         'subtitle' => 'Car rental with or without driver for flexible and comfortable travel.',
         'view_all' => 'View All Vehicles',
+        'view_detail' => 'View Details',
         'labels' => [
             'pax' => ':count Pax',
             'transmission' => ':type Transmission',
@@ -615,5 +616,63 @@ return [
                 'notes' => '- Notes: :value',
             ],
         ],
+    ],
+    'floating_whatsapp' => [
+        'label' => 'Contact via WhatsApp',
+    ],
+    'mega_menu' => [
+        'popular_destinations' => 'Popular Travel Destinations',
+        'explore_all_destinations' => 'Explore All Destinations',
+    ],
+    'mobile_nav' => [
+        'tour_categories' => 'Tour Categories',
+    ],
+    'country_card' => [
+        'featured_destinations' => 'Featured Destinations',
+        'explore' => 'Explore',
+    ],
+    'tour_card' => [
+        'view_packages' => 'View package options',
+    ],
+    'catalog' => [
+        'destination_country' => 'Destination Country',
+        'all_countries' => 'All Countries',
+    ],
+    'gallery_page' => [
+        'title' => 'Travel Gallery',
+        'subtitle' => 'Memorable moments and breathtaking destinations captured with Baharsyah Jelajah.',
+        'seo_title' => 'Travel Gallery | :brand',
+        'seo_description' => 'Explore our collection of travel photos, halal tour destinations, and memorable moments with Baharsyah Jelajah.',
+        'empty' => 'No gallery photos available yet.',
+    ],
+    'testimonials_page' => [
+        'title' => 'Customer Stories & Reviews',
+        'subtitle' => 'Real experiences from travelers who explored the world with us.',
+        'seo_title' => 'Customer Testimonials | :brand',
+        'seo_description' => 'Read authentic reviews and travel experiences from customers who chose Baharsyah Jelajah for tours, fleet rentals, and Umrah.',
+        'empty' => 'No reviews available at the moment.',
+    ],
+    'errors' => [
+        'not_found' => [
+            'badge' => '404 Not Found',
+            'title' => 'Page Not Found',
+            'description' => 'Sorry, the page you are looking for might have been moved, removed, or the link is incorrect.',
+        ],
+        'server_error' => [
+            'badge' => '500 Server Error',
+            'title' => 'Internal Server Error',
+            'description' => 'Sorry, our system is experiencing temporary issues. Our technical team is working on it.',
+        ],
+        'client_error' => [
+            'badge' => 'Request Error',
+            'title' => 'Unable to Process Request',
+            'description' => 'Sorry, your request could not be processed by the server.',
+        ],
+        'actions' => [
+            'home' => 'Back to Home',
+            'tour' => 'View Tour Packages',
+            'contact' => 'Contact Us',
+        ],
+        'support_text' => 'Our team is ready to help via official channels if you need assistance with specific packages or itineraries.',
     ],
 ];

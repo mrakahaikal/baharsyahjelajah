@@ -34,7 +34,7 @@
                 @if($country->is_featured)
                     <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-400 px-3.5 py-1 text-xs font-extrabold text-slate-950 shadow-xs">
                         <x-lucide-sparkles class="h-3.5 w-3.5" aria-hidden="true" />
-                        Destinasi Unggulan
+                        {{ __('country.show.featured_destinations') }}
                     </span>
                 @endif
             </div>
@@ -57,7 +57,7 @@
                                 <x-lucide-building-2 class="h-5 w-5" aria-hidden="true" />
                             </span>
                             <div>
-                                <p class="text-xs font-medium text-slate-300">Ibu Kota</p>
+                                <p class="text-xs font-medium text-slate-300">{{ __('country.show.capital_city') }}</p>
                                 <p class="mt-0.5 text-sm font-bold text-white">{{ $country->capital_city }}</p>
                             </div>
                         </div>
@@ -68,7 +68,7 @@
                                 <x-lucide-coins class="h-5 w-5" aria-hidden="true" />
                             </span>
                             <div>
-                                <p class="text-xs font-medium text-slate-300">Mata Uang</p>
+                                <p class="text-xs font-medium text-slate-300">{{ __('country.show.currency') }}</p>
                                 <p class="mt-0.5 text-sm font-bold text-white">{{ $country->currency_code }}</p>
                             </div>
                         </div>
@@ -79,7 +79,7 @@
                                 <x-lucide-languages class="h-5 w-5" aria-hidden="true" />
                             </span>
                             <div>
-                                <p class="text-xs font-medium text-slate-300">Bahasa Resmi</p>
+                                <p class="text-xs font-medium text-slate-300">{{ __('country.show.official_language') }}</p>
                                 <p class="mt-0.5 text-sm font-bold text-white">{{ $country->language }}</p>
                             </div>
                         </div>
@@ -90,7 +90,7 @@
                                 <x-lucide-sun-medium class="h-5 w-5" aria-hidden="true" />
                             </span>
                             <div>
-                                <p class="text-xs font-medium text-slate-300">Waktu Terbaik</p>
+                                <p class="text-xs font-medium text-slate-300">{{ __('country.show.best_time') }}</p>
                                 <p class="mt-0.5 text-sm font-bold text-white">{{ $country->best_time_to_visit }}</p>
                             </div>
                         </div>
@@ -101,7 +101,7 @@
                                 <x-lucide-file-text class="h-4 w-4" aria-hidden="true" />
                             </span>
                             <div class="min-w-0">
-                                <p class="text-xs font-medium text-slate-300">Persyaratan Perjalanan & Visa</p>
+                                <p class="text-xs font-medium text-slate-300">{{ __('country.show.travel_requirements') }}</p>
                                 <p class="mt-0.5 text-sm leading-6 text-slate-200">{{ $country->travel_requirements_summary }}</p>
                             </div>
                         </div>
@@ -116,7 +116,7 @@
         <section class="bg-slate-50 py-16 sm:py-20" aria-labelledby="tours-heading">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="max-w-2xl">
-                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-blue-600">Paket Perjalanan</p>
+                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-blue-600">{{ __('country.show.travel_packages') }}</p>
                     <h2 id="tours-heading" class="mt-2 text-3xl font-extrabold text-slate-950 sm:text-4xl">
                         {{ __('country.show.tabs.tours', ['count' => $tours->total()]) }}
                     </h2>
@@ -139,7 +139,7 @@
                 <div class="max-w-2xl">
                     <p class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-amber-300">
                         <x-lucide-moon-star class="h-4 w-4" aria-hidden="true" />
-                        Ibadah Umrah
+                        {{ __('country.show.umrah_section') }}
                     </p>
                     <h2 id="umrah-heading" class="mt-2 text-3xl font-extrabold text-white sm:text-4xl">
                         {{ __('country.show.tabs.umrah', ['count' => $umrahPackages->total()]) }}
@@ -161,7 +161,7 @@
         <section class="bg-white py-16 sm:py-20" aria-labelledby="visa-heading">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="max-w-2xl">
-                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-emerald-600">Dokumen Perjalanan</p>
+                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-emerald-600">{{ __('country.show.visa_section') }}</p>
                     <h2 id="visa-heading" class="mt-2 text-3xl font-extrabold text-slate-950 sm:text-4xl">
                         {{ __('country.show.tabs.visa', ['count' => $visaServices->total()]) }}
                     </h2>
@@ -182,7 +182,7 @@
         <section class="bg-slate-50 py-16 sm:py-20" aria-labelledby="destinations-heading">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="max-w-2xl">
-                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-blue-600">Tempat Menarik</p>
+                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-blue-600">{{ __('country.show.destinations_section') }}</p>
                     <h2 id="destinations-heading" class="mt-2 text-3xl font-extrabold text-slate-950 sm:text-4xl">
                         {{ __('country.show.tabs.destinations', ['count' => $destinations->total()]) }}
                     </h2>
@@ -203,7 +203,7 @@
         <section class="bg-white py-16 sm:py-20" aria-labelledby="vehicles-heading">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="max-w-2xl">
-                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-blue-600">Armada Transportasi</p>
+                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-blue-600">{{ __('country.show.vehicles_section') }}</p>
                     <h2 id="vehicles-heading" class="mt-2 text-3xl font-extrabold text-slate-950 sm:text-4xl">
                         {{ __('country.show.tabs.vehicles', ['count' => $vehicles->total()]) }}
                     </h2>
@@ -224,7 +224,7 @@
         <section class="bg-slate-50 py-16 sm:py-20" aria-labelledby="posts-heading">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="max-w-2xl">
-                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-blue-600">Panduan & Informasi</p>
+                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-blue-600">{{ __('country.show.articles_section') }}</p>
                     <h2 id="posts-heading" class="mt-2 text-3xl font-extrabold text-slate-950 sm:text-4xl">
                         {{ __('country.show.tabs.articles', ['count' => $posts->total()]) }}
                     </h2>

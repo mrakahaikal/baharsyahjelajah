@@ -129,17 +129,34 @@ class HomeController extends Controller
             ])
             ->all();
         $canonicalUrl = $alternateUrls[app()->getLocale()];
-        $schemaGraph = [[
-            '@type' => 'TravelAgency',
-            '@id' => $canonicalUrl.'#organization',
-            'name' => $this->localized($this->generalSettings->site_name),
-            'url' => $canonicalUrl,
-            'email' => $this->generalSettings->email,
-            'telephone' => filled($this->generalSettings->whatsapp_number)
-                ? '+'.$this->generalSettings->whatsapp_number
-                : null,
-            'address' => $this->localized($this->generalSettings->address),
-        ]];
+        $siteName = $this->localized($this->generalSettings->site_name) ?: (string) config('app.name');
+        $schemaGraph = [
+            [
+                '@type' => 'WebSite',
+                '@id' => $canonicalUrl.'#website',
+                'url' => $canonicalUrl,
+                'name' => $siteName,
+                'potentialAction' => [
+                    '@type' => 'SearchAction',
+                    'target' => [
+                        '@type' => 'EntryPoint',
+                        'urlTemplate' => route('tour.index', ['locale' => app()->getLocale()]).'?search={search_term_string}',
+                    ],
+                    'query-input' => 'required name=search_term_string',
+                ],
+            ],
+            [
+                '@type' => 'TravelAgency',
+                '@id' => $canonicalUrl.'#organization',
+                'name' => $siteName,
+                'url' => $canonicalUrl,
+                'email' => $this->generalSettings->email,
+                'telephone' => filled($this->generalSettings->whatsapp_number)
+                    ? '+'.$this->generalSettings->whatsapp_number
+                    : null,
+                'address' => $this->localized($this->generalSettings->address),
+            ],
+        ];
 
         if ($faqs->isNotEmpty()) {
             $schemaGraph[] = [

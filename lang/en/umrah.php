@@ -28,6 +28,8 @@ return [
         'title' => 'Compare available Umrah packages.',
         'subtitle' => 'Prices and schedules may change with flight and accommodation availability.',
         'count' => ':count packages found',
+        'destination_country' => 'Destination Country',
+        'all_countries' => 'All Countries',
     ],
     'card' => [
         'days' => ':count days',

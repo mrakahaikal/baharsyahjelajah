@@ -28,6 +28,8 @@ return [
         'title' => 'Bandingkan pakej Umrah yang tersedia.',
         'subtitle' => 'Harga dan jadual boleh berubah mengikut ketersediaan penerbangan serta penginapan.',
         'count' => ':count pakej ditemui',
+        'destination_country' => 'Negara Destinasi',
+        'all_countries' => 'Semua Negara',
     ],
     'card' => [
         'days' => ':count hari',

@@ -30,9 +30,14 @@ skills-lock.json
 /public/fonts-manifest.dev.json
 /public/hot
 /public/storage
+/public/*.xml
+/public/css/filament
+/public/js/filament
+/public/fonts/filament
 /storage/*.key
 /storage/pail
 /vendor
+/scratch
 _ide_helper.php
 Homestead.json
 Homestead.yaml

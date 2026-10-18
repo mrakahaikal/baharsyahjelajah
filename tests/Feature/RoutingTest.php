@@ -76,6 +76,16 @@ it('redirects visa paths to the default locale while preserving the query string
     ],
 ]);
 
+it('redirects gallery and testimonials paths to the default locale', function (string $path, string $destination) {
+    get($path)
+        ->assertRedirect($destination);
+})->with([
+    'gallery index' => ['/gallery', '/id/gallery'],
+    'gallery with query' => ['/gallery?page=2', '/id/gallery?page=2'],
+    'testimonials index' => ['/testimonials', '/id/testimonials'],
+    'testimonials with query' => ['/testimonials?rating=5', '/id/testimonials?rating=5'],
+]);
+
 it('sets the application locale based on the URL prefix', function (string $locale) {
     get("/{$locale}")
         ->assertStatus(200)
@@ -309,7 +319,7 @@ it('renders the correct page view', function (string $path, string $content) {
     ['blog', 'Blog'],
     ['visa', 'Persiapan dokumen yang lebih jelas sebelum keberangkatan.'],
     ['shop', 'Shop Index'],
-    ['gallery', 'Gallery Page'],
-    ['testimonials', 'Testimonials Page'],
+    ['gallery', 'Galeri Perjalanan'],
+    ['testimonials', 'Kesan & Testimoni Pelanggan'],
     ['kontak', 'Mulai perjalanan Anda dengan rencana yang lebih jelas.'],
 ]);

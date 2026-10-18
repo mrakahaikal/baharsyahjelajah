@@ -124,10 +124,10 @@
 
                         @if($countries->isNotEmpty())
                             <fieldset class="py-6">
-                                <legend class="text-xs font-bold uppercase tracking-wider text-slate-400">Negara Destinasi</legend>
+                                <legend class="text-xs font-bold uppercase tracking-wider text-slate-400">{{ __('frontend.catalog.destination_country') }}</legend>
                                 <div class="mt-3 flex flex-col gap-1">
                                     <button type="button" wire:click="$set('country', '')" aria-pressed="{{ $country === '' ? 'true' : 'false' }}" class="flex min-h-10 items-center justify-between gap-3 rounded-md px-3 text-left text-sm font-semibold transition-colors {{ $country === '' ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
-                                        Semua Negara
+                                        {{ __('frontend.catalog.all_countries') }}
                                         @if($country === '')<x-lucide-check class="h-4 w-4 shrink-0" aria-hidden="true" />@endif
                                     </button>
                                     @foreach($countries as $item)
@@ -287,6 +287,29 @@
                         @endforeach
                     </div>
                 </fieldset>
+
+                @if($countries->isNotEmpty())
+                    <fieldset>
+                        <legend class="text-xs font-bold uppercase tracking-wider text-slate-400">{{ __('frontend.catalog.destination_country') }}</legend>
+                        <div class="mt-3 grid grid-cols-1 gap-2">
+                            <button type="button" wire:click="$set('country', '')" aria-pressed="{{ $country === '' ? 'true' : 'false' }}" class="flex min-h-12 items-center justify-between rounded-lg border px-4 text-left text-sm font-bold {{ $country === '' ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-700' }}">
+                                {{ __('frontend.catalog.all_countries') }}
+                                @if($country === '')<x-lucide-check class="h-4 w-4" aria-hidden="true" />@endif
+                            </button>
+                            @foreach($countries as $item)
+                                <button type="button" wire:key="mobile-country-{{ $item->id }}" wire:click="$set('country', '{{ $item->slug }}')" aria-pressed="{{ $item->slug === $country ? 'true' : 'false' }}" class="flex min-h-12 items-center justify-between gap-3 rounded-lg border px-4 text-left text-sm font-bold {{ $item->slug === $country ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-700' }}">
+                                    <span class="inline-flex items-center gap-2 min-w-0 truncate">
+                                        @if($item->flag_url)
+                                            <img src="{{ $item->flag_url }}" alt="" class="h-3.5 w-5 rounded-xs object-cover">
+                                        @endif
+                                        <span>{{ $item->name }}</span>
+                                    </span>
+                                    @if($item->slug === $country)<x-lucide-check class="h-4 w-4 shrink-0" aria-hidden="true" />@endif
+                                </button>
+                            @endforeach
+                        </div>
+                    </fieldset>
+                @endif
 
                 <fieldset>
                     <legend class="text-xs font-bold uppercase tracking-wider text-slate-400">{{ __('frontend.tour.index.filters.type') }}</legend>

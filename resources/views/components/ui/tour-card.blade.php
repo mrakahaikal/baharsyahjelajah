@@ -72,7 +72,7 @@
         @endif
 
         <x-ui::button tag="a" href="{{ route('tour.show', ['locale' => $locale, 'tour' => $tourSlug]) }}" variant="outline" class="mt-auto w-full {{ $startingPrice ? 'mt-5' : 'mt-6' }}">
-            {{ $locale === 'en' ? 'View package options' : ($locale === 'ms' ? 'Lihat pilihan pakej' : 'Lihat pilihan paket') }}
+            {{ __('frontend.tour_card.view_packages') }}
             <x-slot:trailingIcon><x-lucide-arrow-right /></x-slot:trailingIcon>
         </x-ui::button>
     </div>

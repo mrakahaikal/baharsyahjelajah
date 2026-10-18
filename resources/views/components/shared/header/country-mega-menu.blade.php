@@ -80,7 +80,7 @@
                             <div class="grid h-7 w-7 place-items-center rounded-lg bg-emerald-50 text-emerald-600">
                                 <x-lucide-map-pin class="h-4 w-4" aria-hidden="true" />
                             </div>
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Destinasi Wisata Populer</h3>
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">{{ __('frontend.mega_menu.popular_destinations') }}</h3>
                         </div>
                     </div>
 
@@ -111,7 +111,7 @@
                 </div>
 
                 <a href="{{ route('destination.index', ['locale' => $locale]) }}" class="mt-4 text-center rounded-xl bg-slate-50 py-2.5 text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-700 transition-colors block border border-slate-200/60">
-                    Jelajah Semua Objek Wisata &rarr;
+                    {{ __('frontend.mega_menu.explore_all_destinations') }} &rarr;
                 </a>
             </div>
         </div>

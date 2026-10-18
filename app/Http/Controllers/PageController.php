@@ -25,13 +25,20 @@ class PageController extends Controller
         return view('pages.shop.show', compact('product'));
     }
 
-    public function gallery(): View
+    public function gallery(string $locale): View
     {
+        $supportedLocales = ['id', 'ms', 'en'];
+        $alternateUrls = collect($supportedLocales)
+            ->mapWithKeys(fn (string $supportedLocale): array => [
+                $supportedLocale => route('gallery.index', ['locale' => $supportedLocale]),
+            ])
+            ->all();
+
         $tourGalleries = Media::query()
             ->where('model_type', TourPackage::class)
-            ->where('collection_name', TourPackage::MEDIA_COLLECTION_GALLERY)
+            ->whereIn('collection_name', [TourPackage::MEDIA_COLLECTION_GALLERY, TourPackage::MEDIA_COLLECTION_COVER])
             ->orderBy('order_column')
-            ->limit(18)
+            ->limit(24)
             ->get();
 
         $vehicleGalleries = VehicleGallery::query()
@@ -40,17 +47,35 @@ class PageController extends Controller
             ->limit(12)
             ->get();
 
-        return view('pages.gallery.index', compact('tourGalleries', 'vehicleGalleries'));
+        return view('pages.gallery.index', [
+            'tourGalleries' => $tourGalleries,
+            'vehicleGalleries' => $vehicleGalleries,
+            'alternateUrls' => $alternateUrls,
+            'canonicalUrl' => $alternateUrls[$locale] ?? route('gallery.index', ['locale' => $locale]),
+            'locale' => $locale,
+        ]);
     }
 
-    public function testimonials(): View
+    public function testimonials(string $locale): View
     {
+        $supportedLocales = ['id', 'ms', 'en'];
+        $alternateUrls = collect($supportedLocales)
+            ->mapWithKeys(fn (string $supportedLocale): array => [
+                $supportedLocale => route('testimonials.index', ['locale' => $supportedLocale]),
+            ])
+            ->all();
+
         $testimonials = Testimonial::query()
             ->active()
             ->with('product')
             ->latest()
             ->paginate(12);
 
-        return view('pages.testimonials.index', compact('testimonials'));
+        return view('pages.testimonials.index', [
+            'testimonials' => $testimonials,
+            'alternateUrls' => $alternateUrls,
+            'canonicalUrl' => $alternateUrls[$locale] ?? route('testimonials.index', ['locale' => $locale]),
+            'locale' => $locale,
+        ]);
     }
 }

@@ -48,8 +48,8 @@ $indexBreadcrumbs = [
     'blog.index' => 'frontend.blog.breadcrumb.current',
     'visa.index' => 'visa.breadcrumb.index',
     'shop.index' => 'frontend.nav.shop',
-    'gallery.index' => 'frontend.tour.gallery',
-    'testimonials.index' => 'frontend.testimonials.title',
+    'gallery.index' => 'frontend.gallery_page.title',
+    'testimonials.index' => 'frontend.testimonials_page.title',
     'contact.index' => 'frontend.contact_page.breadcrumb.current',
 ];
 

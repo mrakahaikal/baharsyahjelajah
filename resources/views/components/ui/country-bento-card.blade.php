@@ -90,7 +90,7 @@
                 @if($totalCount === 0)
                     <span class="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-slate-300 backdrop-blur-xs">
                         <x-lucide-compass class="h-3.5 w-3.5" aria-hidden="true" />
-                        Destinasi Pilihan
+                        {{ __('frontend.country_card.featured_destinations') }}
                     </span>
                 @endif
             </div>
@@ -100,7 +100,7 @@
                     {{ __('country.home.offerings_count', ['count' => $totalCount]) }}
                 </span>
                 <span class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-400 transition group-hover:translate-x-1 group-hover:text-blue-300">
-                    Jelajah
+                    {{ __('frontend.country_card.explore') }}
                     <x-lucide-arrow-right class="h-4 w-4" aria-hidden="true" />
                 </span>
             </div>

@@ -79,6 +79,7 @@ return [
         'title' => 'Pilihan Armada Terbaik',
         'subtitle' => 'Sewa mobil lepas kunci atau dengan supir untuk perjalanan yang lebih fleksibel dan nyaman.',
         'view_all' => 'Lihat Semua Armada',
+        'view_detail' => 'Lihat Detail',
         'labels' => [
             'pax' => ':count Orang',
             'transmission' => 'Transmisi :type',
@@ -619,5 +620,63 @@ return [
                 'notes' => '- Catatan: :value',
             ],
         ],
+    ],
+    'floating_whatsapp' => [
+        'label' => 'Hubungi via WhatsApp',
+    ],
+    'mega_menu' => [
+        'popular_destinations' => 'Destinasi Wisata Populer',
+        'explore_all_destinations' => 'Jelajah Semua Objek Wisata',
+    ],
+    'mobile_nav' => [
+        'tour_categories' => 'Kategori Tour',
+    ],
+    'country_card' => [
+        'featured_destinations' => 'Destinasi Pilihan',
+        'explore' => 'Jelajah',
+    ],
+    'tour_card' => [
+        'view_packages' => 'Lihat pilihan paket',
+    ],
+    'catalog' => [
+        'destination_country' => 'Negara Destinasi',
+        'all_countries' => 'Semua Negara',
+    ],
+    'gallery_page' => [
+        'title' => 'Galeri Perjalanan',
+        'subtitle' => 'Dokumentasi momen berharga dan keindahan destinasi bersama Baharsyah Jelajah.',
+        'seo_title' => 'Galeri Perjalanan Wisata | :brand',
+        'seo_description' => 'Lihat koleksi foto perjalanan, destinasi wisata halal, dan momen berharga para wisatawan bersama Baharsyah Jelajah.',
+        'empty' => 'Belum ada foto galeri yang ditampilkan.',
+    ],
+    'testimonials_page' => [
+        'title' => 'Kesan & Testimoni Pelanggan',
+        'subtitle' => 'Cerita kepuasan dan pengalaman berkesan para wisatawan yang menjelajahi dunia bersama kami.',
+        'seo_title' => 'Testimoni Pelanggan | :brand',
+        'seo_description' => 'Baca ulasan dan pengalaman nyata pelanggan yang menggunakan layanan tour, sewa armada, dan umrah Baharsyah Jelajah.',
+        'empty' => 'Belum ada ulasan yang ditampilkan saat ini.',
+    ],
+    'errors' => [
+        'not_found' => [
+            'badge' => '404 Tidak Ditemukan',
+            'title' => 'Halaman Tidak Ditemukan',
+            'description' => 'Maaf, halaman yang Anda cari mungkin telah dipindahkan, dihapus, atau tautan yang Anda tuju salah.',
+        ],
+        'server_error' => [
+            'badge' => '500 Gangguan Server',
+            'title' => 'Terjadi Kesalahan Server',
+            'description' => 'Maaf, sistem kami sedang mengalami gangguan sementara. Tim teknis kami sedang memperbaikinya.',
+        ],
+        'client_error' => [
+            'badge' => 'Kesalahan Permintaan',
+            'title' => 'Permintaan Tidak Dapat Diproses',
+            'description' => 'Maaf, permintaan yang Anda kirimkan tidak dapat diproses oleh sistem.',
+        ],
+        'actions' => [
+            'home' => 'Kembali ke Beranda',
+            'tour' => 'Lihat Paket Tour',
+            'contact' => 'Hubungi Tim',
+        ],
+        'support_text' => 'Tim kami bisa membantu lewat kanal resmi jika Anda sedang mencari paket atau itinerary tertentu.',
     ],
 ];

@@ -28,7 +28,7 @@
         <div class="border-t border-slate-100 pt-4 space-y-3">
             @if($menuCategories->isNotEmpty())
                 <div class="flex flex-col gap-1.5">
-                    <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Kategori Tour</span>
+                    <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">{{ __('frontend.mobile_nav.tour_categories') }}</span>
                     <div class="grid grid-cols-1 gap-2">
                         @foreach($menuCategories as $cat)
                             <a href="{{ route('tour.index', ['locale' => $locale, 'category' => $cat->localizedSlug($locale)]) }}"
