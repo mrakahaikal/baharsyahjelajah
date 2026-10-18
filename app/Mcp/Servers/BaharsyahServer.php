@@ -7,11 +7,13 @@ namespace App\Mcp\Servers;
 use App\Mcp\Prompts\AuditCategoryTaxonomyPrompt;
 use App\Mcp\Prompts\AuditCountryReadinessPrompt;
 use App\Mcp\Prompts\AuditDestinationsReadinessPrompt;
+use App\Mcp\Prompts\AuditFleetReadinessPrompt;
 use App\Mcp\Prompts\AuditVisaServicesReadinessPrompt;
 use App\Mcp\Prompts\ConsultVisaRequirementsPrompt;
 use App\Mcp\Prompts\CurateCountryGuidePrompt;
 use App\Mcp\Prompts\DraftArticlePrompt;
 use App\Mcp\Prompts\PlanDestinationHighlightPrompt;
+use App\Mcp\Prompts\RecommendVehicleForTripPrompt;
 use App\Mcp\Prompts\ReviewArticleSeoPrompt;
 use App\Mcp\Prompts\SuggestCategoryForTopicPrompt;
 use App\Mcp\Resources\ArticleCatalogOverviewResource;
@@ -22,6 +24,8 @@ use App\Mcp\Resources\DestinationCatalogResource;
 use App\Mcp\Resources\FeaturedCountriesResource;
 use App\Mcp\Resources\FeaturedDestinationsResource;
 use App\Mcp\Resources\RecentArticlesResource;
+use App\Mcp\Resources\VehicleFleetCatalogResource;
+use App\Mcp\Resources\VehicleRentalTermsResource;
 use App\Mcp\Resources\VisaCatalogResource;
 use App\Mcp\Resources\VisaRequirementsSummaryResource;
 use App\Mcp\Tools\Articles\CreateArticleTool;
@@ -46,6 +50,11 @@ use App\Mcp\Tools\Destinations\DeleteDestinationTool;
 use App\Mcp\Tools\Destinations\GetDestinationTool;
 use App\Mcp\Tools\Destinations\ListDestinationsTool;
 use App\Mcp\Tools\Destinations\UpdateDestinationTool;
+use App\Mcp\Tools\Vehicles\CreateVehicleTool;
+use App\Mcp\Tools\Vehicles\DeleteVehicleTool;
+use App\Mcp\Tools\Vehicles\GetVehicleTool;
+use App\Mcp\Tools\Vehicles\ListVehiclesTool;
+use App\Mcp\Tools\Vehicles\UpdateVehicleTool;
 use App\Mcp\Tools\VisaServices\CreateVisaServiceTool;
 use App\Mcp\Tools\VisaServices\DeleteVisaServiceTool;
 use App\Mcp\Tools\VisaServices\GetVisaServiceTool;
@@ -58,7 +67,7 @@ use Laravel\Mcp\Server\Attributes\Version;
 
 #[Name('Baharsyah Jelajah Management & Content Server')]
 #[Version('1.0.0')]
-#[Instructions('This server provides tools to manage and monitor Baharsyah Jelajah content, including category, article, destination, country, visa services, and real-time currency operations.')]
+#[Instructions('This server provides tools to manage and monitor Baharsyah Jelajah content, including category, article, destination, country, visa services, vehicle fleet rentals, and real-time currency operations.')]
 class BaharsyahServer extends Server
 {
     /**
@@ -103,6 +112,13 @@ class BaharsyahServer extends Server
         CreateVisaServiceTool::class,
         UpdateVisaServiceTool::class,
         DeleteVisaServiceTool::class,
+
+        // Vehicle & Fleet Management
+        ListVehiclesTool::class,
+        GetVehicleTool::class,
+        CreateVehicleTool::class,
+        UpdateVehicleTool::class,
+        DeleteVehicleTool::class,
     ];
 
     /**
@@ -121,6 +137,8 @@ class BaharsyahServer extends Server
         CurrencyRatesResource::class,
         VisaCatalogResource::class,
         VisaRequirementsSummaryResource::class,
+        VehicleFleetCatalogResource::class,
+        VehicleRentalTermsResource::class,
     ];
 
     /**
@@ -139,5 +157,7 @@ class BaharsyahServer extends Server
         AuditCountryReadinessPrompt::class,
         ConsultVisaRequirementsPrompt::class,
         AuditVisaServicesReadinessPrompt::class,
+        RecommendVehicleForTripPrompt::class,
+        AuditFleetReadinessPrompt::class,
     ];
 }
