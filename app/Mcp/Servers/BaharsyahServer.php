@@ -7,6 +7,8 @@ namespace App\Mcp\Servers;
 use App\Mcp\Prompts\AuditCategoryTaxonomyPrompt;
 use App\Mcp\Prompts\AuditCountryReadinessPrompt;
 use App\Mcp\Prompts\AuditDestinationsReadinessPrompt;
+use App\Mcp\Prompts\AuditVisaServicesReadinessPrompt;
+use App\Mcp\Prompts\ConsultVisaRequirementsPrompt;
 use App\Mcp\Prompts\CurateCountryGuidePrompt;
 use App\Mcp\Prompts\DraftArticlePrompt;
 use App\Mcp\Prompts\PlanDestinationHighlightPrompt;
@@ -15,10 +17,13 @@ use App\Mcp\Prompts\SuggestCategoryForTopicPrompt;
 use App\Mcp\Resources\ArticleCatalogOverviewResource;
 use App\Mcp\Resources\CategoryTaxonomyResource;
 use App\Mcp\Resources\CountryCatalogResource;
+use App\Mcp\Resources\CurrencyRatesResource;
 use App\Mcp\Resources\DestinationCatalogResource;
 use App\Mcp\Resources\FeaturedCountriesResource;
 use App\Mcp\Resources\FeaturedDestinationsResource;
 use App\Mcp\Resources\RecentArticlesResource;
+use App\Mcp\Resources\VisaCatalogResource;
+use App\Mcp\Resources\VisaRequirementsSummaryResource;
 use App\Mcp\Tools\Articles\CreateArticleTool;
 use App\Mcp\Tools\Articles\DeleteArticleTool;
 use App\Mcp\Tools\Articles\GetArticleTool;
@@ -41,6 +46,11 @@ use App\Mcp\Tools\Destinations\DeleteDestinationTool;
 use App\Mcp\Tools\Destinations\GetDestinationTool;
 use App\Mcp\Tools\Destinations\ListDestinationsTool;
 use App\Mcp\Tools\Destinations\UpdateDestinationTool;
+use App\Mcp\Tools\VisaServices\CreateVisaServiceTool;
+use App\Mcp\Tools\VisaServices\DeleteVisaServiceTool;
+use App\Mcp\Tools\VisaServices\GetVisaServiceTool;
+use App\Mcp\Tools\VisaServices\ListVisaServicesTool;
+use App\Mcp\Tools\VisaServices\UpdateVisaServiceTool;
 use Laravel\Mcp\Server;
 use Laravel\Mcp\Server\Attributes\Instructions;
 use Laravel\Mcp\Server\Attributes\Name;
@@ -48,7 +58,7 @@ use Laravel\Mcp\Server\Attributes\Version;
 
 #[Name('Baharsyah Jelajah Management & Content Server')]
 #[Version('1.0.0')]
-#[Instructions('This server provides tools to manage and monitor Baharsyah Jelajah content, including category, article, destination, and country management operations.')]
+#[Instructions('This server provides tools to manage and monitor Baharsyah Jelajah content, including category, article, destination, country, visa services, and real-time currency operations.')]
 class BaharsyahServer extends Server
 {
     /**
@@ -86,6 +96,13 @@ class BaharsyahServer extends Server
         CreateCountryTool::class,
         UpdateCountryTool::class,
         DeleteCountryTool::class,
+
+        // Visa Management
+        ListVisaServicesTool::class,
+        GetVisaServiceTool::class,
+        CreateVisaServiceTool::class,
+        UpdateVisaServiceTool::class,
+        DeleteVisaServiceTool::class,
     ];
 
     /**
@@ -101,6 +118,9 @@ class BaharsyahServer extends Server
         FeaturedDestinationsResource::class,
         CountryCatalogResource::class,
         FeaturedCountriesResource::class,
+        CurrencyRatesResource::class,
+        VisaCatalogResource::class,
+        VisaRequirementsSummaryResource::class,
     ];
 
     /**
@@ -117,5 +137,7 @@ class BaharsyahServer extends Server
         AuditDestinationsReadinessPrompt::class,
         CurateCountryGuidePrompt::class,
         AuditCountryReadinessPrompt::class,
+        ConsultVisaRequirementsPrompt::class,
+        AuditVisaServicesReadinessPrompt::class,
     ];
 }
