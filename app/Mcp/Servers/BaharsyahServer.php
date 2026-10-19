@@ -11,12 +11,14 @@ use App\Mcp\Prompts\AuditFleetReadinessPrompt;
 use App\Mcp\Prompts\AuditVisaServicesReadinessPrompt;
 use App\Mcp\Prompts\ConsultFaqAnswersPrompt;
 use App\Mcp\Prompts\ConsultTourPackagePrompt;
+use App\Mcp\Prompts\ConsultUmrahPackagePrompt;
 use App\Mcp\Prompts\ConsultVisaRequirementsPrompt;
 use App\Mcp\Prompts\CurateCountryGuidePrompt;
 use App\Mcp\Prompts\CurateSocialProofPrompt;
 use App\Mcp\Prompts\DesignBannerCampaignPrompt;
 use App\Mcp\Prompts\DraftArticlePrompt;
 use App\Mcp\Prompts\DraftTourQuotationPrompt;
+use App\Mcp\Prompts\DraftUmrahQuotationPrompt;
 use App\Mcp\Prompts\DraftWhatsappFollowupPrompt;
 use App\Mcp\Prompts\PlanDestinationHighlightPrompt;
 use App\Mcp\Prompts\RecommendVehicleForTripPrompt;
@@ -35,6 +37,8 @@ use App\Mcp\Resources\FeaturedDestinationsResource;
 use App\Mcp\Resources\RecentArticlesResource;
 use App\Mcp\Resources\TourCatalogResource;
 use App\Mcp\Resources\TourCategoriesResource;
+use App\Mcp\Resources\UmrahCatalogResource;
+use App\Mcp\Resources\UmrahDeparturesScheduleResource;
 use App\Mcp\Resources\VehicleFleetCatalogResource;
 use App\Mcp\Resources\VehicleRentalAreasResource;
 use App\Mcp\Resources\VehicleRentalTermsResource;
@@ -97,6 +101,17 @@ use App\Mcp\Tools\Tours\Packages\GetTourPackageTool;
 use App\Mcp\Tools\Tours\Packages\ListTourPackagesTool;
 use App\Mcp\Tools\Tours\Packages\UpdateTourPackageTool;
 use App\Mcp\Tools\Tours\UpdateTourTool;
+use App\Mcp\Tools\Umrah\CalculateUmrahPriceTool;
+use App\Mcp\Tools\Umrah\CreateUmrahPackageTool;
+use App\Mcp\Tools\Umrah\DeleteUmrahPackageTool;
+use App\Mcp\Tools\Umrah\GetUmrahPackageTool;
+use App\Mcp\Tools\Umrah\ListUmrahDeparturesTool;
+use App\Mcp\Tools\Umrah\ListUmrahPackagesTool;
+use App\Mcp\Tools\Umrah\ManageUmrahDepartureTool;
+use App\Mcp\Tools\Umrah\ManageUmrahIncludesTool;
+use App\Mcp\Tools\Umrah\ManageUmrahItineraryTool;
+use App\Mcp\Tools\Umrah\ManageUmrahPricesTool;
+use App\Mcp\Tools\Umrah\UpdateUmrahPackageTool;
 use App\Mcp\Tools\Vehicles\CreateVehicleRentalAreaTool;
 use App\Mcp\Tools\Vehicles\CreateVehicleTool;
 use App\Mcp\Tools\Vehicles\DeleteVehicleRentalAreaTool;
@@ -125,7 +140,7 @@ use Laravel\Mcp\Server\Attributes\Version;
 
 #[Name('Baharsyah Jelajah Management & Content Server')]
 #[Version('1.0.0')]
-#[Instructions('This server provides tools to manage and monitor Baharsyah Jelajah content, including category, article, destination, country, visa services, vehicle fleet rentals, tour packages, and real-time currency operations.')]
+#[Instructions('This server provides tools to manage and monitor Baharsyah Jelajah content, including category, article, destination, country, visa services, vehicle fleet rentals, tour packages, umrah packages, and real-time currency operations.')]
 class BaharsyahServer extends Server
 {
     /**
@@ -238,6 +253,19 @@ class BaharsyahServer extends Server
         ManageTourPricingTierTool::class,
         ManageTourItineraryTool::class,
         ManageTourIncludesTool::class,
+
+        // Umrah Packages, Departures, Pricing, Itinerary, & Includes
+        ListUmrahPackagesTool::class,
+        GetUmrahPackageTool::class,
+        CreateUmrahPackageTool::class,
+        UpdateUmrahPackageTool::class,
+        DeleteUmrahPackageTool::class,
+        ListUmrahDeparturesTool::class,
+        ManageUmrahDepartureTool::class,
+        CalculateUmrahPriceTool::class,
+        ManageUmrahPricesTool::class,
+        ManageUmrahItineraryTool::class,
+        ManageUmrahIncludesTool::class,
     ];
 
     /**
@@ -265,6 +293,8 @@ class BaharsyahServer extends Server
         WhatsappTemplatesResource::class,
         TourCatalogResource::class,
         TourCategoriesResource::class,
+        UmrahCatalogResource::class,
+        UmrahDeparturesScheduleResource::class,
     ];
 
     /**
@@ -291,5 +321,7 @@ class BaharsyahServer extends Server
         DraftWhatsappFollowupPrompt::class,
         ConsultTourPackagePrompt::class,
         DraftTourQuotationPrompt::class,
+        ConsultUmrahPackagePrompt::class,
+        DraftUmrahQuotationPrompt::class,
     ];
 }
