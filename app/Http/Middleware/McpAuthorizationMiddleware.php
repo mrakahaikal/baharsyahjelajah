@@ -108,7 +108,7 @@ class McpAuthorizationMiddleware
                 return 'mcp:publish';
             }
 
-            if (str_starts_with($toolName, 'create_') || str_starts_with($toolName, 'update_')) {
+            if (str_starts_with($toolName, 'create_') || str_starts_with($toolName, 'update_') || str_starts_with($toolName, 'manage_')) {
                 return 'mcp:write';
             }
 

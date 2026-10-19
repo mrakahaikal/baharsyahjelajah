@@ -10,11 +10,13 @@ use App\Mcp\Prompts\AuditDestinationsReadinessPrompt;
 use App\Mcp\Prompts\AuditFleetReadinessPrompt;
 use App\Mcp\Prompts\AuditVisaServicesReadinessPrompt;
 use App\Mcp\Prompts\ConsultFaqAnswersPrompt;
+use App\Mcp\Prompts\ConsultTourPackagePrompt;
 use App\Mcp\Prompts\ConsultVisaRequirementsPrompt;
 use App\Mcp\Prompts\CurateCountryGuidePrompt;
 use App\Mcp\Prompts\CurateSocialProofPrompt;
 use App\Mcp\Prompts\DesignBannerCampaignPrompt;
 use App\Mcp\Prompts\DraftArticlePrompt;
+use App\Mcp\Prompts\DraftTourQuotationPrompt;
 use App\Mcp\Prompts\DraftWhatsappFollowupPrompt;
 use App\Mcp\Prompts\PlanDestinationHighlightPrompt;
 use App\Mcp\Prompts\RecommendVehicleForTripPrompt;
@@ -31,6 +33,8 @@ use App\Mcp\Resources\FaqKnowledgeBaseResource;
 use App\Mcp\Resources\FeaturedCountriesResource;
 use App\Mcp\Resources\FeaturedDestinationsResource;
 use App\Mcp\Resources\RecentArticlesResource;
+use App\Mcp\Resources\TourCatalogResource;
+use App\Mcp\Resources\TourCategoriesResource;
 use App\Mcp\Resources\VehicleFleetCatalogResource;
 use App\Mcp\Resources\VehicleRentalAreasResource;
 use App\Mcp\Resources\VehicleRentalTermsResource;
@@ -74,6 +78,25 @@ use App\Mcp\Tools\Testimonials\DeleteTestimonialTool;
 use App\Mcp\Tools\Testimonials\GetTestimonialTool;
 use App\Mcp\Tools\Testimonials\ListTestimonialsTool;
 use App\Mcp\Tools\Testimonials\UpdateTestimonialTool;
+use App\Mcp\Tools\Tours\CalculateTourPriceTool;
+use App\Mcp\Tools\Tours\Categories\CreateTourCategoryTool;
+use App\Mcp\Tools\Tours\Categories\DeleteTourCategoryTool;
+use App\Mcp\Tools\Tours\Categories\GetTourCategoryTool;
+use App\Mcp\Tools\Tours\Categories\ListTourCategoriesTool;
+use App\Mcp\Tools\Tours\Categories\UpdateTourCategoryTool;
+use App\Mcp\Tools\Tours\CreateTourTool;
+use App\Mcp\Tools\Tours\DeleteTourTool;
+use App\Mcp\Tools\Tours\GetTourTool;
+use App\Mcp\Tools\Tours\ListToursTool;
+use App\Mcp\Tools\Tours\ManageTourIncludesTool;
+use App\Mcp\Tools\Tours\ManageTourItineraryTool;
+use App\Mcp\Tools\Tours\ManageTourPricingTierTool;
+use App\Mcp\Tools\Tours\Packages\CreateTourPackageTool;
+use App\Mcp\Tools\Tours\Packages\DeleteTourPackageTool;
+use App\Mcp\Tools\Tours\Packages\GetTourPackageTool;
+use App\Mcp\Tools\Tours\Packages\ListTourPackagesTool;
+use App\Mcp\Tools\Tours\Packages\UpdateTourPackageTool;
+use App\Mcp\Tools\Tours\UpdateTourTool;
 use App\Mcp\Tools\Vehicles\CreateVehicleRentalAreaTool;
 use App\Mcp\Tools\Vehicles\CreateVehicleTool;
 use App\Mcp\Tools\Vehicles\DeleteVehicleRentalAreaTool;
@@ -102,7 +125,7 @@ use Laravel\Mcp\Server\Attributes\Version;
 
 #[Name('Baharsyah Jelajah Management & Content Server')]
 #[Version('1.0.0')]
-#[Instructions('This server provides tools to manage and monitor Baharsyah Jelajah content, including category, article, destination, country, visa services, vehicle fleet rentals, and real-time currency operations.')]
+#[Instructions('This server provides tools to manage and monitor Baharsyah Jelajah content, including category, article, destination, country, visa services, vehicle fleet rentals, tour packages, and real-time currency operations.')]
 class BaharsyahServer extends Server
 {
     /**
@@ -190,6 +213,31 @@ class BaharsyahServer extends Server
         CreateWhatsappTemplateTool::class,
         UpdateWhatsappTemplateTool::class,
         DeleteWhatsappTemplateTool::class,
+
+        // Tour Categories
+        ListTourCategoriesTool::class,
+        GetTourCategoryTool::class,
+        CreateTourCategoryTool::class,
+        UpdateTourCategoryTool::class,
+        DeleteTourCategoryTool::class,
+
+        // Tours Management
+        ListToursTool::class,
+        GetTourTool::class,
+        CreateTourTool::class,
+        UpdateTourTool::class,
+        DeleteTourTool::class,
+
+        // Tour Packages & Pricing / Itinerary / Includes
+        ListTourPackagesTool::class,
+        GetTourPackageTool::class,
+        CreateTourPackageTool::class,
+        UpdateTourPackageTool::class,
+        DeleteTourPackageTool::class,
+        CalculateTourPriceTool::class,
+        ManageTourPricingTierTool::class,
+        ManageTourItineraryTool::class,
+        ManageTourIncludesTool::class,
     ];
 
     /**
@@ -215,6 +263,8 @@ class BaharsyahServer extends Server
         CuratedTestimonialsResource::class,
         ActiveBannersResource::class,
         WhatsappTemplatesResource::class,
+        TourCatalogResource::class,
+        TourCategoriesResource::class,
     ];
 
     /**
@@ -239,5 +289,7 @@ class BaharsyahServer extends Server
         CurateSocialProofPrompt::class,
         DesignBannerCampaignPrompt::class,
         DraftWhatsappFollowupPrompt::class,
+        ConsultTourPackagePrompt::class,
+        DraftTourQuotationPrompt::class,
     ];
 }
