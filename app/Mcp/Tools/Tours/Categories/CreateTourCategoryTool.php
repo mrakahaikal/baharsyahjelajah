@@ -27,8 +27,8 @@ class CreateTourCategoryTool extends Tool
     public function schema(JsonSchema $schema): array
     {
         return [
-            'name' => $schema->mixed()->description('Category name as a plain string or multilingual map {"id": "...", "en": "...", "ms": "..."}. Required.'),
-            'slug' => $schema->mixed()->description('Optional custom URL slug (plain string or multilingual map). Auto-generated from name if omitted.'),
+            'name' => $schema->union(['string', 'object'])->description('Category name as a plain string or multilingual map {"id": "...", "en": "...", "ms": "..."}. Required.'),
+            'slug' => $schema->union(['string', 'object'])->description('Optional custom URL slug (plain string or multilingual map). Auto-generated from name if omitted.'),
             'icon' => $schema->string()->description('Optional Lucide icon name (e.g., "lucide-compass", "lucide-mountain").'),
             'sort_order' => $schema->integer()->description('Display sort order priority (default: 0).'),
         ];

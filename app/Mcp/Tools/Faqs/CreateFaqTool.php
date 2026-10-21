@@ -27,8 +27,8 @@ class CreateFaqTool extends Tool
     public function schema(JsonSchema $schema): array
     {
         return [
-            'question' => $schema->mixed()->description('The question text. Single string or multilingual JSON map {"id": "...", "en": "...", "ms": "..."}. Required.'),
-            'answer' => $schema->mixed()->description('The answer text. Single string or multilingual JSON map. Required.'),
+            'question' => $schema->union(['string', 'object'])->description('The question text. Single string or multilingual JSON map {"id": "...", "en": "...", "ms": "..."}. Required.'),
+            'answer' => $schema->union(['string', 'object'])->description('The answer text. Single string or multilingual JSON map. Required.'),
             'category' => $schema->string()->description('FAQ category: "general", "tour", "umrah", "vehicle", or "payment". Default is "general".'),
             'contexts' => $schema->array()->description('Display contexts array: ["home", "tour", "umrah", "vehicle", "booking"]. Auto-inferred from category if omitted.'),
             'sort_order' => $schema->integer()->description('Sorting weight for order of appearance. Default is 0.'),

@@ -24,15 +24,21 @@ class McpAuthorizationMiddleware
     {
         $token = $request->bearerToken();
 
+        $isActionRoute = $request->route('tool') !== null;
+
         if (empty($token)) {
-            return new JsonResponse([
-                'jsonrpc' => '2.0',
-                'error' => [
-                    'code' => -32000,
-                    'message' => 'Unauthorized: Invalid or missing MCP bearer token.',
-                ],
-                'id' => $request->input('id'),
-            ], Response::HTTP_UNAUTHORIZED);
+            $data = $isActionRoute
+                ? ['error' => 'Unauthorized: Invalid or missing OAuth bearer token.']
+                : [
+                    'jsonrpc' => '2.0',
+                    'error' => [
+                        'code' => -32000,
+                        'message' => 'Unauthorized: Invalid or missing MCP bearer token.',
+                    ],
+                    'id' => $request->input('id'),
+                ];
+
+            return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
         }
 
         // 1. Static Bearer Token fallback (Local AI Agent / developer CLI)
@@ -50,14 +56,18 @@ class McpAuthorizationMiddleware
             $validatedPsr = $resourceServer->validateAuthenticatedRequest($psrRequest);
             $accessToken = AccessToken::fromPsrRequest($validatedPsr);
         } catch (\Throwable) {
-            return new JsonResponse([
-                'jsonrpc' => '2.0',
-                'error' => [
-                    'code' => -32000,
-                    'message' => 'Unauthorized: Invalid or missing MCP bearer token.',
-                ],
-                'id' => $request->input('id'),
-            ], Response::HTTP_UNAUTHORIZED);
+            $data = $isActionRoute
+                ? ['error' => 'Unauthorized: Invalid or expired OAuth bearer token.']
+                : [
+                    'jsonrpc' => '2.0',
+                    'error' => [
+                        'code' => -32000,
+                        'message' => 'Unauthorized: Invalid or missing MCP bearer token.',
+                    ],
+                    'id' => $request->input('id'),
+                ];
+
+            return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
         }
 
         // Resolve authenticated user if present on the token
@@ -71,24 +81,30 @@ class McpAuthorizationMiddleware
         }
 
         // 3. Verify granular scope for the requested tool or method
-        $method = (string) $request->input('method', '');
+        $routeTool = $request->route('tool');
         $params = $request->input('params', []);
-        $toolName = is_array($params) ? ($params['name'] ?? null) : null;
+        $toolName = ! empty($routeTool) ? (string) $routeTool : (is_array($params) ? ($params['name'] ?? null) : null);
+        $method = ! empty($routeTool) ? 'tools/call' : (string) $request->input('method', '');
 
         $requiredScope = $this->resolveRequiredScope($method, $toolName);
 
         // 'mcp:admin' or 'mcp:use' has full access to MCP tools and methods
         if (! $accessToken->can('mcp:admin') && ! $accessToken->can('mcp:use') && ! $accessToken->can($requiredScope)) {
             $target = $toolName ? "tool '{$toolName}'" : "method '{$method}'";
+            $message = "Forbidden: OAuth token lacks required scope '{$requiredScope}' for {$target}.";
 
-            return new JsonResponse([
-                'jsonrpc' => '2.0',
-                'error' => [
-                    'code' => -32003,
-                    'message' => "Forbidden: OAuth token lacks required scope '{$requiredScope}' for {$target}.",
-                ],
-                'id' => $request->input('id'),
-            ], Response::HTTP_FORBIDDEN);
+            $data = $isActionRoute
+                ? ['error' => $message]
+                : [
+                    'jsonrpc' => '2.0',
+                    'error' => [
+                        'code' => -32003,
+                        'message' => $message,
+                    ],
+                    'id' => $request->input('id'),
+                ];
+
+            return new JsonResponse($data, Response::HTTP_FORBIDDEN);
         }
 
         return $next($request);

@@ -33,9 +33,9 @@ class UpdateUmrahPackageTool extends Tool
     {
         return [
             'id' => $schema->integer()->description('Numeric ID of the Umrah package to update.')->required(),
-            'name' => $schema->mixed()->description('Updated package name (plain string or multilingual map).'),
-            'slug' => $schema->mixed()->description('Updated URL slug (plain string or multilingual map).'),
-            'description' => $schema->mixed()->description('Updated package description (plain text, Markdown, or HTML; auto-converted to semantic HTML).'),
+            'name' => $schema->union(['string', 'object'])->description('Updated package name (plain string or multilingual map).'),
+            'slug' => $schema->union(['string', 'object'])->description('Updated URL slug (plain string or multilingual map).'),
+            'description' => $schema->union(['string', 'object'])->description('Updated package description (plain text, Markdown, or HTML; auto-converted to semantic HTML).'),
             'package_type' => $schema->string()->description('Updated package type: "regular", "plus", "vip", "ramadan", or "private".'),
             'duration_days' => $schema->integer()->description('Updated duration in days.'),
             'price_idr' => $schema->integer()->description('Updated base reference price in IDR.'),

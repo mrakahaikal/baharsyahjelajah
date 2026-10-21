@@ -26,9 +26,9 @@ class CreateVehicleRentalAreaTool extends Tool
     public function schema(JsonSchema $schema): array
     {
         return [
-            'name' => $schema->mixed()->description('Area name. Single string or multilingual JSON map {"id": "...", "en": "...", "ms": "..."}. Required.'),
+            'name' => $schema->union(['string', 'object'])->description('Area name. Single string or multilingual JSON map {"id": "...", "en": "...", "ms": "..."}. Required.'),
             'slug' => $schema->string()->description('Unique URL slug. Auto-generated from Indonesian name if omitted.'),
-            'description' => $schema->mixed()->description('Area description or coverage notes. Single string or multilingual map.'),
+            'description' => $schema->union(['string', 'object'])->description('Area description or coverage notes. Single string or multilingual map.'),
             'minimum_rental_days' => $schema->integer()->description('Minimum rental duration in days (default: 1).'),
             'is_active' => $schema->boolean()->description('Active operational status (default: true).'),
             'sort_order' => $schema->integer()->description('Display sorting weight (default: 0).'),

@@ -29,8 +29,8 @@ class UpdateTestimonialTool extends Tool
     {
         return [
             'id' => $schema->integer()->description('Testimonial numeric ID to update.')->required(),
-            'reviewer_name' => $schema->mixed()->description('Updated reviewer name (single string or multilingual JSON map).'),
-            'content' => $schema->mixed()->description('Updated testimonial text (single string or multilingual JSON map).'),
+            'reviewer_name' => $schema->union(['string', 'object'])->description('Updated reviewer name (single string or multilingual JSON map).'),
+            'content' => $schema->union(['string', 'object'])->description('Updated testimonial text (single string or multilingual JSON map).'),
             'rating' => $schema->integer()->description('Updated star rating score from 1 to 5.'),
             'product_type' => $schema->string()->description('Updated product type: "tour", "vehicle", or "umrah".'),
             'product_id' => $schema->integer()->description('Updated product numeric ID.'),

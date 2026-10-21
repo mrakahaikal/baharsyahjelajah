@@ -29,8 +29,8 @@ class UpdateTourCategoryTool extends Tool
     {
         return [
             'id' => $schema->integer()->description('Numeric ID of the tour category to update.')->required(),
-            'name' => $schema->mixed()->description('Updated category name (plain string or multilingual map).'),
-            'slug' => $schema->mixed()->description('Updated URL slug (plain string or multilingual map).'),
+            'name' => $schema->union(['string', 'object'])->description('Updated category name (plain string or multilingual map).'),
+            'slug' => $schema->union(['string', 'object'])->description('Updated URL slug (plain string or multilingual map).'),
             'icon' => $schema->string()->description('Updated Lucide icon name.'),
             'sort_order' => $schema->integer()->description('Updated display sort order priority.'),
         ];

@@ -28,8 +28,8 @@ class UpdateFaqTool extends Tool
     {
         return [
             'id' => $schema->integer()->description('FAQ numeric ID to update.')->required(),
-            'question' => $schema->mixed()->description('New question text (single string or multilingual JSON map).'),
-            'answer' => $schema->mixed()->description('New answer text (single string or multilingual JSON map).'),
+            'question' => $schema->union(['string', 'object'])->description('New question text (single string or multilingual JSON map).'),
+            'answer' => $schema->union(['string', 'object'])->description('New answer text (single string or multilingual JSON map).'),
             'category' => $schema->string()->description('Updated category: "general", "tour", "umrah", "vehicle", or "payment".'),
             'contexts' => $schema->array()->description('Updated contexts array: ["home", "tour", "umrah", "vehicle", "booking"].'),
             'sort_order' => $schema->integer()->description('Updated sorting weight.'),

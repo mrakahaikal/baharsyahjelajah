@@ -31,9 +31,9 @@ class CreateUmrahPackageTool extends Tool
     public function schema(JsonSchema $schema): array
     {
         return [
-            'name' => $schema->mixed()->description('Package name (plain string or multilingual map {"id": "...", "en": "...", "ms": "..."}). Required.'),
-            'slug' => $schema->mixed()->description('Optional custom URL slug (plain string or multilingual map). Auto-generated from name if omitted.'),
-            'description' => $schema->mixed()->description('Detailed package description (plain text, Markdown, or HTML; auto-converted to semantic HTML). Required.'),
+            'name' => $schema->union(['string', 'object'])->description('Package name (plain string or multilingual map {"id": "...", "en": "...", "ms": "..."}). Required.'),
+            'slug' => $schema->union(['string', 'object'])->description('Optional custom URL slug (plain string or multilingual map). Auto-generated from name if omitted.'),
+            'description' => $schema->union(['string', 'object'])->description('Detailed package description (plain text, Markdown, or HTML; auto-converted to semantic HTML). Required.'),
             'package_type' => $schema->string()->description('Package type: "regular", "plus", "vip", "ramadan", or "private". Default: "regular".'),
             'duration_days' => $schema->integer()->description('Total duration of pilgrimage in days (min: 1). Required.'),
             'price_idr' => $schema->integer()->description('Base reference price in IDR (min: 1). Required.'),

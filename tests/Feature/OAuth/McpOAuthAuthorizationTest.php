@@ -192,3 +192,32 @@ test('dynamic client registration creates new client and deduplicates identical 
     $duplicateResponse->assertStatus(200);
     expect($duplicateResponse->json('client_id'))->toBe($clientId);
 });
+
+test('oauth client can paginate through all tools/list pages without error', function () {
+    $user = User::factory()->create(['email' => 'antigravity@baharsyahjelajah.com']);
+    $token = $user->createToken('Google Antigravity', ['mcp:use'])->accessToken;
+
+    $cursor = null;
+    $totalTools = 0;
+    $page = 1;
+
+    do {
+        $params = $cursor ? ['cursor' => $cursor] : [];
+        $response = $this->withToken($token)
+            ->postJson('/mcp/admin', [
+                'jsonrpc' => '2.0',
+                'method' => 'tools/list',
+                'params' => $params,
+                'id' => $page++,
+            ]);
+
+        $response->assertOk();
+        expect($response->json('error'))->toBeNull();
+
+        $tools = $response->json('result.tools') ?? [];
+        $totalTools += count($tools);
+        $cursor = $response->json('result.nextCursor');
+    } while (! empty($cursor));
+
+    expect($totalTools)->toBeGreaterThan(70);
+});

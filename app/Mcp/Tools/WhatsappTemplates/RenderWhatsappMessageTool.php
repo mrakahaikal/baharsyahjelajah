@@ -24,7 +24,7 @@ class RenderWhatsappMessageTool extends Tool
         return [
             'product_type' => $schema->string()->description('Product type: "tour", "umrah", "vehicle", or "visa".')->required(),
             'locale' => $schema->string()->description('Language locale: "id", "en", or "ms". Default is "id".'),
-            'variables' => $schema->mixed()->description('Key-value map of variable replacements (e.g. {"product_name": "Paket Umrah Syawal", "pax": "2"}).')->required(),
+            'variables' => $schema->object()->description('Key-value map of variable replacements (e.g. {"product_name": "Paket Umrah Syawal", "pax": "2"}).')->required(),
             'phone_number' => $schema->string()->description('Optional destination phone number (e.g. "6281234567890") to generate direct wa.me URL.'),
         ];
     }

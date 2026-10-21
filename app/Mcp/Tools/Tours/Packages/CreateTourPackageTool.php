@@ -32,8 +32,8 @@ class CreateTourPackageTool extends Tool
     {
         return [
             'tour_id' => $schema->integer()->description('ID of the parent tour.')->required(),
-            'name' => $schema->mixed()->description('Package name (plain string or multilingual map {"id": "...", "en": "...", "ms": "..."}). Required.'),
-            'slug' => $schema->mixed()->description('Optional custom URL slug (plain string or multilingual map). Auto-generated from name if omitted.'),
+            'name' => $schema->union(['string', 'object'])->description('Package name (plain string or multilingual map {"id": "...", "en": "...", "ms": "..."}). Required.'),
+            'slug' => $schema->union(['string', 'object'])->description('Optional custom URL slug (plain string or multilingual map). Auto-generated from name if omitted.'),
             'duration_days' => $schema->integer()->description('Total duration in days (min: 1).')->required(),
             'duration_nights' => $schema->integer()->description('Total duration in nights (min: 0, default: duration_days - 1).'),
             'destination_ids' => $schema->array()->description('Optional array of numeric destination IDs included in this package.'),

@@ -28,13 +28,13 @@ class CreateBannerTool extends Tool
     public function schema(JsonSchema $schema): array
     {
         return [
-            'title' => $schema->mixed()->description('Banner headline title. Single string or multilingual JSON map {"id": "...", "en": "...", "ms": "..."}. Required.'),
-            'subtitle' => $schema->mixed()->description('Banner subheadline/description. Single string or multilingual map.'),
+            'title' => $schema->union(['string', 'object'])->description('Banner headline title. Single string or multilingual JSON map {"id": "...", "en": "...", "ms": "..."}. Required.'),
+            'subtitle' => $schema->union(['string', 'object'])->description('Banner subheadline/description. Single string or multilingual map.'),
             'placement' => $schema->string()->description('Placement area: "home_hero" or "home_promo". Default is "home_promo".'),
             'image_path' => $schema->string()->description('Path or URL of the banner image.'),
             'cta_type' => $schema->string()->description('Call-to-Action button type: "route", "url", or "whatsapp".'),
             'cta_value' => $schema->string()->description('Destination route, link URL, or WhatsApp phone number.'),
-            'cta_label' => $schema->mixed()->description('Button label text. Single string or multilingual map.'),
+            'cta_label' => $schema->union(['string', 'object'])->description('Button label text. Single string or multilingual map.'),
             'sort_order' => $schema->integer()->description('Sorting weight for display order. Default is 0.'),
             'is_active' => $schema->boolean()->description('Publish status. Default is true.'),
             'starts_at' => $schema->string()->description('Optional campaign start schedule (ISO datetime).'),

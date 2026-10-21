@@ -31,10 +31,10 @@ class CreateTourTool extends Tool
     {
         return [
             'tour_category_id' => $schema->integer()->description('ID of the tour category.')->required(),
-            'name' => $schema->mixed()->description('Tour name (plain string or multilingual map {"id": "...", "en": "...", "ms": "..."}). Required.'),
-            'slug' => $schema->mixed()->description('Optional custom URL slug (plain string or multilingual map). Auto-generated from name if omitted.'),
-            'short_description' => $schema->mixed()->description('Short summary (2-3 sentences) as plain string or multilingual map. Required.'),
-            'description' => $schema->mixed()->description('Comprehensive tour description (plain text, Markdown, or HTML; auto-converted to semantic HTML) as string or multilingual map. Required.'),
+            'name' => $schema->union(['string', 'object'])->description('Tour name (plain string or multilingual map {"id": "...", "en": "...", "ms": "..."}). Required.'),
+            'slug' => $schema->union(['string', 'object'])->description('Optional custom URL slug (plain string or multilingual map). Auto-generated from name if omitted.'),
+            'short_description' => $schema->union(['string', 'object'])->description('Short summary (2-3 sentences) as plain string or multilingual map. Required.'),
+            'description' => $schema->union(['string', 'object'])->description('Comprehensive tour description (plain text, Markdown, or HTML; auto-converted to semantic HTML) as string or multilingual map. Required.'),
             'tour_type' => $schema->string()->description('Tour destination type: "domestic" or "international". Default: "domestic".'),
             'currency' => $schema->string()->description('Base 3-letter currency code (e.g., "IDR", "MYR", "USD"). Default: "IDR".'),
             'country_ids' => $schema->array()->description('Optional array of numeric country IDs visited in this tour.'),

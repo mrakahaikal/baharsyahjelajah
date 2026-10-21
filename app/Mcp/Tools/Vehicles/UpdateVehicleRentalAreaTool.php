@@ -28,9 +28,9 @@ class UpdateVehicleRentalAreaTool extends Tool
         return [
             'id' => $schema->integer()->description('Vehicle rental area numeric ID to update.'),
             'slug' => $schema->string()->description('Vehicle rental area unique slug to update.'),
-            'name' => $schema->mixed()->description('New area name (single string or multilingual JSON map).'),
+            'name' => $schema->union(['string', 'object'])->description('New area name (single string or multilingual JSON map).'),
             'new_slug' => $schema->string()->description('New unique URL slug replacement.'),
-            'description' => $schema->mixed()->description('New area description (single string or multilingual JSON map).'),
+            'description' => $schema->union(['string', 'object'])->description('New area description (single string or multilingual JSON map).'),
             'minimum_rental_days' => $schema->integer()->description('Updated minimum rental duration in days.'),
             'is_active' => $schema->boolean()->description('Updated active operational status.'),
             'sort_order' => $schema->integer()->description('Updated display sorting weight.'),

@@ -28,8 +28,8 @@ class CreateTestimonialTool extends Tool
     public function schema(JsonSchema $schema): array
     {
         return [
-            'reviewer_name' => $schema->mixed()->description('Reviewer customer name. Single string or multilingual JSON map {"id": "...", "en": "...", "ms": "..."}. Required.'),
-            'content' => $schema->mixed()->description('Review testimonial text. Single string or multilingual JSON map. Required.'),
+            'reviewer_name' => $schema->union(['string', 'object'])->description('Reviewer customer name. Single string or multilingual JSON map {"id": "...", "en": "...", "ms": "..."}. Required.'),
+            'content' => $schema->union(['string', 'object'])->description('Review testimonial text. Single string or multilingual JSON map. Required.'),
             'rating' => $schema->integer()->description('Star rating score from 1 to 5. Required.'),
             'product_type' => $schema->string()->description('Associated product type: "tour", "vehicle", or "umrah". Required.'),
             'product_id' => $schema->integer()->description('Associated product numeric ID. Required.'),

@@ -137,6 +137,7 @@ use Laravel\Mcp\Server;
 use Laravel\Mcp\Server\Attributes\Instructions;
 use Laravel\Mcp\Server\Attributes\Name;
 use Laravel\Mcp\Server\Attributes\Version;
+use Laravel\Mcp\Server\Tool;
 
 #[Name('Baharsyah Jelajah Management & Content Server')]
 #[Version('1.0.0')]
@@ -267,6 +268,19 @@ class BaharsyahServer extends Server
         ManageUmrahItineraryTool::class,
         ManageUmrahIncludesTool::class,
     ];
+
+    /**
+     * Get all tool class names registered on this server.
+     *
+     * @return array<int, class-string<Tool>>
+     */
+    public static function registeredToolClasses(): array
+    {
+        /** @var array<int, class-string<Tool>> $tools */
+        $tools = (new \ReflectionProperty(static::class, 'tools'))->getDefaultValue();
+
+        return $tools;
+    }
 
     /**
      * The resources registered with the server.

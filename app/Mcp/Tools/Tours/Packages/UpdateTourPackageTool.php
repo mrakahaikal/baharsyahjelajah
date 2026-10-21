@@ -34,8 +34,8 @@ class UpdateTourPackageTool extends Tool
         return [
             'id' => $schema->integer()->description('Numeric ID of the tour package to update.')->required(),
             'tour_id' => $schema->integer()->description('Updated parent tour ID.'),
-            'name' => $schema->mixed()->description('Updated package name (plain string or multilingual map).'),
-            'slug' => $schema->mixed()->description('Updated URL slug (plain string or multilingual map).'),
+            'name' => $schema->union(['string', 'object'])->description('Updated package name (plain string or multilingual map).'),
+            'slug' => $schema->union(['string', 'object'])->description('Updated URL slug (plain string or multilingual map).'),
             'duration_days' => $schema->integer()->description('Updated duration in days (min: 1).'),
             'duration_nights' => $schema->integer()->description('Updated duration in nights (min: 0).'),
             'destination_ids' => $schema->array()->description('Updated array of numeric destination IDs to sync.'),

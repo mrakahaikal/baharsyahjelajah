@@ -34,7 +34,7 @@ class ManageUmrahIncludesTool extends Tool
             'umrah_package_id' => $schema->integer()->description('Numeric ID of the Umrah package.')->required(),
             'include_id' => $schema->integer()->description('Numeric ID of the specific include item (required for "delete", optional for "upsert").'),
             'type' => $schema->string()->description('Item type: "include" (fasilitas termasuk), "exclude" (tidak termasuk), "requirement" (persyaratan dokumen/vaksin), or "note" (catatan penting). Default: "include".'),
-            'item' => $schema->mixed()->description('Item description (plain string or multilingual map). Required for "upsert".'),
+            'item' => $schema->union(['string', 'object'])->description('Item description (plain string or multilingual map). Required for "upsert".'),
             'sort_order' => $schema->integer()->description('Display sort order (default: 0).'),
             'items' => $schema->array()->description('Array of items when action is "sync": [{"type": "include", "item": "Tiket Pesawat PP", "sort_order": 1}].'),
         ];

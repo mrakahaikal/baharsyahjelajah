@@ -29,13 +29,13 @@ class UpdateBannerTool extends Tool
     {
         return [
             'id' => $schema->integer()->description('Banner numeric ID to update.')->required(),
-            'title' => $schema->mixed()->description('Updated banner title (single string or multilingual JSON map).'),
-            'subtitle' => $schema->mixed()->description('Updated banner subtitle (single string or multilingual JSON map).'),
+            'title' => $schema->union(['string', 'object'])->description('Updated banner title (single string or multilingual JSON map).'),
+            'subtitle' => $schema->union(['string', 'object'])->description('Updated banner subtitle (single string or multilingual JSON map).'),
             'placement' => $schema->string()->description('Updated placement position: "home_hero" or "home_promo".'),
             'image_path' => $schema->string()->description('Updated image path or URL.'),
             'cta_type' => $schema->string()->description('Updated CTA type: "route", "url", or "whatsapp".'),
             'cta_value' => $schema->string()->description('Updated CTA destination value.'),
-            'cta_label' => $schema->mixed()->description('Updated button label text.'),
+            'cta_label' => $schema->union(['string', 'object'])->description('Updated button label text.'),
             'sort_order' => $schema->integer()->description('Updated sorting weight.'),
             'is_active' => $schema->boolean()->description('Updated active status.'),
             'starts_at' => $schema->string()->description('Updated schedule start (ISO datetime). Pass null to clear.'),

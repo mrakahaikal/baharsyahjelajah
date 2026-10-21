@@ -33,7 +33,7 @@ class ManageTourPricingTierTool extends Tool
             'action' => $schema->string()->description('Operation to perform: "upsert" (create or update tier and its price brackets) or "delete" (remove tier). Default: "upsert".'),
             'tour_package_id' => $schema->integer()->description('Numeric ID of the parent tour package.')->required(),
             'package_tier_id' => $schema->integer()->description('Numeric ID of an existing package tier (required for "delete", optional for "upsert" when updating an existing tier).'),
-            'name' => $schema->mixed()->description('Tier name (plain string or multilingual map, e.g., "Gold - Hotel Bintang 4"). Required when creating a new tier.'),
+            'name' => $schema->union(['string', 'object'])->description('Tier name (plain string or multilingual map, e.g., "Gold - Hotel Bintang 4"). Required when creating a new tier.'),
             'hotel_stars' => $schema->integer()->description('Optional hotel star rating (1 to 5).'),
             'price_tiers' => $schema->array()->description('Array of pax price brackets to sync on this tier: [{"min_pax": 2, "max_pax": 4, "price": 2500000, "currency": "IDR"}].'),
         ];

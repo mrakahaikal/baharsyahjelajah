@@ -32,9 +32,9 @@ class ManageUmrahItineraryTool extends Tool
             'action' => $schema->string()->description('Operation to perform: "upsert" (create/update single day), "sync" (replace all itinerary days), or "delete" (remove day). Default: "upsert".'),
             'umrah_package_id' => $schema->integer()->description('Numeric ID of the Umrah package.')->required(),
             'day_number' => $schema->integer()->description('Day number (e.g., 1, 2, 3). Required for "upsert" and "delete".'),
-            'title' => $schema->mixed()->description('Agenda title for the day (plain string or multilingual map). Required for "upsert".'),
-            'location' => $schema->mixed()->description('City or landmark location (plain string or multilingual map, e.g. "Madinah Al-Munawwarah", "Makkah Al-Mukarramah").'),
-            'description' => $schema->mixed()->description('Detailed daily agenda description (plain text, Markdown, or HTML; auto-converted to semantic HTML).'),
+            'title' => $schema->union(['string', 'object'])->description('Agenda title for the day (plain string or multilingual map). Required for "upsert".'),
+            'location' => $schema->union(['string', 'object'])->description('City or landmark location (plain string or multilingual map, e.g. "Madinah Al-Munawwarah", "Makkah Al-Mukarramah").'),
+            'description' => $schema->union(['string', 'object'])->description('Detailed daily agenda description (plain text, Markdown, or HTML; auto-converted to semantic HTML).'),
             'itineraries' => $schema->array()->description('Array of itinerary items when action is "sync": [{"day_number": 1, "title": "...", "location": "...", "description": "..."}].'),
         ];
     }
